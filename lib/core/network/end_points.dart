@@ -1,0 +1,39 @@
+class EndPoints {
+  static const domain = 'https://almamlaka-lb.dot.jo';
+
+  //static const domain = 'https://almamlka01jo2025.dev2.dot.jo';
+  static const baseUrl = '$domain/api/v1/';
+
+  // Auth
+  static const countryCodes = 'Account/CountryCodes';
+  static const register = 'general/register';
+  static const login = 'general/login';
+  static const updateDeviceToken = 'update-device-info';
+  static const validateOTP = 'Account/ValidateOTP';
+  static const updateFcmToken = 'Account/UpdateFCMToken';
+  static const staticPages = 'basic-page';
+  static const resetPassword = 'update-password';
+  static const otp = 'otp';
+  static const verifyOtp = 'verify-otp';
+  static const updateProfile = 'update-profile';
+  static const deactivateAccount = 'deactivate-account';
+
+  static const deleteUser = 'Account/DeleteUser';
+
+  //home page
+  static const generalEndpoint = 'resources';
+  static const splashAndHomePage = 'look-up';
+  static const stories = 'vod';
+  static const dynamicArticles = 'dynamic-articles';
+  static const allFavorites = 'get-bookmarked-articles';
+  static const bookmarkToggle = 'article-bookmark-toggle';
+  static const weather = 'weather';
+  static const toggleCategoryFavorite = 'category-favorite-toggle';
+  static const articleDetails = 'get-article';
+  static const departmentsSubCategories = 'departments-with-sub-categories';
+
+  // notifications
+  static const notifications = 'notifications';
+  static const readNotification = 'mark-as-read';
+  static const unreadCountNotification = 'unread-count';
+}
