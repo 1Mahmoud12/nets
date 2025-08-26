@@ -269,15 +269,15 @@ class AuthContent extends StatelessWidget {
           title.tr(),
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w800, fontSize: 20.sp, color: AppColors.primaryColor),
         ),
-        const SizedBox(height: 16),
-        Text(
-          subTitle.tr(),
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.w500,
-            fontSize: 18.sp,
-            color: darkModeValue ? AppColors.darkModeText : const Color(0xff343434),
-          ),
-        ),
+        //   const SizedBox(height: 16),
+        // Text(
+        //   subTitle.tr(),
+        //   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+        //     fontWeight: FontWeight.w500,
+        //     fontSize: 18.sp,
+        //     color: darkModeValue ? AppColors.darkModeText : const Color(0xff343434),
+        //   ),
+        // ),
       ],
     );
   }

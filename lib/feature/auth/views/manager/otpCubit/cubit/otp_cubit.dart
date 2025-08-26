@@ -23,24 +23,27 @@ class OTPCubit extends Cubit<OTPState> {
 
   Future<void> verifyOtp({required BuildContext context, required bool verifyRegistrationEmail}) async {
     emit(OTPLoading());
-    await resetPasswordDataSourceInterface.verifyOtp(otp: codeController.text, verifyRegistrationEmail: verifyRegistrationEmail).then((value) {
-      value.fold(
-        (l) {
-          emit(OTPError(e: l.errMessage));
-          customShowToast(context, l.errMessage, showToastStatus: ShowToastStatus.error);
-        },
-        (r) async {
-          if (verifyRegistrationEmail) {
-            customShowToast(context, r.message ?? '');
-            context.navigateToPage(const LoginView());
-          } else {
-            context.navigateToPage(ResetPasswordView(homeView: false, tempToken: r.data?.authKey));
-          }
-
-          emit(OTPSuccess());
-        },
-      );
+    Future.delayed(const Duration(seconds: 2), () {
+      context.navigateToPage(const ResetPasswordView(homeView: false, tempToken: ''));
     });
+    // await resetPasswordDataSourceInterface.verifyOtp(otp: codeController.text, verifyRegistrationEmail: verifyRegistrationEmail).then((value) {
+    //   value.fold(
+    //     (l) {
+    //       emit(OTPError(e: l.errMessage));
+    //       customShowToast(context, l.errMessage, showToastStatus: ShowToastStatus.error);
+    //     },
+    //     (r) async {
+    //       if (verifyRegistrationEmail) {
+    //         customShowToast(context, r.message ?? '');
+    //         context.navigateToPage(const LoginView());
+    //       } else {
+    //         context.navigateToPage(ResetPasswordView(homeView: false, tempToken: r.data?.authKey));
+    //       }
+
+    //       emit(OTPSuccess());
+    //     },
+    //   );
+    // });
   }
 
   void _startTimer() {

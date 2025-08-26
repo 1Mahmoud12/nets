@@ -41,27 +41,30 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
   Future<void> resetPassword({required BuildContext context, bool homeView = true, String? tempToken}) async {
     emit(ResetPasswordLoading());
     animationDialogLoading(context);
-    final result = await resetPasswordDataSource.resetPassword(
-      data: {
-        'password': newPasswordController.text,
-        'auth_key': tempToken ?? Constants.token,
-        'password_confirmation': confirmPasswordController.text,
-      },
-    );
-    if (context.mounted) closeDialog(context);
-    result.fold(
-      (l) {
-        emit(ResetPasswordError(l.errMessage));
-        //  customShowToast(context, l.errMessage, showToastStatus: ShowToastStatus.error);
-      },
-      (r) {
-        emit(ResetPasswordSuccess());
-        if (context.mounted) {
-          context.navigateToPage(SuccessfullyView(homeView: homeView));
-        }
-        customShowToast(context, r);
-      },
-    );
+    Future.delayed(const Duration(seconds: 2), () {
+      context.navigateToPage(SuccessfullyView(homeView: homeView));
+    });
+    // final result = await resetPasswordDataSource.resetPassword(
+    //   data: {
+    //     'password': newPasswordController.text,
+    //     'auth_key': tempToken ?? Constants.token,
+    //     'password_confirmation': confirmPasswordController.text,
+    //   },
+    // );
+    // if (context.mounted) closeDialog(context);
+    // result.fold(
+    //   (l) {
+    //     emit(ResetPasswordError(l.errMessage));
+    //     //  customShowToast(context, l.errMessage, showToastStatus: ShowToastStatus.error);
+    //   },
+    //   (r) {
+    //     emit(ResetPasswordSuccess());
+    //     if (context.mounted) {
+    //       context.navigateToPage(SuccessfullyView(homeView: homeView));
+    //     }
+    //     customShowToast(context, r);
+    //   },
+    // );
   }
 
   @override

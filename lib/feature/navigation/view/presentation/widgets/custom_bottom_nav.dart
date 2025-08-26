@@ -3,15 +3,14 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
-  final List<String> selectedIcons;
-  final List<String> unselectedIcons;
+  final List<IconData> selectedIcons;
+  final List<IconData> unselectedIcons;
   final List<String> names;
   final bool showBadge;
 
@@ -58,29 +57,27 @@ class CustomBottomNavigationBar extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(
+            Icon(
               isSelected ? selectedIcons[index] : unselectedIcons[index],
-              colorFilter: darkModeValue
-                  ? ColorFilter.mode(
-                      isSelected
-                          ? AppColors.primaryColor
-                          : darkModeValue
-                          ? AppColors.darkModeColor
-                          : AppColors.black,
-                      BlendMode.srcIn,
-                    )
-                  : null,
+              color:
+                  isSelected
+                      ? AppColors.primaryColor
+                      : darkModeValue
+                      ? AppColors.darkModeColor
+                      : AppColors.black,
+              size: 24,
             ),
             Text(
               names[index].tr(),
               style: Theme.of(context).textTheme.displayMedium?.copyWith(
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w800,
-                color: isSelected
-                    ? AppColors.primaryColor
-                    : darkModeValue
-                    ? AppColors.darkModeColor
-                    : AppColors.black,
+                color:
+                    isSelected
+                        ? AppColors.primaryColor
+                        : darkModeValue
+                        ? AppColors.darkModeColor
+                        : AppColors.black,
               ),
             ),
           ],

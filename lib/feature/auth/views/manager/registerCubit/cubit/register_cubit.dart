@@ -8,6 +8,7 @@ import 'package:nets/core/utils/device_id.dart';
 import 'package:nets/core/utils/navigate.dart';
 import 'package:nets/feature/auth/data/dataSource/register_data_source.dart';
 import 'package:nets/feature/auth/views/presentation/otp_view.dart';
+import 'package:nets/feature/navigation/view/presentation/navigation_view.dart';
 
 part 'register_state.dart';
 
@@ -31,34 +32,36 @@ class RegisterCubit extends Cubit<RegisterState> {
   Future<void> register({required BuildContext context}) async {
     emit(RegisterLoading());
     await DeviceUUid().initializeDeviceInfo(isAuth: true);
-
-    await RegisterDataSource.register(
-      data: {
-        'name': nameController.text,
-        'phone': phoneController.text,
-        'email': emailController.text,
-        'password': passwordController.text,
-        'password_confirmation': confirmPasswordController.text,
-        'device_token': Constants.fcmToken,
-        'device_type': Constants.deviceType,
-        'device_id': Constants.deviceId,
-        'device_os': Constants.deviceOs,
-        'device_version': Constants.deviceVersion,
-        'agree': isTermsConditions,
-      },
-    ).then((value) {
-      value.fold(
-        (l) {
-          emit(RegisterError(e: l.errMessage));
-          log('register errors==> ${l.errMessage}');
-          customShowToast(context, l.errMessage, showToastStatus: ShowToastStatus.error);
-        },
-        (r) async {
-          context.navigateToPage(OTPVerificationView(verifyRegistrationEmail: true, email: emailController.text));
-          emit(RegisterSuccess());
-        },
-      );
+    Future.delayed(const Duration(seconds: 2), () {
+      context.navigateToPage(const NavigationView());
     });
+    // await RegisterDataSource.register(
+    //   data: {
+    //     'name': nameController.text,
+    //     'phone': phoneController.text,
+    //     'email': emailController.text,
+    //     'password': passwordController.text,
+    //     'password_confirmation': confirmPasswordController.text,
+    //     'device_token': Constants.fcmToken,
+    //     'device_type': Constants.deviceType,
+    //     'device_id': Constants.deviceId,
+    //     'device_os': Constants.deviceOs,
+    //     'device_version': Constants.deviceVersion,
+    //     'agree': isTermsConditions,
+    //   },
+    // ).then((value) {
+    //   value.fold(
+    //     (l) {
+    //       emit(RegisterError(e: l.errMessage));
+    //       log('register errors==> ${l.errMessage}');
+    //       customShowToast(context, l.errMessage, showToastStatus: ShowToastStatus.error);
+    //     },
+    //     (r) async {
+    //       context.navigateToPage(OTPVerificationView(verifyRegistrationEmail: true, email: emailController.text));
+    //       emit(RegisterSuccess());
+    //     },
+    //   );
+    // });
   }
 
   @override
