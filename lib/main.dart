@@ -22,7 +22,6 @@ import 'package:nets/core/utils/constants_models.dart';
 import 'package:nets/feature/auth/data/models/login_model.dart';
 import 'package:nets/feature/auth/views/presentation/login_view.dart';
 import 'package:nets/feature/navigation/view/presentation/navigation_view.dart';
-import 'package:nets/feature/splash/view/presentation/splash_screen_view.dart';
 
 import 'firebase_options.dart';
 import 'my_app.dart';

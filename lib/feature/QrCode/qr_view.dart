@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/network/local/cache.dart';
+import 'qr_scanner_screen.dart';
 
 class QrView extends StatefulWidget {
   const QrView({super.key});
@@ -131,6 +134,60 @@ END:VCARD
     );
   }
 
+  void _openQrScanner() async {
+    // Request camera permission first
+    final status = await Permission.camera.request();
+
+    if (status.isGranted) {
+      // Open camera immediately
+      final ImagePicker picker = ImagePicker();
+      try {
+        final XFile? photo = await picker.pickImage(source: ImageSource.camera, imageQuality: 80);
+
+        if (photo != null) {
+          // Show success message
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Photo captured successfully!'), duration: Duration(seconds: 2)));
+          }
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error opening camera: $e')));
+        }
+      }
+    } else if (status.isDenied) {
+      // Show permission denied message
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Camera permission is required to scan QR codes'), backgroundColor: Colors.red));
+      }
+    } else if (status.isPermanentlyDenied) {
+      // Show settings dialog
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Camera Permission Required'),
+              content: const Text('Camera permission has been permanently denied. Please enable it in settings.'),
+              actions: [
+                TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    openAppSettings();
+                  },
+                  child: const Text('Open Settings'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
+  }
+
   void _showQrOptions() {
     showModalBottomSheet(
       context: context,
@@ -163,6 +220,7 @@ END:VCARD
                         ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: darkModeValue ? AppColors.white : AppColors.black),
                       ),
                       const SizedBox(height: 20),
+                      _buildOptionTile(Icons.qr_code_scanner, 'Scan QR Code', 'Open camera to scan QR codes', _openQrScanner),
                       _buildOptionTile(Icons.share, 'Share QR Code', 'Share with others via messaging apps', _shareQrCode),
                       _buildOptionTile(Icons.download, 'Save to Gallery', 'Save QR code as image to your device', _saveQrCode),
                       _buildOptionTile(Icons.copy, 'Copy Contact Info', 'Copy contact details to clipboard', _copyQrData),
@@ -195,139 +253,158 @@ END:VCARD
     return Scaffold(
       backgroundColor: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-
-              // QR Code Container
-              Container(
-                padding: const EdgeInsets.all(30),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [AppColors.primaryColor.withOpacity(0.1), AppColors.primaryColor.withOpacity(0.05)],
-                  ),
-                  borderRadius: BorderRadius.circular(25),
-                  border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 2),
-                  boxShadow: [BoxShadow(color: AppColors.primaryColor.withOpacity(0.2), blurRadius: 20, offset: const Offset(0, 10))],
-                ),
-                child: Column(
-                  children: [
-                    // QR Code with animated border
-                    Stack(
-                      alignment: Alignment.center,
+        child: Stack(
+          children: [
+            // Main Content
+            SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 70, 20, 20),
+              child: Column(
+                children: [
+                  // QR Code Container
+                  Container(
+                    padding: const EdgeInsets.all(30),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [AppColors.primaryColor.withOpacity(0.1), AppColors.primaryColor.withOpacity(0.05)],
+                      ),
+                      borderRadius: BorderRadius.circular(25),
+                      border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 2),
+                      boxShadow: [BoxShadow(color: AppColors.primaryColor.withOpacity(0.2), blurRadius: 20, offset: const Offset(0, 10))],
+                    ),
+                    child: Column(
                       children: [
-                        // Animated rotating border
-                        AnimatedBuilder(
-                          animation: _rotationAnimation,
-                          builder: (context, child) {
-                            return Transform.rotate(
-                              angle: _rotationAnimation.value * 2 * 3.14159,
-                              child: Container(
-                                width: 260,
-                                height: 260,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 2),
-                                ),
+                        // QR Code with animated border
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            // Animated rotating border
+                            AnimatedBuilder(
+                              animation: _rotationAnimation,
+                              builder: (context, child) {
+                                return Transform.rotate(
+                                  angle: _rotationAnimation.value * 2 * 3.14159,
+                                  child: Container(
+                                    width: 260,
+                                    height: 260,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 2),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            // QR Code
+                            Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 5))],
                               ),
-                            );
-                          },
+                              child: QrImageView(
+                                data: _generateQrData(),
+                                size: 200.0,
+                                backgroundColor: Colors.white,
+                                foregroundColor: AppColors.primaryColor,
+                                errorStateBuilder: (cxt, err) {
+                                  return const Center(child: Text('Error generating QR code', textAlign: TextAlign.center));
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                        // QR Code
+
+                        const SizedBox(height: 25),
+
+                        // Enhanced User info card
                         Container(
+                          width: double.infinity,
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: darkModeValue ? AppColors.darkModeColor : Colors.grey[50],
                             borderRadius: BorderRadius.circular(15),
-                            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 5))],
+                            border: Border.all(color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!),
                           ),
-                          child: QrImageView(
-                            data: _generateQrData(),
-                            size: 200.0,
-                            backgroundColor: Colors.white,
-                            foregroundColor: AppColors.primaryColor,
-                            errorStateBuilder: (cxt, err) {
-                              return const Center(child: Text('Error generating QR code', textAlign: TextAlign.center));
-                            },
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: AppColors.primaryColor,
+                                    child: Text(
+                                      userData['name']!.split(' ').map((e) => e[0]).join(),
+                                      style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 15),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          userData['name']!,
+                                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: darkModeValue ? AppColors.white : AppColors.black,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          userData['position']!,
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium?.copyWith(color: AppColors.primaryColor, fontSize: 14, fontWeight: FontWeight.w500),
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          userData['company']!,
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodySmall?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600], fontSize: 12),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 15),
+                              Divider(color: darkModeValue ? Colors.grey[700] : Colors.grey[300], height: 1),
+                              const SizedBox(height: 15),
+                              // Contact details
+                              _buildContactRow(Icons.email, userData['email']!),
+                              const SizedBox(height: 8),
+                              _buildContactRow(Icons.phone, userData['phone']!),
+                            ],
                           ),
                         ),
                       ],
                     ),
+                  ),
 
-                    const SizedBox(height: 25),
-
-                    // Enhanced User info card
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: darkModeValue ? AppColors.darkModeColor : Colors.grey[50],
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!),
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundColor: AppColors.primaryColor,
-                                child: Text(
-                                  userData['name']!.split(' ').map((e) => e[0]).join(),
-                                  style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              const SizedBox(width: 15),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      userData['name']!,
-                                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: darkModeValue ? AppColors.white : AppColors.black,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      userData['position']!,
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.bodyMedium?.copyWith(color: AppColors.primaryColor, fontSize: 14, fontWeight: FontWeight.w500),
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      userData['company']!,
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.bodySmall?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600], fontSize: 12),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                          Divider(color: darkModeValue ? Colors.grey[700] : Colors.grey[300], height: 1),
-                          const SizedBox(height: 15),
-                          // Contact details
-                          _buildContactRow(Icons.email, userData['email']!),
-                          const SizedBox(height: 8),
-                          _buildContactRow(Icons.phone, userData['phone']!),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  const SizedBox(height: 30),
+                ],
               ),
-            ],
-          ),
+            ),
+
+            // Top Header with Camera Icon
+            Positioned(
+              top: 0,
+              // left: 0,
+              right: 0,
+              child: IconButton(
+                onPressed: _openQrScanner,
+                icon: const Icon(Icons.qr_code_scanner, color: AppColors.primaryColor, size: 24),
+                padding: const EdgeInsets.all(12),
+                constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+                tooltip: 'Scan QR Code',
+              ),
+            ),
+          ],
         ),
       ),
     );
