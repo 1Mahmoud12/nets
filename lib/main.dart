@@ -108,7 +108,7 @@ void main() async {
       EasyLocalization(
         supportedLocales: const [Locale('ar', 'SA'), Locale('en', 'US')],
         path: 'assets/translation',
-        startLocale: const Locale('ar', 'SA'),
+        startLocale: const Locale('en', 'US'),
         child: DevicePreview(enabled: false, builder: (context) => const MyApp()),
       ),
     );

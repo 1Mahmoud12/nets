@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/network/local/cache.dart';
-import 'qr_scanner_screen.dart';
 
 class QrView extends StatefulWidget {
   const QrView({super.key});
