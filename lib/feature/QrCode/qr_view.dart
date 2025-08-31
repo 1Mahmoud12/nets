@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/network/local/cache.dart';
-import 'qr_scanner_screen.dart';
+import 'package:nets/core/themes/colors.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class QrView extends StatefulWidget {
   const QrView({super.key});
@@ -136,54 +135,49 @@ END:VCARD
 
   void _openQrScanner() async {
     // Request camera permission first
-    final status = await Permission.camera.request();
+    final ImagePicker picker = ImagePicker();
+    try {
+      final XFile? photo = await picker.pickImage(source: ImageSource.camera, imageQuality: 80);
 
-    if (status.isGranted) {
-      // Open camera immediately
-      final ImagePicker picker = ImagePicker();
-      try {
-        final XFile? photo = await picker.pickImage(source: ImageSource.camera, imageQuality: 80);
-
-        if (photo != null) {
-          // Show success message
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Photo captured successfully!'), duration: Duration(seconds: 2)));
-          }
-        }
-      } catch (e) {
+      if (photo != null) {
+        // Show success message
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error opening camera: $e')));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Photo captured successfully!'), duration: Duration(seconds: 2)));
         }
       }
-    } else if (status.isDenied) {
-      // Show permission denied message
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Camera permission is required to scan QR codes'), backgroundColor: Colors.red));
-      }
-    } else if (status.isPermanentlyDenied) {
-      // Show settings dialog
-      if (mounted) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Camera Permission Required'),
-              content: const Text('Camera permission has been permanently denied. Please enable it in settings.'),
-              actions: [
-                TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    openAppSettings();
-                  },
-                  child: const Text('Open Settings'),
-                ),
-              ],
-            );
-          },
-        );
+    } catch (e) {
+      final status = await Permission.camera.request();
+
+      if (status.isDenied) {
+        // Show permission denied message
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Camera permission is required to scan QR codes'), backgroundColor: Colors.red));
+        }
+      } else if (status.isPermanentlyDenied) {
+        // Show settings dialog
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Camera Permission Required'),
+                content: const Text('Camera permission has been permanently denied. Please enable it in settings.'),
+                actions: [
+                  TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      openAppSettings();
+                    },
+                    child: const Text('Open Settings'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
       }
     }
   }

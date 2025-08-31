@@ -47,5 +47,39 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs camera access to scan QR codes</string>
+	<key>NSMicrophoneUsageDescription</key>
+    <string>This app requires access to the microphone to can open camera</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We use your photo library so you can choose an image for your profile and share contact cards. نستخدم ألبوم الصور لاختيار صورة لملفك ومشاركة بطاقات التواصل.</string>
+
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>We save images to your photo library when you export or share profiles. نحفظ الصور في ألبومك عند التصدير أو المشاركة.</string>
+
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We use your location to attach places to meetings and contacts and improve nearby suggestions. نستخدم موقعك لربط الاجتماعات والأشخاص بالأماكن وتحسين الاقتراحات القريبة.</string>
+
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>We use your location in the background to auto-link events to places and keep suggestions updated. نستخدم موقعك في الخلفية لربط الأحداث بالأماكن وتحديث الاقتراحات.</string>
+    <key>FlutterDeepLinkingEnabled</key>
+    <false/>
+    <!-- ios/Runner/Info.plist -->
+    <key>com.apple.developer.associated-domains</key>
+    <array>
+        <string>applinks:nets.com</string>
+        <string>applinks:www.nets.com</string>
+    </array>
+
+    <!-- Custom URL Schemes -->
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>nets.com</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>nets</string>
+            </array>
+        </dict>
+    </array>
 </dict>
 </plist>

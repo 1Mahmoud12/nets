@@ -1,6 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/network/local/cache.dart';
+import 'package:nets/core/themes/colors.dart';
+
+Color getStatusColor(String status) {
+  switch (status) {
+    case 'online':
+      return Colors.green;
+    case 'away':
+      return Colors.orange;
+    case 'offline':
+    default:
+      return Colors.grey;
+  }
+}
+
+void makeCall(String phone, BuildContext context) {
+  ScaffoldMessenger.of(
+    context,
+  ).showSnackBar(SnackBar(content: Text('Calling $phone...'), backgroundColor: Colors.green, duration: const Duration(seconds: 2)));
+}
+
+void sendMessage(Map<String, String> contact, BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text('Opening chat with ${contact['name']}...'), backgroundColor: AppColors.primaryColor, duration: const Duration(seconds: 2)),
+  );
+}
 
 class ContactsView extends StatefulWidget {
   const ContactsView({super.key});
@@ -54,18 +78,6 @@ class _ContactsViewState extends State<ContactsView> {
     });
   }
 
-  Color _getStatusColor(String status) {
-    switch (status) {
-      case 'online':
-        return Colors.green;
-      case 'away':
-        return Colors.orange;
-      case 'offline':
-      default:
-        return Colors.grey;
-    }
-  }
-
   Widget _buildContactCard(Map<String, String> contact) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -79,7 +91,7 @@ class _ContactsViewState extends State<ContactsView> {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
-          onTap: () => _showContactDetails(contact),
+          onTap: () => showContactDetails(contact, context),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
@@ -102,7 +114,7 @@ class _ContactsViewState extends State<ContactsView> {
                         width: 16,
                         height: 16,
                         decoration: BoxDecoration(
-                          color: _getStatusColor(contact['status']!),
+                          color: getStatusColor(contact['status']!),
                           shape: BoxShape.circle,
                           border: Border.all(color: darkModeValue ? AppColors.darkModeColor : Colors.white, width: 2),
                         ),
@@ -167,7 +179,7 @@ class _ContactsViewState extends State<ContactsView> {
                     Container(
                       decoration: BoxDecoration(color: Colors.green.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
                       child: IconButton(
-                        onPressed: () => _makeCall(contact['phone']!),
+                        onPressed: () => makeCall(contact['phone']!, context),
                         icon: const Icon(Icons.call, color: Colors.green, size: 20),
                         tooltip: 'Call',
                       ),
@@ -176,7 +188,7 @@ class _ContactsViewState extends State<ContactsView> {
                     Container(
                       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
                       child: IconButton(
-                        onPressed: () => _sendMessage(contact),
+                        onPressed: () => sendMessage(contact, context),
                         icon: const Icon(Icons.message, color: AppColors.primaryColor, size: 20),
                         tooltip: 'Message',
                       ),
@@ -187,138 +199,6 @@ class _ContactsViewState extends State<ContactsView> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  void _makeCall(String phone) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('Calling $phone...'), backgroundColor: Colors.green, duration: const Duration(seconds: 2)));
-  }
-
-  void _sendMessage(Map<String, String> contact) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Opening chat with ${contact['name']}...'),
-        backgroundColor: AppColors.primaryColor,
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
-
-  void _showContactDetails(Map<String, String> contact) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder:
-          (context) => Container(
-            height: MediaQuery.of(context).size.height * 0.6,
-            decoration: BoxDecoration(
-              color: darkModeValue ? AppColors.darkModeColor : Colors.white,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            ),
-            child: Column(
-              children: [
-                Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(color: Colors.grey[400], borderRadius: BorderRadius.circular(2)),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundColor: AppColors.primaryColor,
-                          child: Text(
-                            contact['name']!.split(' ').map((e) => e[0]).join(),
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          contact['name']!,
-                          style: Theme.of(
-                            context,
-                          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold, color: darkModeValue ? AppColors.white : AppColors.black),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          contact['status']!.toUpperCase(),
-                          style: TextStyle(color: _getStatusColor(contact['status']!), fontWeight: FontWeight.w500, fontSize: 12),
-                        ),
-                        const SizedBox(height: 32),
-                        _buildDetailRow(Icons.phone, 'Phone', contact['phone']!),
-                        _buildDetailRow(Icons.email, 'Email', contact['email']!),
-                        const Spacer(),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton.icon(
-                                onPressed: () => _makeCall(contact['phone']!),
-                                icon: const Icon(Icons.call),
-                                label: const Text('Call'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: ElevatedButton.icon(
-                                onPressed: () => _sendMessage(contact),
-                                icon: const Icon(Icons.message),
-                                label: const Text('Message'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primaryColor,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-    );
-  }
-
-  Widget _buildDetailRow(IconData icon, String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        children: [
-          Icon(icon, color: darkModeValue ? Colors.grey[400] : Colors.grey[600], size: 20),
-          const SizedBox(width: 16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600], fontSize: 12),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                value,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black, fontSize: 14),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }
@@ -473,4 +353,130 @@ class _ContactsViewState extends State<ContactsView> {
       ),
     );
   }
+}
+
+class DetailsRowWidget extends StatelessWidget {
+  const DetailsRowWidget({super.key, required this.icon, required this.label, required this.value});
+
+  final IconData icon;
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        children: [
+          Icon(icon, color: darkModeValue ? Colors.grey[400] : Colors.grey[600], size: 20),
+          const SizedBox(width: 16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600], fontSize: 12),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                value,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black, fontSize: 14),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+void showContactDetails(Map<String, String> contact, BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder:
+        (context) => Container(
+          height: MediaQuery.of(context).size.height * 0.6,
+          decoration: BoxDecoration(
+            color: darkModeValue ? AppColors.darkModeColor : Colors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(color: Colors.grey[400], borderRadius: BorderRadius.circular(2)),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundColor: AppColors.primaryColor,
+                        child: Text(
+                          contact['name']!.split(' ').map((e) => e[0]).join(),
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        contact['name']!,
+                        style: Theme.of(
+                          context,
+                        ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold, color: darkModeValue ? AppColors.white : AppColors.black),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        contact['status']!.toUpperCase(),
+                        style: TextStyle(color: getStatusColor(contact['status']!), fontWeight: FontWeight.w500, fontSize: 12),
+                      ),
+                      const SizedBox(height: 32),
+
+                      DetailsRowWidget(icon: Icons.phone, label: 'Phone', value: contact['phone']!),
+                      DetailsRowWidget(icon: Icons.email, label: 'Email', value: contact['email']!),
+                      const Spacer(),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () => makeCall(contact['phone']!, context),
+                              icon: const Icon(Icons.call),
+                              label: const Text('Call'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () => sendMessage(contact, context),
+                              icon: const Icon(Icons.message),
+                              label: const Text('Message'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primaryColor,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+  );
 }

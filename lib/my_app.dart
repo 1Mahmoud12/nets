@@ -89,29 +89,35 @@ class _MyAppState extends State<MyApp> {
             child: BlocBuilder<MainCubit, MainState>(
               builder: (context, state) {
                 //    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-                return SafeArea(
-                  top: Platform.isIOS, // Set to true if you want to avoid notch overlap too
-                  child: MaterialApp(
-                    debugShowCheckedModeBanner: false,
-                    localizationsDelegates: context.localizationDelegates,
-                    supportedLocales: context.supportedLocales,
-                    locale: context.locale,
-                    //locale: DevicePreview.locale(context),
-                    //builder: DevicePreview.appBuilder,
-                    navigatorKey: navigatorKey,
-                    theme: Themes(Constants.fontFamily).light(),
-                    darkTheme: Themes(Constants.fontFamily).dark(),
-                    themeMode: _getThemeMode(),
-                    builder: (context, child) => child!,
-                    themeAnimationDuration: const Duration(milliseconds: 300),
-                    themeAnimationCurve: Curves.easeInCubic,
-                    // themeAnimationStyle: AnimationStyle(),
-                    home: const MamlakaApp(),
-                  ),
-                );
+                return Platform.isIOS
+                    ? buildMaterialApp(context)
+                    : SafeArea(
+                      top: Platform.isIOS, // Set to true if you want to avoid notch overlap too
+                      child: buildMaterialApp(context),
+                    );
               },
             ),
           ),
+    );
+  }
+
+  MaterialApp buildMaterialApp(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      //locale: DevicePreview.locale(context),
+      //builder: DevicePreview.appBuilder,
+      navigatorKey: navigatorKey,
+      theme: Themes(Constants.fontFamily).light(),
+      darkTheme: Themes(Constants.fontFamily).dark(),
+      themeMode: _getThemeMode(),
+      builder: (context, child) => child!,
+      themeAnimationDuration: const Duration(milliseconds: 300),
+      themeAnimationCurve: Curves.easeInCubic,
+      // themeAnimationStyle: AnimationStyle(),
+      home: const MamlakaApp(),
     );
   }
 }
