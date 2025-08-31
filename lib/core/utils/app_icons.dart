@@ -10,6 +10,7 @@ class AppIcons {
   static const aiIcon = '$baseUrl/ai-icon.svg';
   static const puse = '$baseUrl/puse-icon.svg';
   static const aa = '$baseUrl/aa.svg';
+  static const appIconss = '$baseUrl/app-icons-nets.svg';
   static const weather = '$baseUrl/day-status.svg';
   static const edit = '$baseUrl/edit-profile.svg';
   static const editImage = '$baseUrl/PencilSimple.svg';
