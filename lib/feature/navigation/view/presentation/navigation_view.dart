@@ -424,17 +424,19 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
         bottomSheet: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, -2))],
-              ),
-              child: CustomBottomNavigationBar(
-                currentIndex: index,
-                onTap: (value) => _onItemTapped(value, context),
-                selectedIcons: selectedIcons,
-                unselectedIcons: unselectedIcons,
-                names: names,
+            SafeArea(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
+                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, -2))],
+                ),
+                child: CustomBottomNavigationBar(
+                  currentIndex: index,
+                  onTap: (value) => _onItemTapped(value, context),
+                  selectedIcons: selectedIcons,
+                  unselectedIcons: unselectedIcons,
+                  names: names,
+                ),
               ),
             ),
           ],
