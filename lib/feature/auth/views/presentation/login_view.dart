@@ -33,11 +33,9 @@ class _LoginViewState extends State<LoginView> {
   // Email validator
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'email_required'.tr();
+      return 'name is required'.tr();
     }
-    if (!_emailRegExp.hasMatch(value)) {
-      return 'email_invalid'.tr();
-    }
+
     return null;
   }
 
@@ -118,8 +116,8 @@ class _LoginViewState extends State<LoginView> {
 
                         enable: !isLoading,
                         controller: loginCubit.emailController,
-                        hintText: 'username@mail.com'.tr(),
-                        nameField: 'email'.tr(),
+                        hintText: 'Enter your name'.tr(),
+                        nameField: 'Name'.tr(),
                         textInputType: TextInputType.emailAddress,
                         validator: _validateEmail,
                       ),
