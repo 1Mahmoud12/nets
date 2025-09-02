@@ -1,8 +1,8 @@
 class EndPoints {
-  static const domain = 'https://almamlaka-lb.dot.jo';
+  static const domain = 'https://deeplink.gootravell.com';
 
   //static const domain = 'https://almamlka01jo2025.dev2.dot.jo';
-  static const baseUrl = '$domain/api/v1/';
+  static const baseUrl = '$domain/api/';
 
   // Auth
   static const countryCodes = 'Account/CountryCodes';
@@ -22,6 +22,7 @@ class EndPoints {
 
   //home page
   static const generalEndpoint = 'resources';
+  static const checkLink = 'deeplink/check-device';
   static const splashAndHomePage = 'look-up';
   static const stories = 'vod';
   static const dynamicArticles = 'dynamic-articles';

@@ -1,14 +1,12 @@
-import 'dart:developer';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nets/core/utils/constants.dart';
-import 'package:nets/core/utils/custom_show_toast.dart';
-import 'package:nets/core/utils/device_id.dart';
+import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/utils/navigate.dart';
-import 'package:nets/feature/auth/data/dataSource/register_data_source.dart';
-import 'package:nets/feature/auth/views/presentation/otp_view.dart';
 import 'package:nets/feature/navigation/view/presentation/navigation_view.dart';
+
+import '../../../../data/models/login_model.dart';
 
 part 'register_state.dart';
 
@@ -31,7 +29,9 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   Future<void> register({required BuildContext context}) async {
     emit(RegisterLoading());
-    await DeviceUUid().initializeDeviceInfo(isAuth: true);
+    userCacheValue = LoginModel(data: Data(phone: '01127200000', email: 'test@gmail.com', authKey: 'asdasd'));
+    await userCache?.put(userCacheKey, jsonEncode(LoginModel(data: Data(phone: '01127200000', email: 'test@gmail.com', authKey: 'asdasd')).toJson()));
+
     Future.delayed(const Duration(seconds: 2), () {
       context.navigateToPage(const NavigationView());
     });

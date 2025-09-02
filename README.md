@@ -27,3 +27,10 @@ pod install
 open .
 cd ..
 ```
+
+```shell
+flutter clean  
+flutter pub get
+flutter build apk
+open build/app/outputs/flutter-apk/
+```

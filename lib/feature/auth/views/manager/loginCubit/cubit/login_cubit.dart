@@ -1,15 +1,10 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nets/core/network/local/cache.dart';
-import 'package:nets/core/utils/constants.dart';
-import 'package:nets/core/utils/constants_models.dart';
-import 'package:nets/core/utils/custom_show_toast.dart';
-import 'package:nets/core/utils/device_id.dart';
 import 'package:nets/core/utils/navigate.dart';
-import 'package:nets/feature/auth/data/dataSource/login_data_source.dart';
+import 'package:nets/feature/auth/data/models/login_model.dart';
 import 'package:nets/feature/navigation/view/presentation/navigation_view.dart';
 
 part 'login_state.dart';
@@ -27,8 +22,9 @@ class LoginCubit extends Cubit<LoginState> {
     Future.delayed(const Duration(seconds: 2), () {
       context.navigateToPage(const NavigationView());
     });
-
-    await DeviceUUid().initializeDeviceInfo(isAuth: true);
+    userCacheValue = LoginModel(data: Data(phone: '01127200000', email: 'test@gmail.com', authKey: 'asdasd'));
+    await userCache?.put(userCacheKey, jsonEncode(LoginModel(data: Data(phone: '01127200000', email: 'test@gmail.com', authKey: 'asdasd')).toJson()));
+    //await DeviceUUid().initializeDeviceInfo(isAuth: true);
     // await LoginDataSource.login(
     //   data: {
     //     'email': emailController.text,

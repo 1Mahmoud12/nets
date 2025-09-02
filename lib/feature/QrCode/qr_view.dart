@@ -4,8 +4,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:nets/core/themes/colors.dart';
-import 'package:nets/core/network/local/cache.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QrView extends StatefulWidget {

@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/utils/custom_show_toast.dart';
-import 'package:nets/feature/navigation/view/presentation/widgets/custom_bottom_nav.dart';
 import 'package:nets/feature/Contacts/contacts_view.dart';
 import 'package:nets/feature/QrCode/qr_view.dart';
+import 'package:nets/feature/navigation/data/homeDataSource/home_data_source.dart';
+import 'package:nets/feature/navigation/view/presentation/widgets/custom_bottom_nav.dart';
 import 'package:nets/feature/profile/profile_view.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -34,6 +35,7 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
     _notificationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500))..repeat(reverse: true);
 
     _notificationAnimation = Tween<double>(begin: 0.8, end: 1.2).animate(CurvedAnimation(parent: _notificationController, curve: Curves.easeInOut));
+    HomeDataSourceImplementation().updateDeviceToken();
 
     _loadedScreens.add(index);
   }

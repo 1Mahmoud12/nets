@@ -89,12 +89,7 @@ class _MyAppState extends State<MyApp> {
             child: BlocBuilder<MainCubit, MainState>(
               builder: (context, state) {
                 //    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-                return Platform.isIOS
-                    ? buildMaterialApp(context)
-                    : SafeArea(
-                      top: Platform.isIOS, // Set to true if you want to avoid notch overlap too
-                      child: buildMaterialApp(context),
-                    );
+                return Platform.isIOS ? buildMaterialApp(context) : buildMaterialApp(context);
               },
             ),
           ),

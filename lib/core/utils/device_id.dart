@@ -19,7 +19,7 @@ class DeviceUUid {
     await _setDeviceOs();
     await _setDeviceVersion();
     if (!isAuth) {
-      HomeDataSourceImplementation().updateDeviceToken(fcmToken: Constants.fcmToken);
+      HomeDataSourceImplementation().updateDeviceToken();
     }
 
     log('deviceId: ${Constants.deviceId}');

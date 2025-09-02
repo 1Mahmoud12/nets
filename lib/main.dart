@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:adjust_sdk/adjust.dart';
-import 'package:adjust_sdk/adjust_config.dart';
 import 'package:app_links/app_links.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -23,15 +21,15 @@ import 'package:nets/core/utils/constants.dart';
 import 'package:nets/core/utils/constants_models.dart';
 import 'package:nets/feature/Contacts/contacts_view.dart';
 import 'package:nets/feature/auth/data/models/login_model.dart';
-import 'package:nets/feature/auth/views/presentation/login_view.dart';
 import 'package:nets/feature/navigation/view/presentation/navigation_view.dart';
+import 'package:nets/feature/splash/view/presentation/splash_screen_view.dart';
 
 import 'firebase_options.dart';
 import 'my_app.dart';
 
 //PusherService pusherService = PusherService();
 // Widget appStartScreen = ForgotPasswordView();
-Widget appStartScreen = const LoginView();
+Widget appStartScreen = const SplashScreenView();
 final appLinks = AppLinks(); // AppLinks is singleton
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -116,9 +114,6 @@ void main() async {
     log('$error');
   }
 
-  final AdjustConfig config = AdjustConfig('{YourAppToken}', AdjustEnvironment.sandbox);
-  Adjust.initSdk(config);
-
   // rootBundle.loadString('assets/services/map.json').then((string) {
   //   Constants.mapStyleString = string;
   // });
@@ -138,12 +133,12 @@ void main() async {
 }
 
 void _handleDeepLink(Uri uri) {
-  log('Handling deep link: $uri');
+  print('Handling deep link: $uri');
 
   // Extract the path segments from the URI
   final pathSegments = uri.host;
   final segments = uri.pathSegments;
-  log('Handling pathSegments: $pathSegments');
+  print('Handling pathSegments: $pathSegments');
 
   if (pathSegments.isNotEmpty) {
     // Handle different deep link routes
@@ -156,7 +151,7 @@ void _handleDeepLink(Uri uri) {
         }
         break;
       default:
-        log('Unknown deep link path: $pathSegments');
+        print('Unknown deep link path: $pathSegments');
         // Navigate to home/main screen for unknown paths
         _navigateToMainScreen();
     }
