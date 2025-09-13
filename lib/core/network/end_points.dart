@@ -1,5 +1,5 @@
 class EndPoints {
-  static const domain = 'https://deeplink.gootravell.com';
+  static const domain = 'https://gootravell.com';
 
   //static const domain = 'https://almamlka01jo2025.dev2.dot.jo';
   static const baseUrl = '$domain/api/';

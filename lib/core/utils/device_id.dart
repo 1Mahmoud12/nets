@@ -5,7 +5,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:nets/core/utils/constants.dart';
 import 'package:nets/core/utils/notification/notification.dart';
-import 'package:nets/feature/navigation/data/homeDataSource/home_data_source.dart';
 import 'package:uuid/uuid.dart';
 
 import '../network/local/cache.dart';
@@ -18,9 +17,9 @@ class DeviceUUid {
     await _setDeviceType();
     await _setDeviceOs();
     await _setDeviceVersion();
-    if (!isAuth) {
-      HomeDataSourceImplementation().updateDeviceToken();
-    }
+    // if (!isAuth) {
+    //   HomeDataSourceImplementation().updateDeviceToken();
+    // }
 
     log('deviceId: ${Constants.deviceId}');
     log('fcmToken: ${Constants.fcmToken}');

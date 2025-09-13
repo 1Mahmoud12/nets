@@ -76,7 +76,7 @@ void main() async {
   // ConstantsModels.getLastArticleByDepartmentIdModel = CustomLastArticleModel.fromJson(
   //   jsonDecode(await dataCache?.get(customLastArticleByDepartmentIdModel, defaultValue: '{}')),
   // );
-  log('userCache===>$checkedNotification');
+  log('userCache===>${userCacheValue?.data}');
   //ConstantsModels.favoritesModel = FavoritesModel.fromJson(jsonDecode(await userCache!.get(favoritesKey, defaultValue: '{}')));
   // Handle initial link when app starts from deep link
   final initialLink = await appLinks.getInitialLink();
@@ -165,17 +165,21 @@ void _navigateToLinkScreen(String linkId) {
       // Navigate to the main screen (NavigationView)
       // You can add additional logic here to pass the linkId to a specific screen
       //  navigatorKey.currentState!.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const NavigationView()), (route) => false);
-      showContactDetails({
-        'name': 'Ahmed Hassan',
-        'phone': '+20 123 456 7890',
-        'email': 'ahmed.hassan@email.com',
-        'status': 'online',
-      }, navigatorKey.currentState!.context);
+      if (userCacheValue?.data != null) {
+        showContactDetails({
+          'name': 'Ahmed Hassan',
+          'phone': '+20 123 456 7890',
+          'email': 'ahmed.hassan@email.com',
+          'status': 'online',
+        }, navigatorKey.currentState!.context);
+      }
       // Optional: Show a message or navigate to a specific tab based on linkId
       log('Successfully navigated to main screen for link ID: $linkId');
     } else {
       // If navigator is not ready, set the app start screen
-      appStartScreen = const NavigationView();
+      if (userCacheValue?.data != null) {
+        appStartScreen = const NavigationView();
+      }
     }
   });
 }

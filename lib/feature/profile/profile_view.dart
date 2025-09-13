@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
-import 'package:nets/core/utils/navigate.dart';
 import 'package:nets/feature/auth/views/presentation/login_view.dart';
 
 class ProfileView extends StatefulWidget {
@@ -268,7 +267,9 @@ class _ProfileViewState extends State<ProfileView> {
             ElevatedButton(
               onPressed: () async {
                 await userCache?.put(userCacheKey, null);
+
                 userCacheValue?.data = null;
+                userCache?.clear();
                 Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const LoginView()), (route) => false);
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red[400]),
