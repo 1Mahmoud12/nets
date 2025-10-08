@@ -104,8 +104,8 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                     minWidth: context.screenWidth * .3,
                     maxWidth: widget.maxWidth ? context.screenWidth * .9 : context.screenWidth * .3,
                   ),
-                  position: PopupMenuPosition.under,
-                  offset: Offset(0, 16.h),
+                  
+                  
                   onSelected: (DropDownModel selectedValue) {
                     setState(() {
                       newSelected = selectedValue;
@@ -123,7 +123,7 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                           decoration: BoxDecoration(
                             border: Border(bottom: BorderSide(color: AppColors.black.withAlpha((.2 * 255).toInt()))),
                           ),
-                          padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 12.w),
+                          // padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 12.w),
 
                           width: widget.maxWidth ? context.screenWidth * .9 : context.screenWidth * .3,
 

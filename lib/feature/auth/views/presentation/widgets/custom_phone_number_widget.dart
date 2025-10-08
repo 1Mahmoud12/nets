@@ -135,7 +135,7 @@ class _CustomPhoneNumberFieldState extends State<CustomPhoneNumberField> {
         }
         return null;
       },
-      prefixIcon: Padding(
+      suffixIcon: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: SizedBox(
           width: 110, // Increased width to accommodate country code
@@ -146,7 +146,7 @@ class _CustomPhoneNumberFieldState extends State<CustomPhoneNumberField> {
                   fillColor: AppColors.transparent,
                   borderColor: AppColors.transparent,
                   selectedItem: DropDownModel(
-                    name: selectedCountry.name,
+                    name: selectedCountry.code,
                     value: selectedCountry.id,
                     image: selectedCountry.image,
                     additionalText: selectedCountry.code,
@@ -159,8 +159,8 @@ class _CustomPhoneNumberFieldState extends State<CustomPhoneNumberField> {
                   },
                 ),
               ),
-              const SizedBox(width: 4),
-              Container(height: 20, width: 1, color: AppColors.secondDividerColor),
+              // const SizedBox(width: 4),
+              // Container(height: 20, width: 1, color: AppColors.secondDividerColor),
             ],
           ),
         ),

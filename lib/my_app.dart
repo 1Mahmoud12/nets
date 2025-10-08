@@ -76,7 +76,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    arabicLanguage = context.locale.languageCode == 'ar';
+    arabicLanguage = context.locale.languageCode == 'en';
     // if (false) {
     //   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     // }
@@ -104,6 +104,7 @@ class _MyAppState extends State<MyApp> {
       locale: context.locale,
       //locale: DevicePreview.locale(context),
       //builder: DevicePreview.appBuilder,
+      
       navigatorKey: navigatorKey,
       theme: Themes(Constants.fontFamily).light(),
       darkTheme: Themes(Constants.fontFamily).dark(),

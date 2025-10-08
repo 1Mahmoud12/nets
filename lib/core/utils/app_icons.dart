@@ -1,7 +1,7 @@
 class AppIcons {
   static const baseUrl = 'assets/images/svg';
   // app logo
-  static const appLogo = '$baseUrl/app-logo.svg';
+  static const appLogo = '$baseUrl/logo.svg';
   static const smallAppLogo = '$baseUrl/small-svg-app-logo.svg';
   static const splashNotificationIdc = '$baseUrl/splace-notification-ic.svg';
   static const profileIcons = '$baseUrl/profile-icon.svg';
@@ -78,4 +78,20 @@ class AppIcons {
   static const faceIdIc = '$baseUrl/faceIdIc.svg';
   static const fingerPrintIc = '$baseUrl/fingerPrintIc.svg';
   static const bioMetricIc = '$baseUrl/bioMetricIc.svg';
+
+  // Flags
+  static const AEIc = '$baseUrl/emiratesFlag.svg';
+  static const EGIc = '$baseUrl/egyptFlag.svg';
+  static const SAIc = '$baseUrl/saudiArabiaFlag.svg';
+  static const EN = '$baseUrl/englishIc.svg';
+  //icons navigation
+  static const home = '$baseUrl/home_icon.svg';
+  static const contact = '$baseUrl/contact_icon.svg';
+  static const journey = '$baseUrl/journey_icon.svg';
+  static const profile = '$baseUrl/profile_icon.svg';
+  static const homeSel = '$baseUrl/home_sel.svg';
+  static const contactSel = '$baseUrl/contact_sel.svg';
+  static const journeySel = '$baseUrl/journey_sel.svg';
+  static const profileSel = '$baseUrl/profile_sel.svg';
+
 }

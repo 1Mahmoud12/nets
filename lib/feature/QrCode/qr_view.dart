@@ -34,9 +34,14 @@ class _QrViewState extends State<QrView> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    _rotationController = AnimationController(duration: const Duration(seconds: 10), vsync: this)..repeat();
+    _rotationController = AnimationController(
+      duration: const Duration(seconds: 10),
+      vsync: this,
+    )..repeat();
 
-    _rotationAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _rotationController, curve: Curves.linear));
+    _rotationAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _rotationController, curve: Curves.linear),
+    );
   }
 
   @override
@@ -71,16 +76,29 @@ END:VCARD
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Row(children: [Icon(Icons.check_circle, color: Colors.white), SizedBox(width: 8), Text('QR code shared successfully!')]),
+            content: const Row(
+              children: [
+                Icon(Icons.check_circle, color: Colors.white),
+                SizedBox(width: 8),
+                Text('QR code shared successfully!'),
+              ],
+            ),
             backgroundColor: Colors.green,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
         );
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to share QR code: $e'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to share QR code: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     } finally {
       if (mounted) {
@@ -100,16 +118,29 @@ END:VCARD
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Row(children: [Icon(Icons.check_circle, color: Colors.white), SizedBox(width: 8), Text('QR code saved to gallery!')]),
+            content: const Row(
+              children: [
+                Icon(Icons.check_circle, color: Colors.white),
+                SizedBox(width: 8),
+                Text('QR code saved to gallery!'),
+              ],
+            ),
             backgroundColor: Colors.green,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
         );
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to save QR code: $e'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to save QR code: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     } finally {
       if (mounted) {
@@ -123,7 +154,11 @@ END:VCARD
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: const Row(
-          children: [Icon(Icons.copy, color: Colors.white, size: 20), SizedBox(width: 8), Text('Contact info copied to clipboard!')],
+          children: [
+            Icon(Icons.copy, color: Colors.white, size: 20),
+            SizedBox(width: 8),
+            Text('Contact info copied to clipboard!'),
+          ],
         ),
         backgroundColor: AppColors.primaryColor,
         behavior: SnackBarBehavior.floating,
@@ -137,12 +172,20 @@ END:VCARD
     // Request camera permission first
     final ImagePicker picker = ImagePicker();
     try {
-      final XFile? photo = await picker.pickImage(source: ImageSource.camera, imageQuality: 80);
+      final XFile? photo = await picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 80,
+      );
 
       if (photo != null) {
         // Show success message
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Photo captured successfully!'), duration: Duration(seconds: 2)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Photo captured successfully!'),
+              duration: Duration(seconds: 2),
+            ),
+          );
         }
       }
     } catch (e) {
@@ -151,9 +194,12 @@ END:VCARD
       if (status.isDenied) {
         // Show permission denied message
         if (mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(const SnackBar(content: Text('Camera permission is required to scan QR codes'), backgroundColor: Colors.red));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Camera permission is required to scan QR codes'),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
       } else if (status.isPermanentlyDenied) {
         // Show settings dialog
@@ -163,9 +209,14 @@ END:VCARD
             builder: (BuildContext context) {
               return AlertDialog(
                 title: const Text('Camera Permission Required'),
-                content: const Text('Camera permission has been permanently denied. Please enable it in settings.'),
+                content: const Text(
+                  'Camera permission has been permanently denied. Please enable it in settings.',
+                ),
                 actions: [
-                  TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Cancel'),
+                  ),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -192,7 +243,9 @@ END:VCARD
             height: MediaQuery.of(context).size.height * 0.4,
             decoration: BoxDecoration(
               color: darkModeValue ? AppColors.darkModeColor : Colors.white,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(20),
+              ),
             ),
             child: Column(
               children: [
@@ -200,7 +253,10 @@ END:VCARD
                   width: 40,
                   height: 4,
                   margin: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(color: Colors.grey[400], borderRadius: BorderRadius.circular(2)),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[400],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(20),
@@ -209,16 +265,43 @@ END:VCARD
                     children: [
                       Text(
                         'QR Code Options',
-                        style: Theme.of(
-                          context,
-                        ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: darkModeValue ? AppColors.white : AppColors.black),
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color:
+                              darkModeValue ? AppColors.white : AppColors.black,
+                        ),
                       ),
                       const SizedBox(height: 20),
-                      _buildOptionTile(Icons.qr_code_scanner, 'Scan QR Code', 'Open camera to scan QR codes', _openQrScanner),
-                      _buildOptionTile(Icons.share, 'Share QR Code', 'Share with others via messaging apps', _shareQrCode),
-                      _buildOptionTile(Icons.download, 'Save to Gallery', 'Save QR code as image to your device', _saveQrCode),
-                      _buildOptionTile(Icons.copy, 'Copy Contact Info', 'Copy contact details to clipboard', _copyQrData),
-                      _buildOptionTile(Icons.print, 'Print QR Code', 'Print QR code for physical sharing', () => Navigator.pop(context)),
+                      _buildOptionTile(
+                        Icons.qr_code_scanner,
+                        'Scan QR Code',
+                        'Open camera to scan QR codes',
+                        _openQrScanner,
+                      ),
+                      _buildOptionTile(
+                        Icons.share,
+                        'Share QR Code',
+                        'Share with others via messaging apps',
+                        _shareQrCode,
+                      ),
+                      _buildOptionTile(
+                        Icons.download,
+                        'Save to Gallery',
+                        'Save QR code as image to your device',
+                        _saveQrCode,
+                      ),
+                      _buildOptionTile(
+                        Icons.copy,
+                        'Copy Contact Info',
+                        'Copy contact details to clipboard',
+                        _copyQrData,
+                      ),
+                      _buildOptionTile(
+                        Icons.print,
+                        'Print QR Code',
+                        'Print QR code for physical sharing',
+                        () => Navigator.pop(context),
+                      ),
                     ],
                   ),
                 ),
@@ -228,15 +311,35 @@ END:VCARD
     );
   }
 
-  Widget _buildOptionTile(IconData icon, String title, String subtitle, VoidCallback onTap) {
+  Widget _buildOptionTile(
+    IconData icon,
+    String title,
+    String subtitle,
+    VoidCallback onTap,
+  ) {
     return ListTile(
       leading: Container(
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
+        decoration: BoxDecoration(
+          color: AppColors.primaryColor.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(8),
+        ),
         child: Icon(icon, color: AppColors.primaryColor),
       ),
-      title: Text(title, style: TextStyle(fontWeight: FontWeight.w600, color: darkModeValue ? AppColors.white : AppColors.black)),
-      subtitle: Text(subtitle, style: TextStyle(color: darkModeValue ? Colors.grey[400] : Colors.grey[600], fontSize: 12)),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          color: darkModeValue ? AppColors.white : AppColors.black,
+        ),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: TextStyle(
+          color: darkModeValue ? Colors.grey[400] : Colors.grey[600],
+          fontSize: 12,
+        ),
+      ),
       onTap: onTap,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     );
@@ -245,13 +348,14 @@ END:VCARD
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
+      backgroundColor:
+          darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
       body: SafeArea(
         child: Stack(
           children: [
             // Main Content
             SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 70, 20, 20),
+              padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
               child: Column(
                 children: [
                   // QR Code Container
@@ -261,11 +365,23 @@ END:VCARD
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: [AppColors.primaryColor.withOpacity(0.1), AppColors.primaryColor.withOpacity(0.05)],
+                        colors: [
+                          AppColors.primaryColor.withOpacity(0.1),
+                          AppColors.primaryColor.withOpacity(0.05),
+                        ],
                       ),
                       borderRadius: BorderRadius.circular(25),
-                      border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 2),
-                      boxShadow: [BoxShadow(color: AppColors.primaryColor.withOpacity(0.2), blurRadius: 20, offset: const Offset(0, 10))],
+                      border: Border.all(
+                        color: AppColors.primaryColor.withOpacity(0.3),
+                        width: 2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primaryColor.withOpacity(0.2),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
                     ),
                     child: Column(
                       children: [
@@ -280,11 +396,15 @@ END:VCARD
                                 return Transform.rotate(
                                   angle: _rotationAnimation.value * 2 * 3.14159,
                                   child: Container(
-                                    width: 260,
-                                    height: 260,
+                                    width: 280,
+                                    height: 280,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 2),
+                                      border: Border.all(
+                                        color: AppColors.primaryColor
+                                            .withOpacity(0.3),
+                                        width: 2,
+                                      ),
                                     ),
                                   ),
                                 );
@@ -292,19 +412,31 @@ END:VCARD
                             ),
                             // QR Code
                             Container(
+                              height: 250,
                               padding: const EdgeInsets.all(20),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(15),
-                                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 5))],
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 5),
+                                  ),
+                                ],
                               ),
                               child: QrImageView(
                                 data: _generateQrData(),
-                                size: 200.0,
+                                size: 280.0,
                                 backgroundColor: Colors.white,
-                                foregroundColor: AppColors.primaryColor,
+                                foregroundColor: AppColors.black,
                                 errorStateBuilder: (cxt, err) {
-                                  return const Center(child: Text('Error generating QR code', textAlign: TextAlign.center));
+                                  return const Center(
+                                    child: Text(
+                                      'Error generating QR code',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  );
                                 },
                               ),
                             ),
@@ -318,9 +450,17 @@ END:VCARD
                           width: double.infinity,
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: darkModeValue ? AppColors.darkModeColor : Colors.grey[50],
+                            color:
+                                darkModeValue
+                                    ? AppColors.darkModeColor
+                                    : Colors.grey[50],
                             borderRadius: BorderRadius.circular(15),
-                            border: Border.all(color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!),
+                            border: Border.all(
+                              color:
+                                  darkModeValue
+                                      ? Colors.grey[700]!
+                                      : Colors.grey[200]!,
+                            ),
                           ),
                           child: Column(
                             children: [
@@ -330,21 +470,36 @@ END:VCARD
                                     radius: 30,
                                     backgroundColor: AppColors.primaryColor,
                                     child: Text(
-                                      userData['name']!.split(' ').map((e) => e[0]).join(),
-                                      style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                                      userData['name']!
+                                          .split(' ')
+                                          .map((e) => e[0])
+                                          .join(),
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.titleMedium?.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(width: 15),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           userData['name']!,
-                                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: darkModeValue ? AppColors.white : AppColors.black,
-                                            fontSize: 18,
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.titleMedium?.copyWith(
+                                            fontWeight: FontWeight.w400,
+                                            color:
+                                                darkModeValue
+                                                    ? AppColors.white
+                                                    : AppColors.black,
+                                            fontSize: 16,
                                           ),
                                         ),
                                         const SizedBox(height: 2),
@@ -352,14 +507,24 @@ END:VCARD
                                           userData['position']!,
                                           style: Theme.of(
                                             context,
-                                          ).textTheme.bodyMedium?.copyWith(color: AppColors.primaryColor, fontSize: 14, fontWeight: FontWeight.w500),
+                                          ).textTheme.bodyMedium?.copyWith(
+                                            color: AppColors.primaryColor,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                         ),
                                         const SizedBox(height: 2),
                                         Text(
                                           userData['company']!,
                                           style: Theme.of(
                                             context,
-                                          ).textTheme.bodySmall?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600], fontSize: 12),
+                                          ).textTheme.bodySmall?.copyWith(
+                                            color:
+                                                darkModeValue
+                                                    ? Colors.grey[400]
+                                                    : Colors.grey[600],
+                                            fontSize: 12,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -367,7 +532,13 @@ END:VCARD
                                 ],
                               ),
                               const SizedBox(height: 15),
-                              Divider(color: darkModeValue ? Colors.grey[700] : Colors.grey[300], height: 1),
+                              Divider(
+                                color:
+                                    darkModeValue
+                                        ? Colors.grey[700]
+                                        : Colors.grey[300],
+                                height: 1,
+                              ),
                               const SizedBox(height: 15),
                               // Contact details
                               _buildContactRow(Icons.email, userData['email']!),
@@ -392,7 +563,11 @@ END:VCARD
               right: 0,
               child: IconButton(
                 onPressed: _openQrScanner,
-                icon: const Icon(Icons.qr_code_scanner, color: AppColors.primaryColor, size: 24),
+                icon: const Icon(
+                  Icons.qr_code_scanner,
+                  color: AppColors.primaryColor,
+                  size: 24,
+                ),
                 padding: const EdgeInsets.all(12),
                 constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                 tooltip: 'Scan QR Code',
@@ -407,12 +582,19 @@ END:VCARD
   Widget _buildContactRow(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, size: 16, color: darkModeValue ? Colors.grey[400] : Colors.grey[600]),
+        Icon(
+          icon,
+          size: 16,
+          color: darkModeValue ? Colors.grey[400] : Colors.grey[600],
+        ),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
             text,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: darkModeValue ? Colors.grey[300] : Colors.grey[700], fontSize: 13),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: darkModeValue ? Colors.grey[300] : Colors.grey[700],
+              fontSize: 13,
+            ),
           ),
         ),
       ],

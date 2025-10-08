@@ -60,13 +60,21 @@ void main() async {
   // );
   onBoardingValue = dataCache?.get(onBoardingKey, defaultValue: true);
   darkModeValue = userCache?.get(darkModeKey, defaultValue: false);
-  checkedNotification = userCache?.get(checkedNotificationKey, defaultValue: false);
+  checkedNotification = userCache?.get(
+    checkedNotificationKey,
+    defaultValue: false,
+  );
   closeUrgentNewValue = false;
   themeModeValue = userCache?.get(themeModeKey, defaultValue: 'light');
   locationCacheValue = userCache?.get(locationCacheKey);
-  final String? cacheData = await userCache?.get(userCacheKey, defaultValue: '{}');
-  ConstantsModels.loginModel = cacheData != null ? LoginModel.fromJson(jsonDecode(cacheData)) : null;
-  userCacheValue = cacheData != null ? LoginModel.fromJson(jsonDecode(cacheData)) : null;
+  final String? cacheData = await userCache?.get(
+    userCacheKey,
+    defaultValue: '{}',
+  );
+  ConstantsModels.loginModel =
+      cacheData != null ? LoginModel.fromJson(jsonDecode(cacheData)) : null;
+  userCacheValue =
+      cacheData != null ? LoginModel.fromJson(jsonDecode(cacheData)) : null;
 
   // ConstantsModels.dynamicArticleModel = DynamicArticleModel.fromJson(jsonDecode(await dataCache?.get(dynamicArticleKey, defaultValue: '{}')));
   // ConstantsModels.storiesModel = StoriesModel.fromJson(jsonDecode(await dataCache?.get(storiesModelKey, defaultValue: '{}')));
@@ -98,14 +106,18 @@ void main() async {
   arabicLanguage = await userCache?.get(languageAppKey, defaultValue: false);
 
   log('arabicLanguage ==>$arabicLanguage');
+  log('Language ==>${Constants.currentLanguage}');
   //Constants.fontFamily = arabicLanguage ? 'Tajawal' : 'Inter';
   Bloc.observer = MyBlocObserver();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform).then((value) {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  ).then((value) {
     //  FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(false);
   });
   try {
-    Constants.messageGlobal = await FirebaseMessaging.instance.getInitialMessage();
+    Constants.messageGlobal =
+        await FirebaseMessaging.instance.getInitialMessage();
     if (Constants.messageGlobal?.data != null) {
       appStartScreen = const NavigationView();
     }
@@ -120,13 +132,21 @@ void main() async {
   //selectTokens();
   //Constants.jsonServerKey = await loadJsonFile();
 
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((value) {
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((value) {
     runApp(
       EasyLocalization(
         supportedLocales: const [Locale('ar', 'SA'), Locale('en', 'US')],
         path: 'assets/translation',
         startLocale: const Locale('en', 'US'),
-        child: DevicePreview(enabled: false, builder: (context) => const MyApp()),
+        fallbackLocale: const Locale('en', 'US'),
+
+        child: DevicePreview(
+          enabled: false,
+          builder: (context) => const MyApp(),
+        ),
       ),
     );
   });
@@ -187,7 +207,10 @@ void _navigateToLinkScreen(String linkId) {
 void _navigateToMainScreen() {
   WidgetsBinding.instance.addPostFrameCallback((_) {
     if (navigatorKey.currentState != null) {
-      navigatorKey.currentState!.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const NavigationView()), (route) => false);
+      navigatorKey.currentState!.pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const NavigationView()),
+        (route) => false,
+      );
     } else {
       appStartScreen = const NavigationView();
     }

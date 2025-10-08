@@ -3,7 +3,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Constants {
-  static String fontFamily = 'ALMAMLAKAFONT';
+  // static String fontFamily = 'ALMAMLAKAFONT';
+  static String fontFamily = 'Montserrat';
   static String appName = 'TAU';
   static LatLng locationCache = const LatLng(30.033333, 31.233334);
   static int distance = 100; // Km

@@ -12,18 +12,38 @@ part 'login_state.dart';
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(LoginInitial());
 
-  static LoginCubit of(BuildContext context) => BlocProvider.of<LoginCubit>(context);
+  static LoginCubit of(BuildContext context) =>
+      BlocProvider.of<LoginCubit>(context);
+  TextEditingController loginPhoneController = TextEditingController();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
+  String countryCode = '+966';
+  // CountryFlag country = countriesflage.first;
   Future<void> login({required BuildContext context}) async {
     emit(LoginLoading());
     Future.delayed(const Duration(seconds: 2), () {
       context.navigateToPage(const NavigationView());
     });
-    userCacheValue = LoginModel(data: Data(phone: '01127200000', email: 'test@gmail.com', authKey: 'asdasd'));
-    await userCache?.put(userCacheKey, jsonEncode(LoginModel(data: Data(phone: '01127200000', email: 'test@gmail.com', authKey: 'asdasd')).toJson()));
+    userCacheValue = LoginModel(
+      data: Data(
+        phone: '01127200000',
+        email: 'test@gmail.com',
+        authKey: 'asdasd',
+      ),
+    );
+    await userCache?.put(
+      userCacheKey,
+      jsonEncode(
+        LoginModel(
+          data: Data(
+            phone: '01127200000',
+            email: 'test@gmail.com',
+            authKey: 'asdasd',
+          ),
+        ).toJson(),
+      ),
+    );
     //await DeviceUUid().initializeDeviceInfo(isAuth: true);
     // await LoginDataSource.login(
     //   data: {

@@ -36,7 +36,7 @@
   "we’ve_send_the_code_to_your_email_address": "We’ve sent the code to your email address",
   "check_your_email": "Check your email",
   "OTP": "OTP",
-  "resend_code": "Resend Code",
+  "resend_code": "Didn't receive the code?",
   "change": "Change",
   "change_password_instruction": "Replace your password with new, strong characters.",
   "change_password": "Change Password",
@@ -177,7 +177,6 @@
   "your_request_not_found_please_try_later": "Your request was not found, please try later.",
   "internal_server_error_please_try_later": "Internal server error, please try later.",
   "opps_there_was_an_error,_please_try_again": "Oops, there was an error. Please try again.",
-
   "corporate_website": "Corporate Website",
   "relative_humidity": "Relative Humidity",
   "Notification Permission": "Notification Permission",
@@ -222,5 +221,6 @@
   "audio_completed": "Audio completed - playback finished",
   "video_player_ready": "Video player ready",
   "video_ended": "Video ended - handling completion",
-  "": ""
+  "send_otp": "Send OTP",
+  "enter_your_phone_number": "Enter your phone number to access your account"
 }

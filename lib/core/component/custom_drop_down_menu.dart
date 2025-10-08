@@ -105,31 +105,24 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
 
                 hint: Row(
                   children: [
-                    if (newSelected.showName)
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 5, right: 5),
-                          child: Text(
-                            newSelected.name.tr(),
-                            style: Styles.style14400.copyWith(color: AppColors.textColor, fontWeight: FontWeight.w600),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ),
                     if (newSelected.showImage && newSelected.image != null)
-                      Expanded(
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5.0),
                         child: newSelected.image!.contains('.svg')
-                            ? SvgPicture.asset(newSelected.image!, fit: BoxFit.cover, height: 16, width: 16)
-                            : Image.asset(newSelected.image!, fit: BoxFit.cover),
+                            ? SvgPicture.asset(newSelected.image!, height: 20, width: 20)
+                            : Image.asset(newSelected.image!, fit: BoxFit.contain, height: 20, width: 20),
+                      ),
+                    if (newSelected.showName)
+                      Text(
+                        newSelected.name.tr(),
+                        style: Styles.style14400.copyWith(color: AppColors.textColor, fontWeight: FontWeight.w600),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     if (widget.showDropDownIcon)
-                      Align(
-                        // alignment: context.locale.languageCode == 'ar' ? Alignment.centerRight : Alignment.centerLeft,
-                        child: RotatedBox(
-                          quarterTurns: widget.directionArrowButton ?? 0,
-                          child: const FittedBox(fit: BoxFit.scaleDown, child: Icon(Icons.keyboard_arrow_down)),
-                        ),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 5.0),
+                        child: FittedBox(fit: BoxFit.scaleDown, child: Icon(Icons.keyboard_arrow_down)),
                       ),
                   ],
                 ),
@@ -153,30 +146,29 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
                 items: widget.items.map((DropDownModel item) {
                   return DropdownMenuItem<DropDownModel>(
                     value: item,
-                    child: Container(
-                      // constraints: BoxConstraints(maxWidth: 120.w),
-                      // width: 120.w,
-                      alignment: context.locale.languageCode == 'ar' ? Alignment.centerRight : Alignment.centerLeft,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.r)),
-                      child: Padding(
-                        padding: widget.menuItemPadding ?? const EdgeInsets.only(left: 10.0).w,
-                        child: item.showImage
-                            ? Padding(
-                                padding: const EdgeInsets.only(left: 5, right: 5),
-                                child: item.image!.contains('.svg')
-                                    ? SvgPicture.asset(item.image!, fit: BoxFit.cover, height: 16, width: 16)
-                                    : Image.asset(item.image!, fit: BoxFit.cover),
-                              )
-                            : Text(
-                                item.name,
-                                style: Styles.style12400,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
-                                maxLines: 1,
-                              ),
+                    child: Padding(
+                      padding: widget.menuItemPadding ?? const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Row(
+                        children: [
+                          if (item.showImage && item.image != null)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: item.image!.contains('.svg')
+                                  ? SvgPicture.asset(item.image!, height: 20, width: 20)
+                                  : Image.asset(item.image!, fit: BoxFit.contain, height: 20, width: 20),
+                            ),
+                          Expanded(
+                            child: Text(
+                              item.name,
+                              style: Styles.style12400,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
+                              maxLines: 1,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-
                     onTap: () {
                       //debugPrint(widget.selectedItem);
                     },
