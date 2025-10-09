@@ -6,12 +6,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/themes/styles.dart';
-import 'package:nets/core/utils/app_icons.dart';
 import 'package:nets/core/utils/constant_gaping.dart';
 import 'package:nets/core/utils/constants.dart';
 import 'package:nets/core/utils/extensions.dart';
 
-class DropDownModel {
+class DropDownModelPhone {
   final String name;
   final String? image;
   final String? additionalText;
@@ -20,7 +19,7 @@ class DropDownModel {
   final int value;
   final Function()? onTap;
 
-  DropDownModel({
+  DropDownModelPhone({
     required this.name,
     required this.value,
     this.showImage = false,
@@ -31,9 +30,9 @@ class DropDownModel {
   });
 }
 
-class CustomDropDownMenu extends StatefulWidget {
-  final DropDownModel? selectedItem;
-  final List<DropDownModel> items;
+class CustomDropDownPhone extends StatefulWidget {
+  final DropDownModelPhone? selectedItem;
+  final List<DropDownModelPhone> items;
   final double? width;
   final Color? borderColor;
   final Color? fillColor;
@@ -41,7 +40,7 @@ class CustomDropDownMenu extends StatefulWidget {
   final int? directionArrowButton;
   final double? borderRadius;
   final bool showDropDownIcon;
-  final void Function(DropDownModel?)? onChanged;
+  final void Function(DropDownModelPhone?)? onChanged;
   final String? nameField;
   final bool hasError;
   final String? errorText;
@@ -52,7 +51,7 @@ class CustomDropDownMenu extends StatefulWidget {
   final double? menuMaxHeight; // Control max height of dropdown menu
   final bool? state;
 
-  const CustomDropDownMenu({
+  const CustomDropDownPhone({
     super.key,
     required this.selectedItem,
     required this.items,
@@ -74,11 +73,11 @@ class CustomDropDownMenu extends StatefulWidget {
   });
 
   @override
-  State<CustomDropDownMenu> createState() => _CustomDropDownMenuState();
+  State<CustomDropDownPhone> createState() => _CustomDropDownPhoneState();
 }
 
-class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
-  DropDownModel newSelected = DropDownModel(
+class _CustomDropDownPhoneState extends State<CustomDropDownPhone> {
+  DropDownModelPhone newSelected = DropDownModelPhone(
     name: '',
     value: -1,
     showName: false,
@@ -113,35 +112,48 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
                 borderRadius: BorderRadius.circular(widget.borderRadius ?? 100),
                 color: widget.fillColor ?? AppColors.white,
                 border: Border.all(
+                  width: 2,
                   color:
                       widget.hasError
                           ? Colors.red
-                          : (widget.borderColor ?? AppColors.greyG200),
+                          : (widget.borderColor ??
+                              AppColors.cBorderButtonColor),
                 ),
               ),
-              child: DropdownButton<DropDownModel>(
+              child: DropdownButton<DropDownModelPhone>(
                 underline: Container(),
                 icon: const SizedBox(),
-                padding:
-                    widget.buttonPadding ??
-                    EdgeInsets.symmetric(
-                      horizontal: newSelected.showImage ? 20 : 24,
-                    ),
+                // padding: widget.buttonPadding ?? EdgeInsets.symmetric(horizontal: newSelected.showImage ? 20 : 24),
                 iconSize: 0,
                 menuMaxHeight: widget.menuMaxHeight,
 
                 hint: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
+                    Container(width: 1, height: 45, color: AppColors.greyG200),
+
+                    const FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Icon(Icons.keyboard_arrow_down),
+                    ),
+
+                    Text(
+                      newSelected.name.tr(),
+                      style: Styles.style12400.copyWith(
+                        color: AppColors.textColor,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     if (newSelected.showImage && newSelected.image != null)
                       Padding(
-                        padding: const EdgeInsets.only(right: 5.0),
+                        padding: const EdgeInsets.only(right: 6.0, left: 5.0),
                         child:
                             newSelected.image!.contains('.svg')
                                 ? SvgPicture.asset(
                                   newSelected.image!,
-                                  height: 20,
-                                  width: 20,
+                                  height: 15,
+                                  width: 15,
                                 )
                                 : Image.asset(
                                   newSelected.image!,
@@ -150,24 +162,9 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
                                   width: 20,
                                 ),
                       ),
-                    if (newSelected.showName)
-                      Text(
-                        newSelected.name.tr(),
-                        style: Styles.style14400.copyWith(
-                          color: AppColors.greyG900,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    if (widget.showDropDownIcon)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5.0),
-                        child: SvgPicture.asset(AppIcons.arrowDown),
-                      ),
                   ],
                 ),
-                onChanged: (DropDownModel? newValue) {
+                onChanged: (DropDownModelPhone? newValue) {
                   newSelected = newValue!;
                   setState(() {});
 
@@ -188,8 +185,8 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
 
                 // Allow items to determine their own height
                 items:
-                    widget.items.map((DropDownModel item) {
-                      return DropdownMenuItem<DropDownModel>(
+                    widget.items.map((DropDownModelPhone item) {
+                      return DropdownMenuItem<DropDownModelPhone>(
                         value: item,
                         child: Padding(
                           padding:
@@ -217,9 +214,7 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
                               Expanded(
                                 child: Text(
                                   item.name,
-                                  style: Styles.style12400.copyWith(
-                                    // color: AppColors.grey,
-                                  ),
+                                  style: Styles.style12400,
                                   overflow: TextOverflow.ellipsis,
                                   textAlign:
                                       context.locale.languageCode == 'ar'

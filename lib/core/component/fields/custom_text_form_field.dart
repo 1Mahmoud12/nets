@@ -110,14 +110,29 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       // Remove height constraint from the outer container
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(widget.borderRadius ?? 4),
-        boxShadow: const [BoxShadow(color: Color(0x0A000000), blurRadius: 35, offset: Offset(0, 9), spreadRadius: -4)],
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0A000000),
+            blurRadius: 35,
+            offset: Offset(0, 9),
+            spreadRadius: -4,
+          ),
+        ],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (widget.nameField != null)
-            Text(widget.nameField!.tr(), style: Styles.style14500.copyWith(color: darkModeValue ? AppColors.darkModeText : AppColors.textColor)),
+            Text(
+              widget.nameField!.tr(),
+              style: Styles.style14500.copyWith(
+                color:
+                    darkModeValue
+                        ? AppColors.darkModeText
+                        : AppColors.textColor,
+              ),
+            ),
           if (widget.nameField != null) SizedBox(height: 6.h),
           SizedBox(
             height: widget.height,
@@ -125,14 +140,21 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               alignment: AlignmentDirectional.bottomEnd,
               children: [
                 Directionality(
-                  textDirection: widget.enableLtr ? ui.TextDirection.ltr : ui.TextDirection.rtl,
+                  textDirection:
+                      widget.enableLtr
+                          ? ui.TextDirection.ltr
+                          : ui.TextDirection.rtl,
                   child: TextFormField(
                     enabled: widget.enable,
                     obscureText: _obscureText,
                     controller: widget.controller,
-                    keyboardType: widget.textInputType ?? TextInputType.visiblePassword,
+                    keyboardType:
+                        widget.textInputType ?? TextInputType.visiblePassword,
                     style: TextStyle(
-                      color: darkModeValue ? AppColors.darkModeText : AppColors.textColor,
+                      color:
+                          darkModeValue
+                              ? AppColors.darkModeText
+                              : AppColors.textColor,
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
                     ),
@@ -142,7 +164,11 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                         setState(() {});
                       }
                     },
-                    validator: widget.validator != null ? (value) => widget.validator!(value) : (value) => value!.isEmpty ? 'Empty Field'.tr() : null,
+                    validator:
+                        widget.validator != null
+                            ? (value) => widget.validator!(value)
+                            : (value) =>
+                                value!.isEmpty ? 'Empty Field'.tr() : null,
                     inputFormatters: widget.inputFormatters,
                     // Only set maxLines if we're not using fixed height mode
                     maxLines: useFixedHeight ? null : (widget.maxLines ?? 1),
@@ -150,65 +176,122 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                     expands: useFixedHeight,
                     cursorColor: AppColors.primaryColor,
                     focusNode: widget.focusNode,
-                    textAlignVertical: useFixedHeight ? TextAlignVertical.center : null,
+                    textAlignVertical:
+                        useFixedHeight ? TextAlignVertical.center : null,
                     decoration: InputDecoration(
                       hintText: widget.hintText.tr(),
                       hintStyle:
                           widget.hintStyle ??
-                          TextStyle(color: AppColors.greyG900, fontSize: (widget.fontSizeHintText ?? 14).sp, fontWeight: FontWeight.w500),
+                          TextStyle(
+                            color: AppColors.greyG900,
+                            fontSize: (widget.fontSizeHintText ?? 14).sp,
+                            fontWeight: FontWeight.w500,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                       prefixIcon: widget.prefixIcon,
-                      suffixIcon: widget.password == true
-                          ? Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: InkWell(
-                                onTap: _toggle,
-                                child: SvgPicture.asset(
-                                  _obscureText ? AppIcons.hidePassword : AppIcons.passwordShow,
-                                  colorFilter: darkModeValue ? const ColorFilter.mode(AppColors.darkModeText, BlendMode.srcIn) : null,
+                      suffixIcon:
+                          widget.password == true
+                              ? Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: InkWell(
+                                  onTap: _toggle,
+                                  child: SvgPicture.asset(
+                                    _obscureText
+                                        ? AppIcons.hidePassword
+                                        : AppIcons.passwordShow,
+                                    colorFilter:
+                                        darkModeValue
+                                            ? const ColorFilter.mode(
+                                              AppColors.darkModeText,
+                                              BlendMode.srcIn,
+                                            )
+                                            : null,
+                                  ),
                                 ),
-                              ),
-                            )
-                          : widget.suffixIcon,
+                              )
+                              : widget.suffixIcon,
                       labelText: widget.labelText,
-                      labelStyle: widget.labelStyle ?? Theme.of(context).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w500),
+                      labelStyle:
+                          widget.labelStyle ??
+                          Theme.of(context).textTheme.displayMedium?.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
                       filled: true,
-                      fillColor: darkModeValue ? AppColors.darkModeBackground : widget.fillColor ?? AppColors.transparent,
-                      contentPadding: widget.contentPadding ?? const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      fillColor:
+                          darkModeValue
+                              ? AppColors.darkModeBackground
+                              : widget.fillColor ?? AppColors.transparent,
+                      contentPadding:
+                          widget.contentPadding ??
+                          const EdgeInsets.symmetric(
+                            horizontal: 5,
+                            vertical: 5,
+                          ),
 
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? 4)),
-                        borderSide: BorderSide(color: widget.enabledBorder ?? AppColors.greyBorderColor, width: 1.5),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(widget.borderRadius ?? 4),
+                        ),
+                        borderSide: BorderSide(
+                          color:
+                              widget.enabledBorder ?? AppColors.greyBorderColor,
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? 4)),
-                        borderSide: BorderSide(color: widget.focusedBorderColor ?? AppColors.primaryColor, width: 1.5),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(widget.borderRadius ?? 4),
+                        ),
+                        borderSide: BorderSide(
+                          color:
+                              widget.focusedBorderColor ??
+                              AppColors.primaryColor,
+                        ),
                       ),
                       errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? 4)),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(widget.borderRadius ?? 4),
+                        ),
                         borderSide: BorderSide(color: AppColors.red),
                       ),
                       focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? 4)),
-                        borderSide: BorderSide(color: widget.focusedBorderColor ?? AppColors.primaryColor, width: 1.5),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? 4)),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(widget.borderRadius ?? 4),
+                        ),
                         borderSide: BorderSide(
                           color:
-                              widget.enabledBorder ??
-                              (Theme.of(context).brightness == Brightness.dark ? AppColors.darkModeText : AppColors.greyBorderColor),
+                              widget.focusedBorderColor ??
+                              AppColors.primaryColor,
                           width: 1.5,
                         ),
                       ),
-
-                      errorStyle: TextStyle(fontSize: 12.sp, color: AppColors.primaryColor, fontWeight: FontWeight.w400),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(widget.borderRadius ?? 4),
+                        ),
+                        borderSide: BorderSide(
+                          color:
+                              widget.enabledBorder ??
+                              (Theme.of(context).brightness == Brightness.dark
+                                  ? AppColors.darkModeText
+                                  : AppColors.greyBorderColor),
+                          width: 1.5,
+                        ),
+                      ),
+                      errorStyle: TextStyle(
+                        fontSize: 12.sp,
+                        color: AppColors.primaryColor,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   ),
                 ),
                 if (widget.showCounter)
                   Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: Text(widget.controller.text.length.toString(), style: Theme.of(context).textTheme.labelSmall),
+                    child: Text(
+                      widget.controller.text.length.toString(),
+                      style: Theme.of(context).textTheme.labelSmall,
+                    ),
                   ),
               ],
             ),

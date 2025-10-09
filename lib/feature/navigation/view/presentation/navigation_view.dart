@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/utils/app_icons.dart';
@@ -12,6 +13,8 @@ import 'package:nets/feature/navigation/data/homeDataSource/home_data_source.dar
 import 'package:nets/feature/navigation/view/presentation/widgets/custom_bottom_nav.dart';
 import 'package:nets/feature/profile/profile_view.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+
+import '../../../my_journey/views/presentation/my_journey_view.dart';
 
 class NavigationView extends StatefulWidget {
   final int customIndex;
@@ -65,7 +68,7 @@ class _NavigationViewState extends State<NavigationView>
     AppIcons.profileSel,
   ];
   final unselectedIcons = [
-   AppIcons.home,
+    AppIcons.home,
     AppIcons.contact,
     AppIcons.journey,
     AppIcons.profile,
@@ -95,7 +98,7 @@ class _NavigationViewState extends State<NavigationView>
       case 1:
         return const ContactsView();
       case 2:
-        return const ProfileView();
+        return const MyJourneyView();
       case 3:
         return const ProfileView();
       default:
@@ -129,6 +132,7 @@ class _NavigationViewState extends State<NavigationView>
       backgroundColor: Colors.transparent,
       builder:
           (context) => Container(
+            padding: const EdgeInsets.all(24),
             height: MediaQuery.of(context).size.height * 0.7,
             decoration: BoxDecoration(
               color: darkModeValue ? AppColors.darkModeColor : Colors.white,
@@ -138,58 +142,46 @@ class _NavigationViewState extends State<NavigationView>
             ),
             child: Column(
               children: [
-                Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[400],
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Notifications',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color:
-                              darkModeValue ? AppColors.white : AppColors.black,
-                        ),
+                // Container(
+                //   width: 40,
+                //   height: 4,
+                //   margin: const EdgeInsets.symmetric(vertical: 12),
+                //   decoration: BoxDecoration(
+                //     color: Colors.grey[400],
+                //     borderRadius: BorderRadius.circular(2),
+                //   ),
+                // ),
+                Row(
+                  children: [
+                    Text(
+                      'Notifications',
+                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color:
+                            darkModeValue ? AppColors.white : AppColors.black,
                       ),
-                      const Spacer(),
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text(
-                          'Mark all read',
-                          style: TextStyle(color: AppColors.primaryColor),
-                        ),
+                    ),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Mark all read',
+                        style: Theme.of(context).textTheme.displayMedium,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 Expanded(
                   child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     itemCount: 5,
                     itemBuilder: (context, index) {
                       return Container(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        padding: const EdgeInsets.all(16),
+                        margin: const EdgeInsets.only(bottom: 20),
+                        padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color:
-                              darkModeValue
-                                  ? AppColors.appBarDarkModeColor
-                                  : Colors.grey[50],
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color:
-                                darkModeValue
-                                    ? Colors.grey[700]!
-                                    : Colors.grey[200]!,
-                          ),
+                          color: AppColors.transparent,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: AppColors.greyG200),
                         ),
                         child: Row(
                           children: [
@@ -205,35 +197,31 @@ class _NavigationViewState extends State<NavigationView>
                                 children: [
                                   Text(
                                     'New message received',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleLarge?.copyWith(
+                                      fontWeight: FontWeight.w400,
                                       color:
                                           darkModeValue
                                               ? AppColors.white
                                               : AppColors.black,
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  const SizedBox(height: 6),
                                   Text(
                                     'You have a new message from Sarah Johnson',
-                                    style: TextStyle(
-                                      color:
-                                          darkModeValue
-                                              ? Colors.grey[400]
-                                              : Colors.grey[600],
-                                      fontSize: 13,
-                                    ),
+                                    style:
+                                        Theme.of(
+                                          context,
+                                        ).textTheme.displayLarge,
                                   ),
-                                  const SizedBox(height: 4),
+                                  const SizedBox(height: 6),
                                   Text(
                                     '2 min ago',
-                                    style: TextStyle(
-                                      color:
-                                          darkModeValue
-                                              ? Colors.grey[500]
-                                              : Colors.grey[500],
-                                      fontSize: 12,
-                                    ),
+                                    style:
+                                        Theme.of(
+                                          context,
+                                        ).textTheme.displayLarge,
                                   ),
                                 ],
                               ),
@@ -384,9 +372,12 @@ class _NavigationViewState extends State<NavigationView>
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(80),
+          preferredSize: const Size.fromHeight(70),
           child: Container(
             decoration: BoxDecoration(
+              border: const Border(
+                bottom: BorderSide(color: AppColors.greyG100),
+              ),
               color:
                   darkModeValue
                       ? AppColors.appBarDarkModeColor
@@ -402,8 +393,8 @@ class _NavigationViewState extends State<NavigationView>
             child: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 10,
+                  horizontal: 16,
+                  vertical: 5,
                 ),
                 child: Row(
                   children: [
@@ -425,15 +416,16 @@ class _NavigationViewState extends State<NavigationView>
                             ),
                           ],
                         ),
-                        child: const CircleAvatar(
+                        child: CircleAvatar(
                           radius: 20,
                           backgroundColor: AppColors.primaryColor,
                           child: Text(
                             'AH',
-                            style: TextStyle(
+                            style: Theme.of(
+                              context,
+                            ).textTheme.displayMedium?.copyWith(
                               color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
@@ -459,45 +451,33 @@ class _NavigationViewState extends State<NavigationView>
                     //     size: 24,
                     //   ),
                     // ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 8),
 
                     // Greeting and user name
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            _getGreeting(),
-                            style: Theme.of(
-                              context,
-                            ).textTheme.bodySmall?.copyWith(
-                              color:
-                                  darkModeValue
-                                      ? Colors.grey[400]
-                                      : Colors.grey[600],
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          _getGreeting(),
+                          style: Theme.of(context).textTheme.displayMedium,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'Ahmed Hassan',
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.w400,
+                            color:
+                                darkModeValue
+                                    ? AppColors.white
+                                    : AppColors.black,
                           ),
-                          const SizedBox(height: 2),
-                          Text(
-                            'Ahmed Hassan',
-                            style: Theme.of(
-                              context,
-                            ).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w500,
-                              color:
-                                  darkModeValue
-                                      ? AppColors.white
-                                      : AppColors.black,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-
+                    const Spacer(),
                     // Status indicator
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -507,9 +487,6 @@ class _NavigationViewState extends State<NavigationView>
                       decoration: BoxDecoration(
                         color: Colors.green.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: Colors.green.withOpacity(0.3),
-                        ),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -535,76 +512,49 @@ class _NavigationViewState extends State<NavigationView>
                       ),
                     ),
 
-                    const SizedBox(width: 12),
+                    // const SizedBox(width: 25),
+                    const Spacer(),
 
                     // Notifications button with animation
                     GestureDetector(
                       onTap: _showNotifications,
-                      child: AnimatedBuilder(
-                        animation: _notificationAnimation,
-                        builder: (context, child) {
-                          return Transform.scale(
-                            scale: _notificationAnimation.value,
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color:
-                                    darkModeValue
-                                        ? Colors.grey[800]
-                                        : Colors.grey[100],
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Stack(
-                                children: [
-                                  Icon(
-                                    PhosphorIcons.bell(),
-                                    color:
-                                        darkModeValue
-                                            ? AppColors.white
-                                            : AppColors.black,
-                                    size: 24,
-                                  ),
-                                  Positioned(
-                                    right: 0,
-                                    top: 0,
-                                    child: Container(
-                                      padding: const EdgeInsets.all(3),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color:
-                                              darkModeValue
-                                                  ? AppColors
-                                                      .appBarDarkModeColor
-                                                  : AppColors.white,
-                                          width: 1.5,
-                                        ),
-                                      ),
-                                      constraints: const BoxConstraints(
-                                        minWidth: 16,
-                                        minHeight: 16,
-                                      ),
-                                      child: const Text(
-                                        '3',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 9,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: 35,
+                            height: 35,
+                            // padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.greyG200),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: SvgPicture.asset(
+                                AppIcons.notificationBill,
                               ),
                             ),
-                          );
-                        },
+                          ),
+                          Positioned(
+                            right: 0,
+                            top: 4,
+                            child: Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(8),
+                                // border: Border.all(
+                                //   color:
+                                //       darkModeValue
+                                //           ? AppColors.appBarDarkModeColor
+                                //           : AppColors.white,
+                                //   width: 1.5,
+                                // ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-
-                    const SizedBox(width: 12),
                   ],
                 ),
               ),
@@ -639,18 +589,18 @@ class _NavigationViewState extends State<NavigationView>
           children: [
             SafeArea(
               child: Container(
-                decoration: BoxDecoration(
-                  color:
-                      darkModeValue
-                          ? AppColors.appBarDarkModeColor
-                          : AppColors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 10,
-                      offset: const Offset(0, -2),
-                    ),
-                  ],
+                decoration: const BoxDecoration(
+                  // color:
+                  //     darkModeValue
+                  //         ? AppColors.appBarDarkModeColor
+                  //         : AppColors.white,
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: Colors.black.withOpacity(0.1),
+                  //     blurRadius: 10,
+                  //     offset: const Offset(0, -2),
+                  //   ),
+                  // ],
                 ),
                 child: CustomBottomNavigationBar(
                   currentIndex: index,

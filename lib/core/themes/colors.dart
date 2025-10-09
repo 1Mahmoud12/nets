@@ -30,7 +30,8 @@ class AppColors {
   static const confirmedColor = Color(0xff0ABE75);
   static const canceledColor = Color(0xff2F2F2F);
 
-  static const scaffoldBackGround = Color(0xffF2F2F2);
+  // static const scaffoldBackGround = Color(0xffF2F2F2);
+  static const scaffoldBackGround = Color(0xfff8f8f8);
   static const cSecondScaffoldBackGround = Color(0xffF6F6F6);
   static const primaryColor = Color(0xff273E72);
   // static const primaryColor = Color(0xff009688);

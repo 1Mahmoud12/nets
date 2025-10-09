@@ -14,7 +14,8 @@ class AppIcons {
   static const weather = '$baseUrl/day-status.svg';
   static const edit = '$baseUrl/edit-profile.svg';
   static const editImage = '$baseUrl/PencilSimple.svg';
-  static const unselectedDiscoverDarkMode = '$baseUrl/un-selected-discover-darkMode.svg';
+  static const unselectedDiscoverDarkMode =
+      '$baseUrl/un-selected-discover-darkMode.svg';
 
   //navigation icons
   static const selectedhHomeIc = '$baseUrl/selected-home.svg';
@@ -93,5 +94,15 @@ class AppIcons {
   static const contactSel = '$baseUrl/contact_sel.svg';
   static const journeySel = '$baseUrl/journey_sel.svg';
   static const profileSel = '$baseUrl/profile_sel.svg';
-
+  static const email = '$baseUrl/email.svg';
+  static const call = '$baseUrl/call.svg';
+  static const notificationBill = '$baseUrl/notification_bill.svg';
+  static const message = '$baseUrl/message.svg';
+  static const fillter = '$baseUrl/fillter.svg';
+  static const addContact = '$baseUrl/addContact.svg';
+  static const filtterIcon = '$baseUrl/filtter_icon.svg';
+  static const maps = '$baseUrl/maps.svg';
+  static const person = '$baseUrl/person.svg';
+  static const arrowDown = '$baseUrl/arrow.svg';
+  static const date = '$baseUrl/date.svg';
 }

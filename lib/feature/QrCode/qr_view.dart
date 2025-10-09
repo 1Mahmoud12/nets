@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
+import 'package:nets/core/utils/app_icons.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -355,19 +357,21 @@ END:VCARD
           children: [
             // Main Content
             SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
+              padding: const EdgeInsets.fromLTRB(20, 50, 20, 70),
               child: Column(
                 children: [
                   // QR Code Container
                   Container(
                     padding: const EdgeInsets.all(30),
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
+                      gradient: const LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          AppColors.primaryColor.withOpacity(0.1),
-                          AppColors.primaryColor.withOpacity(0.05),
+                          // AppColors.primaryColor.withOpacity(0.2),
+                          // AppColors.primaryColor.withOpacity(0.5),
+                          Color(0xff6D83B5),
+                          Color(0xffB5C6EE),
                         ],
                       ),
                       borderRadius: BorderRadius.circular(25),
@@ -478,12 +482,12 @@ END:VCARD
                                         context,
                                       ).textTheme.titleMedium?.copyWith(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20,
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 15),
+                                  const SizedBox(width: 8),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
@@ -493,16 +497,15 @@ END:VCARD
                                           userData['name']!,
                                           style: Theme.of(
                                             context,
-                                          ).textTheme.titleMedium?.copyWith(
+                                          ).textTheme.titleLarge?.copyWith(
                                             fontWeight: FontWeight.w400,
                                             color:
                                                 darkModeValue
                                                     ? AppColors.white
                                                     : AppColors.black,
-                                            fontSize: 16,
                                           ),
                                         ),
-                                        const SizedBox(height: 2),
+                                        const SizedBox(height: 6),
                                         Text(
                                           userData['position']!,
                                           style: Theme.of(
@@ -513,17 +516,16 @@ END:VCARD
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
-                                        const SizedBox(height: 2),
+                                        const SizedBox(height: 6),
                                         Text(
                                           userData['company']!,
                                           style: Theme.of(
                                             context,
-                                          ).textTheme.bodySmall?.copyWith(
+                                          ).textTheme.titleSmall?.copyWith(
                                             color:
                                                 darkModeValue
                                                     ? Colors.grey[400]
                                                     : Colors.grey[600],
-                                            fontSize: 12,
                                           ),
                                         ),
                                       ],
@@ -541,9 +543,9 @@ END:VCARD
                               ),
                               const SizedBox(height: 15),
                               // Contact details
-                              _buildContactRow(Icons.email, userData['email']!),
+                              _buildContactRow(AppIcons.email, userData['email']!),
                               const SizedBox(height: 8),
-                              _buildContactRow(Icons.phone, userData['phone']!),
+                              _buildContactRow(AppIcons.call, userData['phone']!),
                             ],
                           ),
                         ),
@@ -568,7 +570,7 @@ END:VCARD
                   color: AppColors.primaryColor,
                   size: 24,
                 ),
-                padding: const EdgeInsets.all(12),
+                // padding: const EdgeInsets.symmetric(horizontal: 12),
                 constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                 tooltip: 'Scan QR Code',
               ),
@@ -579,21 +581,20 @@ END:VCARD
     );
   }
 
-  Widget _buildContactRow(IconData icon, String text) {
+  Widget _buildContactRow(String icon, String text) {
     return Row(
       children: [
-        Icon(
+        SvgPicture.asset(
           icon,
-          size: 16,
+
           color: darkModeValue ? Colors.grey[400] : Colors.grey[600],
         ),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
             text,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
               color: darkModeValue ? Colors.grey[300] : Colors.grey[700],
-              fontSize: 13,
             ),
           ),
         ),

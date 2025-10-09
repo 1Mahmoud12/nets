@@ -25,28 +25,38 @@ class _SearchWidgetState extends State<SearchWidget> {
       onTap: widget.onTap,
       child: IntrinsicHeight(
         child: CustomTextFormField(
+          enableLtr: true,
+          fontSizeHintText: 12,
           enable: widget.onTap == null,
           outPadding: EdgeInsets.zero,
+          height: 45,
           //  contentPadding: const EdgeInsets.symmetric(vertical: 16),
           focusedBorderColor: AppColors.primaryColor,
-          enabledBorder: AppColors.cBorderButtonColor,
+          enabledBorder: AppColors.greyG200,
           fillColor: AppColors.white,
           controller: controller,
-          hintText: 'search_hint'.tr(),
-          labelText: (widget.hintText ?? 'search').tr(),
-          labelStyle: Theme.of(
-            context,
-          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400, color: AppColors.cP50.withAlpha((0.5 * 255).toInt())),
+          // hintText: 'search_hint'.tr(),
+          hintText: 'Search contacts, phone, or email',
+          // labelText: (widget.hintText ?? 'search').tr(),
+          labelStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w400,
+            color: AppColors.cP50.withAlpha((0.5 * 255).toInt()),
+            
+          ),
 
           onChange: (value) {
             widget.onChange?.call(value);
           },
+          borderRadius: 8,
           prefixIcon: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
-                padding: EdgeInsets.only(left: context.locale.languageCode == 'ar' ? 8 : 24, right: context.locale.languageCode == 'ar' ? 24 : 8),
-                child: SvgPicture.asset(AppIcons.appLogo),
+                padding: EdgeInsets.only(
+                  left: context.locale.languageCode == 'ar' ? 8 : 8,
+                  right: context.locale.languageCode == 'ar' ? 8 : 8,
+                ),
+                child: SvgPicture.asset(AppIcons.unselectedDiscoverDarkMode),
               ),
             ],
           ),

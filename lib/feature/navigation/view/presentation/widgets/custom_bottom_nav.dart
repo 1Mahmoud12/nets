@@ -7,6 +7,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
 
+import '../../../../../core/utils/constant_gaping.dart';
+
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
@@ -28,16 +30,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.only(right: 12.0, bottom: 10, left: 12.0),
       margin: EdgeInsets.only(bottom: Platform.isIOS ? 30 : 0),
       decoration: BoxDecoration(
         color: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
         border: Border(
           top: BorderSide(
-            color:
-                darkModeValue
-                    ? Colors.transparent
-                    : AppColors.cBorderButtonColor,
+            color: darkModeValue ? AppColors.greyG200 : AppColors.greyG200,
           ),
         ),
       ),
@@ -86,6 +85,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
               width: 24,
               height: 24,
             ),
+            h5,
             Text(
               names[index].tr(),
               style: Theme.of(context).textTheme.displayMedium?.copyWith(
