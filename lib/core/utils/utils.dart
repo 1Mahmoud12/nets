@@ -14,8 +14,11 @@ import 'package:nets/core/component/sharred_divider.dart';
 import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/themes/styles.dart';
 import 'package:nets/core/utils/constants.dart';
+import 'package:nets/core/network/local/cache.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../feature/navigation/view/manager/homeBloc/cubit.dart';
 
 enum UtilState { success, warning, error, none }
 
@@ -511,4 +514,15 @@ Future<DateTime> customShowDatePicker({required BuildContext context}) {
   ).then((value) {
     return value ?? DateTime.now();
   });
+}
+
+Future<void> saveDarkMode(BuildContext context, bool value) async {
+  await userCache?.put(darkModeKey, value);
+  darkModeValue = value;
+  themeModeValue = value ? 'dark' : 'light';
+  await userCache?.put(themeModeKey, themeModeValue);
+  applyDarkMode(context, value);
+}
+Future<void> applyDarkMode(BuildContext context, bool value) async {
+  MainCubit.of(context).changeThemeMode(value ? 'dark' : 'light', context);
 }

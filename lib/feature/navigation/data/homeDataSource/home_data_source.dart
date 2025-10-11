@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:nets/core/network/dio_helper.dart';
 import 'package:nets/core/network/end_points.dart';
 import 'package:nets/core/network/errors/failures.dart';
-import 'package:nets/feature/Contacts/contacts_view.dart';
+import 'package:nets/feature/Contacts/views/presentation/contacts_view.dart';
 import 'package:nets/main.dart';
 
 abstract class HomeDataSourceInterface {
@@ -14,7 +14,10 @@ class HomeDataSourceImplementation implements HomeDataSourceInterface {
   @override
   Future<Either<Failure, void>> updateDeviceToken() async {
     try {
-      final response = await DioHelper.postData(endPoint: EndPoints.checkLink, data: {});
+      final response = await DioHelper.postData(
+        endPoint: EndPoints.checkLink,
+        data: {},
+      );
       if (response.data['exists'] == true) {
         showContactDetails({
           'name': 'Ahmed Hassan',

@@ -141,6 +141,20 @@ class _MyJourneyViewState extends State<MyJourneyView> {
     );
   }
 
+  final List<Map<String, String>> allmyJourney = [
+    {
+      'address': '23, Basheer Taleb Al-Rifai Street, Jordan',
+      'date': '2024-05-20',
+    },
+    {
+      'address': '23, Basheer Taleb Al-Rifai Street, Jordan',
+      'date': '2024-05-20',
+    },
+    {
+      'address': '23, Basheer Taleb Al-Rifai Street, Jordan',
+      'date': '2024-05-20',
+    },
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -193,65 +207,86 @@ class _MyJourneyViewState extends State<MyJourneyView> {
                 ],
               ),
               const SizedBox(height: 16),
-              ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: 4,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey.shade300),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '2024-05-20',
-                                style: Theme.of(context).textTheme.displayMedium
-                                    ?.copyWith(color: Colors.grey),
-                              ),
-                              const SizedBox(height: 6),
-                              Text(
-                                "23, Basheer Taleb Al-Rifa'i Street, Jordan",
-                                style:
-                                    Theme.of(
-                                      context,
-                                    ).textTheme.displayMedium?.copyWith(),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                "23, Basheer Taleb Al-Rifa'i Street, Jordan",
-                                style: Theme.of(context).textTheme.labelMedium,
-                              ),
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  SvgPicture.asset(AppIcons.person),
-                                  const SizedBox(width: 4),
-                                  SvgPicture.asset(AppIcons.person),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        SvgPicture.asset(AppIcons.maps),
-                      ],
-                    ),
-                  );
-                },
-              ),
+              if (allmyJourney.isEmpty)
+                Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 50),
+                      SvgPicture.asset(AppIcons.emptyJourney),
+                      const SizedBox(height: 16),
+                      Text(
+                        'No Journey Yet',
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(color: Colors.black87),
+                      ),
+                    ],
+                  ),
+                ),
+              ...List.generate(allmyJourney.length, (index) {
+                return MyJourneyCard(allmyJourney[index]);
+              }),
+
               const SizedBox(height: 80),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class MyJourneyCard extends StatelessWidget {
+  final Map<String, String> myJourney;
+  const MyJourneyCard(this.myJourney, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  myJourney['date'] ?? '2024-05-20',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.displayMedium?.copyWith(color: Colors.grey),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  myJourney['address'] ??
+                      "23, Basheer Taleb Al-Rifa'i Street, Jordan",
+                  style: Theme.of(context).textTheme.displayMedium?.copyWith(),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  myJourney['address'] ??
+                      "23, Basheer Taleb Al-Rifa'i Street, Jordan",
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    SvgPicture.asset(AppIcons.person),
+                    const SizedBox(width: 4),
+                    SvgPicture.asset(AppIcons.person),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SvgPicture.asset(AppIcons.maps),
+        ],
       ),
     );
   }

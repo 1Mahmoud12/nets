@@ -7,11 +7,11 @@ import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/utils/app_icons.dart';
 import 'package:nets/core/utils/custom_show_toast.dart';
-import 'package:nets/feature/Contacts/contacts_view.dart';
+import 'package:nets/feature/Contacts/views/presentation/contacts_view.dart';
 import 'package:nets/feature/QrCode/qr_view.dart';
 import 'package:nets/feature/navigation/data/homeDataSource/home_data_source.dart';
 import 'package:nets/feature/navigation/view/presentation/widgets/custom_bottom_nav.dart';
-import 'package:nets/feature/profile/profile_view.dart';
+import 'package:nets/feature/profile/views/presentation/profile_view.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../my_journey/views/presentation/my_journey_view.dart';
@@ -166,7 +166,12 @@ class _NavigationViewState extends State<NavigationView>
                       onPressed: () {},
                       child: Text(
                         'Mark all read',
-                        style: Theme.of(context).textTheme.displayMedium,
+                        style: Theme.of(
+                          context,
+                        ).textTheme.displayMedium?.copyWith(
+                          color:
+                              darkModeValue ? AppColors.white : AppColors.black,
+                        ),
                       ),
                     ),
                   ],
@@ -210,18 +215,26 @@ class _NavigationViewState extends State<NavigationView>
                                   const SizedBox(height: 6),
                                   Text(
                                     'You have a new message from Sarah Johnson',
-                                    style:
-                                        Theme.of(
-                                          context,
-                                        ).textTheme.displayLarge,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.displayLarge?.copyWith(
+                                      color:
+                                          darkModeValue
+                                              ? AppColors.white
+                                              : AppColors.black,
+                                    ),
                                   ),
                                   const SizedBox(height: 6),
                                   Text(
                                     '2 min ago',
-                                    style:
-                                        Theme.of(
-                                          context,
-                                        ).textTheme.displayLarge,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.displayLarge?.copyWith(
+                                      color:
+                                          darkModeValue
+                                              ? AppColors.white
+                                              : AppColors.black,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -238,107 +251,6 @@ class _NavigationViewState extends State<NavigationView>
                         ),
                       );
                     },
-                  ),
-                ),
-              ],
-            ),
-          ),
-    );
-  }
-
-  void _showProfileMenu() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder:
-          (context) => Container(
-            decoration: BoxDecoration(
-              color: darkModeValue ? AppColors.darkModeColor : Colors.white,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(20),
-              ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[400],
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        leading: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColor.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            PhosphorIcons.gear(),
-                            color: AppColors.primaryColor,
-                          ),
-                        ),
-                        title: Text(
-                          'Settings',
-                          style: TextStyle(
-                            color:
-                                darkModeValue
-                                    ? AppColors.white
-                                    : AppColors.black,
-                          ),
-                        ),
-                        onTap: () => Navigator.pop(context),
-                      ),
-                      ListTile(
-                        leading: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.orange.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            PhosphorIcons.question(),
-                            color: Colors.orange,
-                          ),
-                        ),
-                        title: Text(
-                          'Help & Support',
-                          style: TextStyle(
-                            color:
-                                darkModeValue
-                                    ? AppColors.white
-                                    : AppColors.black,
-                          ),
-                        ),
-                        onTap: () => Navigator.pop(context),
-                      ),
-                      ListTile(
-                        leading: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.red.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            PhosphorIcons.signOut(),
-                            color: Colors.red,
-                          ),
-                        ),
-                        title: const Text(
-                          'Logout',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        onTap: () => Navigator.pop(context),
-                      ),
-                    ],
                   ),
                 ),
               ],
@@ -400,7 +312,7 @@ class _NavigationViewState extends State<NavigationView>
                   children: [
                     // Profile avatar with menu
                     GestureDetector(
-                      onTap: _showProfileMenu,
+                      // onTap: _showProfileMenu,
                       child: Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -431,125 +343,124 @@ class _NavigationViewState extends State<NavigationView>
                         ),
                       ),
                     ),
-                    // Logo and app name
-                    // Container(
-                    //   padding: const EdgeInsets.all(8),
-                    //   decoration: BoxDecoration(
-                    //     gradient: LinearGradient(
-                    //       colors: [
-                    //         AppColors.primaryColor,
-                    //         AppColors.primaryColor.withOpacity(0.8),
-                    //       ],
-                    //       begin: Alignment.topLeft,
-                    //       end: Alignment.bottomRight,
-                    //     ),
-                    //     borderRadius: BorderRadius.circular(12),
-                    //   ),
-                    //   child: Icon(
-                    //     PhosphorIcons.network(),
-                    //     color: Colors.white,
-                    //     size: 24,
-                    //   ),
-                    // ),
+
                     const SizedBox(width: 8),
 
                     // Greeting and user name
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          _getGreeting(),
-                          style: Theme.of(context).textTheme.displayMedium,
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          'Ahmed Hassan',
-                          style: Theme.of(
-                            context,
-                          ).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w400,
-                            color:
-                                darkModeValue
-                                    ? AppColors.white
-                                    : AppColors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    // Status indicator
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.green.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                    Flexible(
                       child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            width: 6,
-                            height: 6,
-                            decoration: const BoxDecoration(
-                              color: Colors.green,
-                              shape: BoxShape.circle,
-                            ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                _getGreeting(),
+                                style:
+                                    Theme.of(context).textTheme.displayMedium,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                'Ahmed Hassan',
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.titleLarge?.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                  color:
+                                      darkModeValue
+                                          ? AppColors.white
+                                          : AppColors.black,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 4),
-                          Text(
-                            'Online',
-                            style: TextStyle(
-                              color: Colors.green[700],
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // const SizedBox(width: 25),
-                    const Spacer(),
-
-                    // Notifications button with animation
-                    GestureDetector(
-                      onTap: _showNotifications,
-                      child: Stack(
-                        children: [
+                          // const Spacer(),
+                          // Status indicator
                           Container(
-                            width: 35,
-                            height: 35,
-                            // padding: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.greyG200),
-                              shape: BoxShape.circle,
+                              color: Colors.green.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Center(
-                              child: SvgPicture.asset(
-                                AppIcons.notificationBill,
-                              ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  width: 6,
+                                  height: 6,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.green,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Online',
+                                  style: TextStyle(
+                                    color: Colors.green[700],
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          Positioned(
-                            right: 0,
-                            top: 4,
-                            child: Container(
-                              padding: const EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(8),
-                                // border: Border.all(
-                                //   color:
-                                //       darkModeValue
-                                //           ? AppColors.appBarDarkModeColor
-                                //           : AppColors.white,
-                                //   width: 1.5,
-                                // ),
-                              ),
+
+                          // Notifications button with animation
+                          GestureDetector(
+                            onTap: _showNotifications,
+                            child: Stack(
+                              children: [
+                                Container(
+                                  width: 35,
+                                  height: 35,
+                                  // padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color:
+                                          darkModeValue
+                                              ? AppColors.greyG200
+                                              : AppColors.greyG200,
+                                    ),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Center(
+                                    child: SvgPicture.asset(
+                                      AppIcons.notificationBill,
+                                      color:
+                                          darkModeValue
+                                              ? AppColors.white
+                                              : AppColors.black,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 0,
+                                  top: 4,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(8),
+                                      // border: Border.all(
+                                      //   color:
+                                      //       darkModeValue
+                                      //           ? AppColors.appBarDarkModeColor
+                                      //           : AppColors.white,
+                                      //   width: 1.5,
+                                      // ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],

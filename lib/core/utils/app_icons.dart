@@ -105,4 +105,14 @@ class AppIcons {
   static const person = '$baseUrl/person.svg';
   static const arrowDown = '$baseUrl/arrow.svg';
   static const date = '$baseUrl/date.svg';
+  static const emptyJourney = '$baseUrl/emptyJourney.svg';
+  static const settings = '$baseUrl/settings.svg';
+  static const notificationSetting = '$baseUrl/notification_setting.svg';
+  static const logoutSetting = '$baseUrl/logout_setting.svg';
+  static const deleteSetting = '$baseUrl/delete_setting.svg';
+  static const instagramSetting = '$baseUrl/instagram2.svg';
+  static const x = '$baseUrl/x.svg';
+  static const facebook = '$baseUrl/facebook.svg';
+  static const linkedin = '$baseUrl/linkedin.svg';
+  static const help = '$baseUrl/help.svg';
 }

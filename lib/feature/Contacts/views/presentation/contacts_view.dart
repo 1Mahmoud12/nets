@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nets/core/component/buttons/custom_text_button.dart';
+import 'package:nets/core/component/cache_image.dart';
+import 'package:nets/core/component/custom_check_button.dart';
 import 'package:nets/core/component/fields/custom_text_form_field.dart';
 import 'package:nets/core/component/search_widget.dart';
 import 'package:nets/core/network/local/cache.dart';
@@ -10,8 +12,9 @@ import 'package:nets/core/utils/app_icons.dart';
 import 'package:nets/core/utils/custom_show_toast.dart';
 import 'package:nets/core/utils/utils.dart';
 
-import '../../core/component/custom_drop_down_menu.dart';
-import '../../core/utils/constant_gaping.dart';
+import '../../../../core/component/custom_drop_down_menu.dart';
+import '../../../../core/utils/constant_gaping.dart';
+import 'widgets/build_contact_card.dart';
 
 Color getStatusColor(String status) {
   switch (status) {
@@ -106,14 +109,14 @@ class _ContactsViewState extends State<ContactsView> {
       'email': 'noor.m@email.com',
       'status': 'away',
     },
-   
+
     {
       'name': 'Omar Khalil',
       'phone': '+20 100 123 4567',
       'email': 'omar.k@email.com',
       'status': 'offline',
     },
-   
+
     {
       'name': 'Youssef Ibrahim',
       'phone': '+20 101 234 5678',
@@ -121,6 +124,8 @@ class _ContactsViewState extends State<ContactsView> {
       'status': 'away',
     },
   ];
+
+  bool isChack = false;
 
   @override
   void initState() {
@@ -145,198 +150,6 @@ class _ContactsViewState extends State<ContactsView> {
                 contact['email']!.toLowerCase().contains(query);
           }).toList();
     });
-  }
-
-  Widget _buildContactCard(Map<String, String> contact) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: darkModeValue ? AppColors.darkModeColor : Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(darkModeValue ? 0.2 : 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: () => showContactDetails(contact, context),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Row(
-              children: [
-                // Avatar with status indicator
-                Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: 28,
-                      backgroundColor: AppColors.primaryColor,
-                      child: Text(
-                        contact['name']!.split(' ').map((e) => e[0]).join(),
-                        style: Theme.of(
-                          context,
-                        ).textTheme.titleMedium?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Container(
-                        width: 16,
-                        height: 16,
-                        decoration: BoxDecoration(
-                          color: getStatusColor(contact['status']!),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color:
-                                darkModeValue
-                                    ? AppColors.darkModeColor
-                                    : Colors.white,
-                            width: 2,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 12),
-
-                // Contact info
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        contact['name']!,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w400,
-                          color:
-                              darkModeValue ? AppColors.white : AppColors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          SvgPicture.asset(
-                            AppIcons.call,
-
-                            color:
-                                darkModeValue
-                                    ? Colors.grey[400]
-                                    : Colors.grey[600],
-                          ),
-                          const SizedBox(width: 5),
-                          Expanded(
-                            child: Text(
-                              contact['phone']!,
-                              style: Theme.of(
-                                context,
-                              ).textTheme.titleSmall?.copyWith(
-                                color:
-                                    darkModeValue
-                                        ? Colors.grey[400]
-                                        : Colors.grey[600],
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          SvgPicture.asset(
-                            AppIcons.email,
-
-                            color:
-                                darkModeValue
-                                    ? Colors.grey[400]
-                                    : Colors.grey[600],
-                          ),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: Text(
-                              contact['email']!,
-                              style: Theme.of(
-                                context,
-                              ).textTheme.titleSmall?.copyWith(
-                                color:
-                                    darkModeValue
-                                        ? Colors.grey[400]
-                                        : Colors.grey[600],
-                                fontSize: 12,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Action buttons
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.green.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        iconSize: 10,
-                        onPressed: () => makeCall(contact['phone']!, context),
-                        icon: SvgPicture.asset(
-                          AppIcons.call,
-                          color: AppColors.green,
-                        ),
-                        tooltip: 'Call',
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: IconButton(
-                        onPressed: () => sendMessage(contact, context),
-                        icon: SvgPicture.asset(
-                          AppIcons.message,
-                          color: AppColors.primaryColor,
-                        ),
-                        tooltip: 'Message',
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   void _addNewContact() {
@@ -420,7 +233,6 @@ class _ContactsViewState extends State<ContactsView> {
                           },
                           child: CustomTextFormField(
                             enable: false,
-                            enableLtr: true,
                             contentPadding: const EdgeInsets.only(left: 20),
                             borderRadius: 8,
                             controller: datePick,
@@ -490,6 +302,429 @@ class _ContactsViewState extends State<ContactsView> {
               ],
             ),
           ),
+    );
+  }
+
+  void _showManualSync() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: darkModeValue ? AppColors.darkModeColor : Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              padding: const EdgeInsets.all(16),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Manual Sync',
+                          style: Theme.of(
+                            context,
+                          ).textTheme.displaySmall?.copyWith(
+                            color: darkModeValue ? Colors.white : Colors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: Icon(
+                            Icons.close,
+                            color: darkModeValue ? Colors.white : Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Text(
+                      'Select contacts to sync with your device',
+                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                        color: darkModeValue ? AppColors.white : null,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _buildDivider(indent: 5),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        CustomCheckButton(
+                          isChecked: isChack,
+                          borderRadius: 8,
+                          checkColor: AppColors.white,
+                          checkedColor: AppColors.primaryColor,
+                          onChanged: (value) {
+                            setModalState(() {
+                              isChack = value;
+                            });
+                          },
+                        ),
+                        w10,
+                        const SizedBox(
+                          width: 44,
+                          height: 44,
+                          child: CacheImage(
+                            circle: true,
+                            fit: BoxFit.fill,
+
+                            // width: 40,
+                            // height: 40,
+                            urlImage:
+                                'https://th.bing.com/th?id=ORMS.f8a57fea0b8def32ea24303ea978f5a7&pid=Wdp&w=612&h=304&qlt=90&c=1&rs=1&dpr=1&p=0',
+                          ),
+                        ),
+                        w10,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Ahmed Ali',
+                              style: Theme.of(
+                                context,
+                              ).textTheme.titleLarge?.copyWith(
+                                color:
+                                    darkModeValue
+                                        ? AppColors.white
+                                        : AppColors.black,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Text(
+                              'HR Manager',
+                              style: Theme.of(
+                                context,
+                              ).textTheme.titleLarge?.copyWith(
+                                color:
+                                    darkModeValue
+                                        ? AppColors.white
+                                        : AppColors.black,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    Row(
+                      children: [
+                        CustomCheckButton(
+                          isChecked: isChack,
+                          borderRadius: 8,
+                          checkColor: AppColors.white,
+                          checkedColor: AppColors.primaryColor,
+                          onChanged: (value) {
+                            setModalState(() {
+                              isChack = value;
+                            });
+                          },
+                        ),
+                        w10,
+                        const SizedBox(
+                          width: 44,
+                          height: 44,
+                          child: CacheImage(
+                            circle: true,
+                            fit: BoxFit.fill,
+
+                            // width: 40,
+                            // height: 40,
+                            urlImage:
+                                'https://th.bing.com/th?id=ORMS.f8a57fea0b8def32ea24303ea978f5a7&pid=Wdp&w=612&h=304&qlt=90&c=1&rs=1&dpr=1&p=0',
+                          ),
+                        ),
+                        w10,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Ahmed Ali',
+                              style: Theme.of(
+                                context,
+                              ).textTheme.titleLarge?.copyWith(
+                                color:
+                                    darkModeValue
+                                        ? AppColors.white
+                                        : AppColors.black,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Text(
+                              'HR Manager',
+                              style: Theme.of(
+                                context,
+                              ).textTheme.titleLarge?.copyWith(
+                                color:
+                                    darkModeValue
+                                        ? AppColors.white
+                                        : AppColors.black,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: CustomTextButton(
+                            borderColor: AppColors.transparent,
+                            borderRadius: 8,
+                            colorText: AppColors.black,
+                            backgroundColor: AppColors.primaryColor.withOpacity(
+                              .1,
+                            ),
+                            onPress: () {
+                              Navigator.pop(context);
+                            },
+                            childText: 'Cancel',
+                          ),
+                        ),
+                        w10,
+                        Expanded(
+                          child: CustomTextButton(
+                            borderColor: AppColors.transparent,
+
+                            borderRadius: 8,
+                            colorText: AppColors.white,
+                            backgroundColor:
+                                isChack
+                                    ? AppColors.primaryColor
+                                    : AppColors.primaryColor.withOpacity(.3),
+                            onPress: () {},
+                            childText: 'Sync Now (${isChack ? 2 : 0})',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showDuplicateContact() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: darkModeValue ? AppColors.darkModeColor : Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              padding: const EdgeInsets.all(16),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Duplicate Contact Found',
+                          style: Theme.of(
+                            context,
+                          ).textTheme.displaySmall?.copyWith(
+                            color: darkModeValue ? Colors.white : Colors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: Icon(
+                            Icons.close,
+                            color: darkModeValue ? Colors.white : Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Text(
+                      'We found a contact with similar information. Would you like to merge them?',
+                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                        color: darkModeValue ? AppColors.white : null,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _buildDivider(indent: 5),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        const SizedBox(
+                          width: 44,
+                          height: 44,
+                          child: CacheImage(
+                            circle: true,
+                            fit: BoxFit.fill,
+
+                            // width: 40,
+                            // height: 40,
+                            urlImage:
+                                'https://th.bing.com/th?id=ORMS.f8a57fea0b8def32ea24303ea978f5a7&pid=Wdp&w=612&h=304&qlt=90&c=1&rs=1&dpr=1&p=0',
+                          ),
+                        ),
+                        w10,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Ahmed Ali',
+                              style: Theme.of(
+                                context,
+                              ).textTheme.titleLarge?.copyWith(
+                                color:
+                                    darkModeValue
+                                        ? AppColors.white
+                                        : AppColors.black,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Text(
+                              'HR Manager',
+                              style: Theme.of(
+                                context,
+                              ).textTheme.titleLarge?.copyWith(
+                                color:
+                                    darkModeValue
+                                        ? AppColors.white
+                                        : AppColors.black,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    Row(
+                      children: [
+                        CustomCheckButton(
+                          isChecked: isChack,
+                          borderRadius: 8,
+                          checkColor: AppColors.white,
+                          checkedColor: AppColors.primaryColor,
+                          onChanged: (value) {
+                            setModalState(() {
+                              isChack = value;
+                            });
+                          },
+                        ),
+                        w10,
+                        const SizedBox(
+                          width: 44,
+                          height: 44,
+                          child: CacheImage(
+                            circle: true,
+                            fit: BoxFit.fill,
+
+                            // width: 40,
+                            // height: 40,
+                            urlImage:
+                                'https://th.bing.com/th?id=ORMS.f8a57fea0b8def32ea24303ea978f5a7&pid=Wdp&w=612&h=304&qlt=90&c=1&rs=1&dpr=1&p=0',
+                          ),
+                        ),
+                        w10,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Ahmed Ali',
+                              style: Theme.of(
+                                context,
+                              ).textTheme.titleLarge?.copyWith(
+                                color:
+                                    darkModeValue
+                                        ? AppColors.white
+                                        : AppColors.black,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Text(
+                              'HR Manager',
+                              style: Theme.of(
+                                context,
+                              ).textTheme.titleLarge?.copyWith(
+                                color:
+                                    darkModeValue
+                                        ? AppColors.white
+                                        : AppColors.black,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: CustomTextButton(
+                            borderColor: AppColors.transparent,
+                            borderRadius: 8,
+                            colorText: AppColors.black,
+                            backgroundColor: AppColors.primaryColor.withOpacity(
+                              .1,
+                            ),
+                            onPress: () {
+                              Navigator.pop(context);
+                            },
+                            childText: 'Cancel',
+                          ),
+                        ),
+                        w10,
+                        Expanded(
+                          child: CustomTextButton(
+                            borderColor: AppColors.transparent,
+
+                            borderRadius: 8,
+                            colorText: AppColors.white,
+                            backgroundColor:
+                                isChack
+                                    ? AppColors.primaryColor
+                                    : AppColors.primaryColor.withOpacity(.3),
+                            onPress: () {},
+                            childText: 'Sync Now (${isChack ? 2 : 0})',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildDivider({double indent = 60}) {
+    return Divider(
+      height: 1,
+      color: darkModeValue ? Colors.grey[700] : Colors.grey[200],
+      indent: indent,
+      endIndent: 20,
     );
   }
 
@@ -577,7 +812,7 @@ class _ContactsViewState extends State<ContactsView> {
                       ),
                       const Spacer(),
                       GestureDetector(
-                        // onTap:()=> showFiltersContact(context),
+                        onTap: () => _showManualSync(),
                         child: SvgPicture.asset(AppIcons.fillter),
                       ),
                       const SizedBox(width: 5),
@@ -705,7 +940,7 @@ class _ContactsViewState extends State<ContactsView> {
                     }
 
                     final contact = filteredContacts[index];
-                    return _buildContactCard(contact);
+                    return buildContactCard(contact, context);
                   },
                   childCount:
                       filteredContacts.isEmpty ? 1 : filteredContacts.length,

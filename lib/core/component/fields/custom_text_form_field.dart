@@ -75,7 +75,7 @@ class CustomTextFormField extends StatefulWidget {
     this.arabicLanguage,
     this.showCounter = false,
     this.labelStyle,
-    this.enableLtr = false,
+    this.enableLtr = true,
   });
 
   @override
@@ -126,11 +126,12 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           if (widget.nameField != null)
             Text(
               widget.nameField!.tr(),
-              style: Styles.style14500.copyWith(
+              style: Styles.style14400.copyWith(
                 color:
                     darkModeValue
                         ? AppColors.darkModeText
                         : AppColors.textColor,
+                        fontSize: 12
               ),
             ),
           if (widget.nameField != null) SizedBox(height: 6.h),
