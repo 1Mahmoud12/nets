@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/component/custom_app_bar.dart';
@@ -93,8 +94,9 @@ class _EditProfileViewState extends State<EditProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(context: context, title: 'Edit Profile'),
-      backgroundColor:  darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
+      appBar: customAppBar(context: context, title: 'edit_profile'.tr()),
+      backgroundColor:
+          darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
       body: SafeArea(
         child: Form(
           key: _formKey,
@@ -231,35 +233,36 @@ class _EditProfileViewState extends State<EditProfileView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Social Media',
+                        'social_media'.tr(),
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w700,
-                          color: darkModeValue ? AppColors.white : AppColors.black,
+                          color:
+                              darkModeValue ? AppColors.white : AppColors.black,
                         ),
                       ),
                       const SizedBox(height: 24),
                       _socialField(
                         icon: AppIcons.facebook,
                         controller: facebookCtrl,
-                        hint: 'Facebook URL',
+                        hint: 'facebook_url'.tr(),
                       ),
                       const SizedBox(height: 12),
                       _socialField(
                         icon: AppIcons.x,
                         controller: twitterCtrl,
-                        hint: 'Twitter URL',
+                        hint: 'twitter_url'.tr(),
                       ),
                       const SizedBox(height: 12),
                       _socialField(
                         icon: AppIcons.instagramSetting,
                         controller: instagramCtrl,
-                        hint: 'Instagram URL',
+                        hint: 'instagram_url'.tr(),
                       ),
                       const SizedBox(height: 12),
                       _socialField(
                         icon: AppIcons.linkedin,
                         controller: linkedinCtrl,
-                        hint: 'LinkedIn URL',
+                        hint: 'linkedin_url'.tr(),
                       ),
                     ],
                   ),
@@ -286,18 +289,19 @@ class _EditProfileViewState extends State<EditProfileView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Additional Information',
+                        'additional_information'.tr(),
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w700,
-                          color: darkModeValue ? AppColors.white : AppColors.black,
+                          color:
+                              darkModeValue ? AppColors.white : AppColors.black,
                         ),
                       ),
                       const SizedBox(height: 24),
                       CustomTextFormField(
                         contentPadding: EdgeInsets.symmetric(horizontal: 10),
                         controller: otherDetailsCtrl,
-                        hintText: 'Other Details',
-                        nameField: 'Other Details',
+                        hintText: 'other_details'.tr(),
+                        nameField: 'other_details'.tr(),
                         maxLines: 6,
                         borderRadius: 8,
                       ),
@@ -324,7 +328,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text('Save Changes'),
+                      child: Text('save_changes'.tr()),
                     ),
                   ),
                 ),

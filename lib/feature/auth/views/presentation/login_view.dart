@@ -12,6 +12,7 @@ import 'package:nets/core/utils/navigate.dart';
 import 'package:nets/feature/auth/views/manager/loginCubit/cubit/login_cubit.dart';
 import 'package:nets/feature/navigation/view/presentation/navigation_view.dart';
 
+import 'otp_view.dart';
 import 'widgets/phone_number_field.dart';
 
 class LoginView extends StatefulWidget {
@@ -25,28 +26,28 @@ class _LoginViewState extends State<LoginView> {
   LoginCubit loginCubit = LoginCubit();
   final _formKey = GlobalKey<FormState>();
 
-  // Email validation regex pattern
-  final RegExp _emailRegExp = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
+  // // Email validation regex pattern
+  // final RegExp _emailRegExp = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
 
-  // Email validator
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'name is required'.tr();
-    }
+  // // Email validator
+  // String? _validateEmail(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return 'name is required'.tr();
+  //   }
 
-    return null;
-  }
+  //   return null;
+  // }
 
-  // Password validator
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'password_required'.tr();
-    }
-    if (value.length < 6) {
-      return 'password_length'.tr();
-    }
-    return null;
-  }
+  // // Password validator
+  // String? _validatePassword(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return 'password_required'.tr();
+  //   }
+  //   if (value.length < 6) {
+  //     return 'password_length'.tr();
+  //   }
+  //   return null;
+  // }
 
   bool isLoading = false;
   bool isGoogleLoading = false;
@@ -78,7 +79,10 @@ class _LoginViewState extends State<LoginView> {
       child: Scaffold(
         backgroundColor: darkModeValue ? AppColors.black : AppColors.white,
         // appBar: customAppBar(context: context, title: 'login'.tr()),
-        appBar: AppBar(automaticallyImplyLeading: false),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: darkModeValue ? AppColors.black : AppColors.white,
+        ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Form(
@@ -116,23 +120,12 @@ class _LoginViewState extends State<LoginView> {
                         title: 'welcome_back'.tr(),
                       ),
                       SizedBox(height: 32.h),
-                      PhoneNumberField(
-                        // hintText: 'XXXXXXXXX'.tr(),
-                        // nameField: 'phone_number'.tr(),
-                        initialCountryCode: loginCubit.countryCode,
-                         controller: loginCubit.loginPhoneController,
-                      ),
-                    
-                      // CustomTextFormField(
-                      //   enableLtr: true,
 
-                      //   enable: !isLoading,
-                      //   controller: loginCubit.emailController,
-                      //   hintText: 'Enter your name'.tr(),
-                      //   nameField: 'Name'.tr(),
-                      //   textInputType: TextInputType.emailAddress,
-                      //   validator: _validateEmail,
-                      // ),
+                      PhoneNumberField(
+                        initialCountryCode: loginCubit.countryCode,
+                        controller: loginCubit.loginPhoneController,
+                      ),
+
                       // Column(
                       //   crossAxisAlignment: CrossAxisAlignment.start,
                       //   children: [
@@ -167,10 +160,17 @@ class _LoginViewState extends State<LoginView> {
                         borderRadius: 12,
                         height: 48.h,
                         onPress: () {
-                          // if (_formKey.currentState!.validate()) {
-                            loginCubit.login(context: context);
-                            // context.navigateToPage(const OTPVerificationView());
-                          // }
+                          if (_formKey.currentState!.validate()) {
+                            // loginCubit.login(context: context);
+                            context.navigateToPage(
+                              BlocProvider.value(
+                                value: loginCubit,
+                                child: OTPVerificationView(
+                                  phone: loginCubit.loginPhoneController.text,
+                                ),
+                              ),
+                            );
+                          }
                         },
                         childText: 'send_otp'.tr(),
                       ),
@@ -293,7 +293,8 @@ class AuthContent extends StatelessWidget {
           child: SvgPicture.asset(AppIcons.appLogo, width: 56.w, height: 56.h),
         ),
         h8,
-        Center(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Text(
             'login'.tr(),
             style: Theme.of(
@@ -302,17 +303,18 @@ class AuthContent extends StatelessWidget {
           ),
         ),
         h8,
-        Text(
-          'enter_your_phone_number'.tr(),
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.w400,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Text(
+            'enter_your_phone_number'.tr(),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w400,
 
-            color:
-                darkModeValue
-                    ? AppColors.darkModeText
-                    : const Color(0xff343434),
+              color:
+                  darkModeValue ? AppColors.darkModeText : AppColors.textColor,
+            ),
           ),
-          textAlign: TextAlign.center,
+          // textAlign: TextAlign.center,
         ),
       ],
     );

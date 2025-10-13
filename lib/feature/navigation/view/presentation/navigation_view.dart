@@ -73,17 +73,17 @@ class _NavigationViewState extends State<NavigationView>
     AppIcons.journey,
     AppIcons.profile,
   ];
-  final names = ['Home', 'Contacts', 'My journey', 'Profile'];
+  final names = ['home', 'contacts', 'my_journey', 'profile'];
 
   // Get current time greeting
   String _getGreeting() {
     final hour = DateTime.now().hour;
     if (hour < 12) {
-      return 'Good Morning';
+      return 'good_morning'.tr();
     } else if (hour < 17) {
-      return 'Good Afternoon';
+      return 'good_afternoon'.tr();
     } else {
-      return 'Good Evening';
+      return 'good_evening'.tr();
     }
   }
 
@@ -154,7 +154,7 @@ class _NavigationViewState extends State<NavigationView>
                 Row(
                   children: [
                     Text(
-                      'Notifications',
+                      'notifications'.tr(),
                       style: Theme.of(context).textTheme.displaySmall?.copyWith(
                         fontWeight: FontWeight.w400,
                         color:
@@ -165,12 +165,12 @@ class _NavigationViewState extends State<NavigationView>
                     TextButton(
                       onPressed: () {},
                       child: Text(
-                        'Mark all read',
+                        'mark_all_read'.tr(),
                         style: Theme.of(
                           context,
                         ).textTheme.displayMedium?.copyWith(
                           color:
-                              darkModeValue ? AppColors.white : AppColors.black,
+                              darkModeValue ? AppColors.white : AppColors.primaryColor.withBlue(150),
                         ),
                       ),
                     ),
@@ -201,7 +201,7 @@ class _NavigationViewState extends State<NavigationView>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'New message received',
+                                    'new_message_received'.tr(),
                                     style: Theme.of(
                                       context,
                                     ).textTheme.titleLarge?.copyWith(
@@ -214,14 +214,14 @@ class _NavigationViewState extends State<NavigationView>
                                   ),
                                   const SizedBox(height: 6),
                                   Text(
-                                    'You have a new message from Sarah Johnson',
+                                    'new_message_from'.tr(args: ['Sarah Johnson']),
                                     style: Theme.of(
                                       context,
                                     ).textTheme.displayLarge?.copyWith(
                                       color:
                                           darkModeValue
                                               ? AppColors.white
-                                              : AppColors.black,
+                                              : AppColors.cSecondaryBlack,
                                     ),
                                   ),
                                   const SizedBox(height: 6),
@@ -233,7 +233,7 @@ class _NavigationViewState extends State<NavigationView>
                                       color:
                                           darkModeValue
                                               ? AppColors.white
-                                              : AppColors.black,
+                                              : AppColors.cSecondaryBlack,
                                     ),
                                   ),
                                 ],
@@ -320,13 +320,6 @@ class _NavigationViewState extends State<NavigationView>
                             color: AppColors.primaryColor,
                             width: 2,
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.primaryColor.withOpacity(0.3),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
                         ),
                         child: CircleAvatar(
                           radius: 20,
@@ -387,15 +380,15 @@ class _NavigationViewState extends State<NavigationView>
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.green.withOpacity(0.1),
+                              color: Color(0xFFEDFFEA),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Container(
-                                  width: 6,
-                                  height: 6,
+                                  width: 8,
+                                  height: 8,
                                   decoration: const BoxDecoration(
                                     color: Colors.green,
                                     shape: BoxShape.circle,
@@ -403,7 +396,7 @@ class _NavigationViewState extends State<NavigationView>
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  'Online',
+                                  'online'.tr(),
                                   style: TextStyle(
                                     color: Colors.green[700],
                                     fontSize: 10,

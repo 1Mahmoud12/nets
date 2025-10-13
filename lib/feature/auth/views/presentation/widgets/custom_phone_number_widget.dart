@@ -13,7 +13,13 @@ class CountryCode {
   final String image;
   final int maxLength;
 
-  CountryCode({required this.id, required this.name, required this.code, required this.image, required this.maxLength});
+  CountryCode({
+    required this.id,
+    required this.name,
+    required this.code,
+    required this.image,
+    required this.maxLength,
+  });
 }
 
 class CustomPhoneNumberField extends StatefulWidget {
@@ -81,7 +87,9 @@ class _CustomPhoneNumberFieldState extends State<CustomPhoneNumberField> {
     // If the phone controller contains a country code, extract just the number part
     if (phoneText.startsWith(selectedCountry.code)) {
       _isInternalChange = true;
-      _displayController.text = phoneText.substring(selectedCountry.code.length);
+      _displayController.text = phoneText.substring(
+        selectedCountry.code.length,
+      );
       _isInternalChange = false;
     } else {
       // If it doesn't start with the code, update the main controller to include it
@@ -97,7 +105,8 @@ class _CustomPhoneNumberFieldState extends State<CustomPhoneNumberField> {
     if (_isInternalChange) return;
 
     _isInternalChange = true;
-    widget.phoneController.text = selectedCountry.code + _displayController.text;
+    widget.phoneController.text =
+        selectedCountry.code + _displayController.text;
     _isInternalChange = false;
   }
 
@@ -125,7 +134,10 @@ class _CustomPhoneNumberFieldState extends State<CustomPhoneNumberField> {
       nameField: 'phone_number'.tr(),
       textInputType: TextInputType.number,
 
-      inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(selectedCountry.maxLength)],
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(selectedCountry.maxLength),
+      ],
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'please_enter_phone_number'.tr();
@@ -138,7 +150,7 @@ class _CustomPhoneNumberFieldState extends State<CustomPhoneNumberField> {
       suffixIcon: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: SizedBox(
-          width: 110, // Increased width to accommodate country code
+          width: 110,
           child: Row(
             children: [
               Expanded(
@@ -151,10 +163,24 @@ class _CustomPhoneNumberFieldState extends State<CustomPhoneNumberField> {
                     image: selectedCountry.image,
                     additionalText: selectedCountry.code,
                   ),
-                  items: countryCodes.map((e) => DropDownModel(name: e.name, value: e.id, image: e.image, additionalText: e.code)).toList(),
+                  items:
+                      countryCodes
+                          .map(
+                            (e) => DropDownModel(
+                              name: e.name,
+                              value: e.id,
+                              image: e.image,
+                              additionalText: e.code,
+                            ),
+                          )
+                          .toList(),
                   onChanged: (DropDownModel? item) {
                     if (item != null) {
-                      _updateCountry(countryCodes.firstWhere((country) => country.id == item.value));
+                      _updateCountry(
+                        countryCodes.firstWhere(
+                          (country) => country.id == item.value,
+                        ),
+                      );
                     }
                   },
                 ),

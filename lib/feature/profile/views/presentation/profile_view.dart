@@ -1,4 +1,8 @@
+import 'dart:developer';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nets/core/component/custom_load_switch_widget.dart';
 import 'package:nets/core/network/local/cache.dart';
@@ -9,7 +13,7 @@ import 'package:nets/core/utils/navigate.dart';
 import 'package:nets/core/utils/utils.dart';
 import 'package:nets/feature/auth/views/presentation/login_view.dart';
 
-import '../../../../core/utils/utils.dart';
+import '../../../../core/utils/constants.dart';
 import './edit_profile_view.dart';
 
 import '../../../../core/component/buttons/custom_text_button.dart';
@@ -25,7 +29,7 @@ class ProfileView extends StatefulWidget {
 class _ProfileViewState extends State<ProfileView> {
   bool isDarkMode = false;
   bool switcher = false;
-  String selectedLanguage = 'English (US)';
+  String? selectedLanguage;
   bool notificationsEnabled = true;
   bool pushNotifications = true;
   bool emailNotifications = false;
@@ -60,7 +64,7 @@ class _ProfileViewState extends State<ProfileView> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Filters',
+                              'filters'.tr(),
                               style: Theme.of(
                                 context,
                               ).textTheme.displaySmall?.copyWith(
@@ -82,9 +86,9 @@ class _ProfileViewState extends State<ProfileView> {
                         const SizedBox(height: 8),
                         CustomDropDownMenu(
                           borderRadius: 8,
-                          nameField: 'Position',
+                          nameField: 'position'.tr(),
                           selectedItem: DropDownModel(
-                            name: 'Select Position',
+                            name: 'select_position'.tr(),
                             value: 1,
                           ),
                           items: [
@@ -95,10 +99,10 @@ class _ProfileViewState extends State<ProfileView> {
                         const SizedBox(height: 8),
                         CustomDropDownMenu(
                           borderRadius: 8,
-                          nameField: 'Country',
+                          nameField: 'country'.tr(),
 
                           selectedItem: DropDownModel(
-                            name: 'Select Country',
+                            name: 'select_country'.tr(),
                             value: 1,
                           ),
                           items: [
@@ -109,10 +113,10 @@ class _ProfileViewState extends State<ProfileView> {
                         const SizedBox(height: 8),
                         CustomDropDownMenu(
                           borderRadius: 8,
-                          nameField: 'Journey',
+                          nameField: 'journey'.tr(),
 
                           selectedItem: DropDownModel(
-                            name: 'Select Journey',
+                            name: 'select_journey'.tr(),
                             value: 1,
                           ),
                           items: [
@@ -131,7 +135,7 @@ class _ProfileViewState extends State<ProfileView> {
                               backgroundColor: AppColors.primaryColor
                                   .withOpacity(.3),
                               onPress: () {},
-                              childText: 'Reset All',
+                              childText: 'reset_all'.tr(),
                             ),
                             CustomTextButton(
                               borderColor: AppColors.transparent,
@@ -140,7 +144,7 @@ class _ProfileViewState extends State<ProfileView> {
                               colorText: AppColors.white,
                               backgroundColor: AppColors.primaryColor,
                               onPress: () {},
-                              childText: 'Apply Filters',
+                              childText: 'apply_filters'.tr(),
                             ),
                           ],
                         ),
@@ -158,7 +162,9 @@ class _ProfileViewState extends State<ProfileView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-          darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
+          darkModeValue
+              ? AppColors.appBarDarkModeColor
+              : AppColors.scaffoldBackGround,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -215,10 +221,10 @@ class _ProfileViewState extends State<ProfileView> {
 
                     // User Email
                     Text(
-                      'ahmed.hassan@nets.com',
+                      /*  userCacheValue?.data?.email ??  */ 'ahmed.hassan@nets.com',
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         color:
-                            darkModeValue ? Colors.grey[400] : Colors.grey[600],
+                            darkModeValue ? AppColors.white : AppColors.black,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -227,7 +233,7 @@ class _ProfileViewState extends State<ProfileView> {
                         context.navigateToPage(const EditProfileView());
                       },
                       child: Text(
-                        'Edit Profile',
+                        'edit_profile'.tr(),
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           color:
                               darkModeValue
@@ -253,20 +259,20 @@ class _ProfileViewState extends State<ProfileView> {
                     color:
                         darkModeValue ? Colors.grey[700]! : Colors.grey[200]!,
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: Colors.black.withOpacity(0.05),
+                  //     blurRadius: 10,
+                  //     offset: const Offset(0, 2),
+                  //   ),
+                  // ],
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildStatItem(context, 'Contacts', '156'),
-                    _buildStatItem(context, 'Groups', '12'),
-                    _buildStatItem(context, 'QR Scan', '89'),
+                    _buildStatItem(context, 'contacts'.tr(), '156'),
+                    _buildStatItem(context, 'groups'.tr(), '12'),
+                    _buildStatItem(context, 'qr_scan'.tr(), '89'),
                   ],
                 ),
               ),
@@ -290,42 +296,63 @@ class _ProfileViewState extends State<ProfileView> {
                       context,
                       isSvg: true,
                       iconPath: AppIcons.notificationSetting,
-                      title: 'Notifications',
-                      subtitle: 'Manage your notifications',
+                      title: 'notifications'.tr(),
+                      subtitle: 'manage_your_notifications'.tr(),
                       onTap: _showNotificationSettings,
                     ),
                     _buildDivider(),
                     _buildSettingsItem(
                       context,
                       icon: Icons.qr_code_scanner,
-                      title: 'Phone Number Sharing',
-                      subtitle: 'Control phone number sharing',
+                      title: 'phone_number_sharing'.tr(),
+                      subtitle: 'control_phone_number_sharing'.tr(),
                       onTap: _showPhoneNumberSharingSettings,
                     ),
                     _buildDivider(),
                     _buildSettingsItem(
                       context,
                       icon: Icons.security,
-                      title: 'Privacy & Security',
-                      subtitle: 'Manage your privacy settings',
+                      title: 'data_privacy'.tr(),
+                      subtitle: 'manage_your_privacy_settings'.tr(),
                       onTap: _showPrivacySettings,
                     ),
                     _buildDivider(),
                     _buildSettingsItem(
                       context,
                       icon: Icons.language,
-                      title: 'Language',
-                      subtitle: selectedLanguage,
+                      title: 'language'.tr(),
+                      subtitle:
+                          !arabicLanguage ? 'arabic'.tr() : 'english_us'.tr(),
                       onTap: _showLanguageSettings,
                     ),
                     _buildDivider(),
                     _buildSettingsItem(
                       context,
                       icon: Icons.dark_mode,
-                      title: 'Dark Mode',
-                      subtitle: 'Toggle dark theme',
+                      title: 'dark_mode'.tr(),
+                      subtitle: 'toggle_dark_theme'.tr(),
                       onTap: () {},
-                      trailing: Switch(
+                      trailing: SizedBox(
+                        width: 60.w,
+                        child: CustomLoadSwitchWidget(
+                          label: '',
+                          initialValue: darkModeValue,
+                          onChanged: ({required bool value}) {
+                            log(value.toString());
+                            setState(() {
+                              darkModeValue = !darkModeValue;
+                              saveDarkMode(context, darkModeValue);
+                            });
+                          },
+                          future: () {
+                            return Future.delayed(
+                              const Duration(seconds: 1),
+                              () => true,
+                            );
+                          },
+                        ),
+                      ),
+                      /*  Switch(
                         value: switcher,
                         onChanged: (value) {
                           setState(() {
@@ -334,14 +361,14 @@ class _ProfileViewState extends State<ProfileView> {
                           });
                         },
                         activeColor: AppColors.primaryColor,
-                      ),
+                      ) */
                     ),
                     _buildDivider(),
                     _buildSettingsItem(
                       context,
                       icon: Icons.help,
-                      title: 'Help & Support',
-                      subtitle: 'Get help and contact support',
+                      title: 'help_support'.tr(),
+                      subtitle: 'get_help_and_contact_support'.tr(),
                       onTap: _showHelpSupport,
                     ),
                     _buildDivider(),
@@ -349,18 +376,18 @@ class _ProfileViewState extends State<ProfileView> {
                       context,
                       isSvg: true,
                       iconPath: AppIcons.settings,
-                      title: 'Setting',
-                      subtitle: 'Control app settings',
+                      title: 'settings'.tr(),
+                      subtitle: 'control_app_settings'.tr(),
                       onTap: () {
-                        customShowToast(context, 'settings comming soon');
+                        customShowToast(context, 'settings_coming_soon'.tr());
                       },
                     ),
                     _buildDivider(),
                     _buildSettingsItem(
                       context,
                       icon: Icons.info,
-                      title: 'About',
-                      subtitle: 'App version 1.0.0',
+                      title: 'about'.tr(),
+                      subtitle: 'app_version'.tr(),
                       onTap: _showAbout,
                     ),
                   ],
@@ -381,7 +408,7 @@ class _ProfileViewState extends State<ProfileView> {
                     SvgPicture.asset(AppIcons.logoutSetting),
                     SizedBox(width: 10),
                     Text(
-                      'Logout',
+                      'logout'.tr(),
                       style: Theme.of(
                         context,
                       ).textTheme.titleLarge?.copyWith(color: AppColors.white),
@@ -404,7 +431,7 @@ class _ProfileViewState extends State<ProfileView> {
                     SvgPicture.asset(AppIcons.deleteSetting),
                     SizedBox(width: 10),
                     Text(
-                      'Delete Account',
+                      'delete_account'.tr(),
                       style: Theme.of(
                         context,
                       ).textTheme.titleLarge?.copyWith(color: AppColors.red),
@@ -435,7 +462,7 @@ class _ProfileViewState extends State<ProfileView> {
         Text(
           label,
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+            color: darkModeValue ? AppColors.white : Colors.grey[600],
           ),
         ),
       ],
@@ -453,7 +480,7 @@ class _ProfileViewState extends State<ProfileView> {
     Widget? trailing,
   }) {
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       leading: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
@@ -469,29 +496,30 @@ class _ProfileViewState extends State<ProfileView> {
         title,
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
           fontWeight: FontWeight.w400,
-          color: isDarkMode ? AppColors.white : AppColors.black,
+          color: darkModeValue ? AppColors.white : AppColors.black,
         ),
       ),
       subtitle: Text(
         subtitle,
         style: Theme.of(context).textTheme.labelMedium?.copyWith(
-          color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+          color: darkModeValue ? AppColors.greyG100 : AppColors.greyG300,
         ),
       ),
       trailing:
           trailing ??
           RotatedBox(
-            quarterTurns: 3,
+            quarterTurns: arabicLanguage ? 3 : 1,
+
             child: SvgPicture.asset(AppIcons.arrowDown),
           ),
       onTap: onTap,
     );
   }
 
-  Widget _buildDivider({double indent = 60}) {
+  Widget _buildDivider({double indent = 20}) {
     return Divider(
       height: 1,
-      color: isDarkMode ? Colors.grey[700] : Colors.grey[200],
+      color: darkModeValue ? Colors.grey[700] : Colors.grey[200],
       indent: indent,
       endIndent: 20,
     );
@@ -504,22 +532,25 @@ class _ProfileViewState extends State<ProfileView> {
         return AlertDialog(
           backgroundColor: isDarkMode ? AppColors.darkModeColor : Colors.white,
           title: Text(
-            'Logout',
-            style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+            'logout_button'.tr(),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              color: darkModeValue ? AppColors.white : AppColors.black,
+            ),
           ),
           content: Text(
-            'Are you sure you want to logout?',
-            style: TextStyle(
-              color: isDarkMode ? Colors.grey[300] : Colors.grey[700],
+            'logout_confirmation_title'.tr(),
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: darkModeValue ? AppColors.greyG100 : AppColors.greyG300,
             ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
-                'Cancel',
-                style: TextStyle(
-                  color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                'cancel_button'.tr(),
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color:
+                      darkModeValue ? AppColors.greyG100 : AppColors.greyG300,
                 ),
               ),
             ),
@@ -535,9 +566,9 @@ class _ProfileViewState extends State<ProfileView> {
                 );
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red[400]),
-              child: const Text(
-                'Logout',
-                style: TextStyle(color: Colors.white),
+              child: Text(
+                'logout_button'.tr(),
+                style: const TextStyle(color: Colors.white),
               ),
             ),
           ],
@@ -553,7 +584,7 @@ class _ProfileViewState extends State<ProfileView> {
         return AlertDialog(
           backgroundColor: isDarkMode ? AppColors.darkModeColor : Colors.white,
           title: Text(
-            'Delete Account',
+            'delete_account'.tr(),
             style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
           ),
           content: Column(
@@ -561,7 +592,7 @@ class _ProfileViewState extends State<ProfileView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Are you sure you want to delete your account?',
+                'delete_account_warning'.tr(),
                 style: TextStyle(
                   color: isDarkMode ? Colors.grey[300] : Colors.grey[700],
                 ),
@@ -580,7 +611,7 @@ class _ProfileViewState extends State<ProfileView> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Your account will be deleted after 30 days. You can recover it within this period.',
+                        'account_deletion_info_30_days'.tr(),
                         style: TextStyle(
                           color: Colors.orange[800],
                           fontSize: 12,
@@ -597,7 +628,7 @@ class _ProfileViewState extends State<ProfileView> {
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
-                'Cancel',
+                'cancel'.tr(),
                 style: TextStyle(
                   color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
                 ),
@@ -613,9 +644,9 @@ class _ProfileViewState extends State<ProfileView> {
                 );
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red[600]),
-              child: const Text(
-                'Delete Account',
-                style: TextStyle(color: Colors.white),
+              child: Text(
+                'delete_account'.tr(),
+                style: const TextStyle(color: Colors.white),
               ),
             ),
           ],
@@ -645,11 +676,11 @@ class _ProfileViewState extends State<ProfileView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Notification Settings',
+                          'notification_settings'.tr(),
                           style: Theme.of(
                             context,
                           ).textTheme.displaySmall?.copyWith(
-                            color: darkModeValue ? Colors.white : Colors.black,
+                            color: darkModeValue ? Colors.black : Colors.black,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
@@ -657,7 +688,7 @@ class _ProfileViewState extends State<ProfileView> {
                           onPressed: () => Navigator.pop(context),
                           icon: Icon(
                             Icons.close,
-                            color: isDarkMode ? Colors.white : Colors.black,
+                            color: darkModeValue ? Colors.black : Colors.black,
                           ),
                         ),
                       ],
@@ -665,21 +696,21 @@ class _ProfileViewState extends State<ProfileView> {
                     _buildDivider(indent: 5),
                     const SizedBox(height: 20),
                     _buildNotificationToggle(
-                      'Push Notifications',
-                      'Receive push notifications',
+                      'push_notifications'.tr(),
+                      'receive_push_notifications'.tr(),
                       pushNotifications,
                       (value) => setModalState(() => pushNotifications = value),
                     ),
                     _buildNotificationToggle(
-                      'Email Notifications',
-                      'Receive email notifications',
+                      'email_notifications'.tr(),
+                      'receive_email_notifications'.tr(),
                       emailNotifications,
                       (value) =>
                           setModalState(() => emailNotifications = value),
                     ),
                     _buildNotificationToggle(
-                      'SMS Notifications',
-                      'Receive SMS notifications',
+                      'sms_notifications'.tr(),
+                      'receive_sms_notifications'.tr(),
                       smsNotifications,
                       (value) => setModalState(() => smsNotifications = value),
                     ),
@@ -687,13 +718,16 @@ class _ProfileViewState extends State<ProfileView> {
 
                     CustomTextButton(
                       onPress: () {
-                        customShowToast(context, 'Notification settings saved');
+                        customShowToast(
+                          context,
+                          'notification_settings_saved'.tr(),
+                        );
                       },
                       backgroundColor: AppColors.primaryColor,
                       borderRadius: 8,
                       borderColor: AppColors.transparent,
                       child: Text(
-                        'Save Settings',
+                        'save_settings'.tr(),
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           color: AppColors.white,
                         ),
@@ -733,11 +767,12 @@ class _ProfileViewState extends State<ProfileView> {
                       children: [
                         Flexible(
                           child: Text(
-                            'Phone Number Sharing',
+                            'phone_number_sharing'.tr(),
                             style: Theme.of(
                               context,
                             ).textTheme.displaySmall?.copyWith(
-                              color: darkModeValue ? Colors.white : Colors.black,
+                              color:
+                                  darkModeValue ? Colors.black : Colors.black,
                               fontWeight: FontWeight.w400,
                             ),
                             maxLines: 1,
@@ -756,21 +791,21 @@ class _ProfileViewState extends State<ProfileView> {
                     _buildDivider(indent: 5),
                     const SizedBox(height: 20),
                     _buildNotificationToggle(
-                      'Share Mobile Number',
-                      'Automatically share your mobile number when receiving a QR code.',
+                      'share_mobile_number'.tr(),
+                      'auto_share_mobile_number_desc'.tr(),
                       pushNotifications,
                       (value) => setModalState(() => pushNotifications = value),
                     ),
                     _buildNotificationToggle(
-                      'Remove Share Notification',
-                      'Disable the "Share phone number" notification when sending a QR code (your number will be shared automatically).',
+                      'remove_share_notification'.tr(),
+                      'disable_share_phone_number_notification_desc'.tr(),
                       emailNotifications,
                       (value) =>
                           setModalState(() => emailNotifications = value),
                     ),
                     _buildNotificationToggle(
-                      'Auto Sync',
-                      'Keep your data synchronized automatically.',
+                      'auto_sync'.tr(),
+                      'auto_sync_desc'.tr(),
                       smsNotifications,
                       (value) => setModalState(() => smsNotifications = value),
                     ),
@@ -813,7 +848,7 @@ class _ProfileViewState extends State<ProfileView> {
       title: Text(
         title,
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          color: darkModeValue ? Colors.white : Colors.black,
+          color: darkModeValue ? Colors.black : Colors.black,
           fontWeight: FontWeight.w400,
         ),
       ),
@@ -858,9 +893,9 @@ class _ProfileViewState extends State<ProfileView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Privacy & Security',
+                      'privacy_security'.tr(),
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: darkModeValue ? Colors.white : Colors.black,
+                        color: darkModeValue ? Colors.black : Colors.black,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -877,23 +912,23 @@ class _ProfileViewState extends State<ProfileView> {
                 const SizedBox(height: 20),
                 _buildPrivacyItem(
                   Icons.lock,
-                  'Two-Factor Authentication',
-                  'Add an extra layer of security',
+                  'two_factor_authentication'.tr(),
+                  'two_factor_authentication_desc'.tr(),
                 ),
                 _buildPrivacyItem(
                   Icons.visibility,
-                  'Profile Visibility',
-                  'Control who can see your profile',
+                  'profile_visibility'.tr(),
+                  'profile_visibility_desc'.tr(),
                 ),
                 _buildPrivacyItem(
                   Icons.block,
-                  'Blocked Users',
-                  'Manage blocked contacts',
+                  'blocked_users'.tr(),
+                  'blocked_users_desc'.tr(),
                 ),
                 _buildPrivacyItem(
                   Icons.security,
-                  'Data Encryption',
-                  'Your data is encrypted end-to-end',
+                  'data_encryption'.tr(),
+                  'data_encryption_desc'.tr(),
                 ),
                 const SizedBox(height: 10),
               ],
@@ -918,7 +953,7 @@ class _ProfileViewState extends State<ProfileView> {
       title: Text(
         title,
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          color: darkModeValue ? Colors.white : Colors.black,
+          color: darkModeValue ? Colors.black : Colors.black,
           fontWeight: FontWeight.w400,
         ),
       ),
@@ -929,7 +964,8 @@ class _ProfileViewState extends State<ProfileView> {
         ),
       ),
       trailing: RotatedBox(
-        quarterTurns: 3,
+        quarterTurns: arabicLanguage ? 3 : 1,
+
         child: SvgPicture.asset(AppIcons.arrowDown),
       ),
       onTap: () {
@@ -940,8 +976,8 @@ class _ProfileViewState extends State<ProfileView> {
 
   void _showLanguageSettings() {
     final languages = [
-      'English (US)',
-      'English (UK)',
+      'English'.tr(),
+      'Arabic'.tr(),
       'Spanish',
       'French',
       'German',
@@ -949,7 +985,6 @@ class _ProfileViewState extends State<ProfileView> {
       'Portuguese',
       'Chinese',
       'Japanese',
-      'Arabic',
     ];
 
     showModalBottomSheet(
@@ -960,7 +995,7 @@ class _ProfileViewState extends State<ProfileView> {
       ),
       builder: (BuildContext context) {
         return Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -969,23 +1004,23 @@ class _ProfileViewState extends State<ProfileView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Select Language',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: darkModeValue ? Colors.white : Colors.black,
-                      fontWeight: FontWeight.w600,
+                    'select_language'.tr(),
+                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                      color: darkModeValue ? Colors.black : Colors.black,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
                     icon: Icon(
                       Icons.close,
-                      color: isDarkMode ? Colors.white : Colors.black,
+                      color: darkModeValue ? AppColors.black : AppColors.black,
                     ),
                   ),
                 ],
               ),
               _buildDivider(indent: 5),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               Flexible(
                 child: ListView.builder(
                   shrinkWrap: true,
@@ -998,9 +1033,8 @@ class _ProfileViewState extends State<ProfileView> {
                       title: Text(
                         language,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: darkModeValue ? Colors.white : Colors.black,
-                          fontWeight:
-                              isSelected ? FontWeight.bold : FontWeight.normal,
+                          color: darkModeValue ? Colors.black : Colors.black,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                       trailing:
@@ -1011,15 +1045,21 @@ class _ProfileViewState extends State<ProfileView> {
                               )
                               : null,
                       onTap: () {
+                        if (language == 'Arabic') {
+                          context.setLocale(const Locale('ar', 'SA'));
+                          userCache?.put(languageAppKey, true);
+
+                          arabicLanguage = true;
+                        } else {
+                          context.setLocale(const Locale('en', 'US'));
+                          userCache?.put(languageAppKey, false);
+                        }
+                        // arabicLanguage = context.locale.languageCode == 'ar';
+
                         setState(() {
                           selectedLanguage = language;
                         });
                         Navigator.pop(context);
-                        // ScaffoldMessenger.of(context).showSnackBar(
-                        //   SnackBar(
-                        //     content: Text('Language changed to $language'),
-                        //   ),
-                        // );
                       },
                     );
                   },
@@ -1041,7 +1081,7 @@ class _ProfileViewState extends State<ProfileView> {
       ),
       builder: (BuildContext context) {
         return Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(24),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -1051,9 +1091,9 @@ class _ProfileViewState extends State<ProfileView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Help & Support',
+                      'help_support'.tr(),
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: darkModeValue ? Colors.white : Colors.black,
+                        color: darkModeValue ? Colors.black : Colors.black,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -1061,31 +1101,27 @@ class _ProfileViewState extends State<ProfileView> {
                       onPressed: () => Navigator.pop(context),
                       icon: Icon(
                         Icons.close,
-                        color: darkModeValue ? Colors.white : Colors.black,
+                        color: darkModeValue ? Colors.black : Colors.black,
                       ),
                     ),
                   ],
                 ),
                 _buildDivider(indent: 5),
                 const SizedBox(height: 20),
-                _buildHelpItem(
-                  AppIcons.help,
-                  'FAQ',
-                  'Frequently asked questions',
-                ),
+                _buildHelpItem(AppIcons.help, 'faq'.tr(), 'faq_desc'.tr()),
                 _buildHelpItem(
                   AppIcons.message,
-                  'Live Chat',
-                  'Chat with our support team',
+                  'live_chat'.tr(),
+                  'live_chat_desc'.tr(),
                 ),
                 _buildHelpItem(
                   AppIcons.email,
-                  'Email Support',
-                  'Send us an email',
+                  'email_support'.tr(),
+                  'email_support_desc'.tr(),
                 ),
                 _buildHelpItem(
                   AppIcons.call,
-                  'Call Support',
+                  'call_support'.tr(),
                   '+1 (555) 123-4567',
                 ),
 
@@ -1112,7 +1148,7 @@ class _ProfileViewState extends State<ProfileView> {
       title: Text(
         title,
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          color: darkModeValue ? Colors.white : Colors.black,
+          color: darkModeValue ? Colors.black : Colors.black,
           fontWeight: FontWeight.w400,
         ),
       ),
@@ -1123,7 +1159,7 @@ class _ProfileViewState extends State<ProfileView> {
         ),
       ),
       trailing: RotatedBox(
-        quarterTurns: 3,
+        quarterTurns: arabicLanguage ? 3 : 1,
         child: SvgPicture.asset(AppIcons.arrowDown),
       ),
       onTap: () {
@@ -1150,9 +1186,9 @@ class _ProfileViewState extends State<ProfileView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'About',
+                      'about'.tr(),
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: darkModeValue ? Colors.white : Colors.black,
+                        color: darkModeValue ? Colors.black : Colors.black,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -1160,7 +1196,7 @@ class _ProfileViewState extends State<ProfileView> {
                       onPressed: () => Navigator.pop(context),
                       icon: Icon(
                         Icons.close,
-                        color: darkModeValue ? Colors.white : Colors.black,
+                        color: darkModeValue ? Colors.black : Colors.black,
                       ),
                     ),
                   ],
@@ -1180,20 +1216,20 @@ class _ProfileViewState extends State<ProfileView> {
                 Text(
                   'NETS',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: darkModeValue ? Colors.white : Colors.black,
+                    color: darkModeValue ? Colors.black : Colors.black,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Version 1.0.0',
+                  'app_version'.tr(),
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: darkModeValue ? Colors.grey[400] : Colors.grey[600],
+                    color: darkModeValue ? Colors.grey[600] : Colors.grey[600],
                   ),
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'A modern networking and communication app designed to help you stay connected with your contacts and manage your social network efficiently.',
+                  'app_description'.tr(),
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     color: darkModeValue ? Colors.grey[400] : Colors.grey[600],
@@ -1209,11 +1245,11 @@ class _ProfileViewState extends State<ProfileView> {
                         Navigator.pop(context);
                       },
                       child: Text(
-                        'Terms of Service',
+                        'terms_and_conditions'.tr(),
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           color:
                               darkModeValue
-                                  ? Colors.white
+                                  ? AppColors.primaryColor
                                   : AppColors.primaryColor,
                           fontWeight: FontWeight.w400,
                         ),
@@ -1224,11 +1260,11 @@ class _ProfileViewState extends State<ProfileView> {
                         Navigator.pop(context);
                       },
                       child: Text(
-                        'Privacy Policy',
+                        'privacy_policy'.tr(),
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           color:
                               darkModeValue
-                                  ? Colors.white
+                                  ? AppColors.primaryColor
                                   : AppColors.primaryColor,
                           fontWeight: FontWeight.w400,
                         ),

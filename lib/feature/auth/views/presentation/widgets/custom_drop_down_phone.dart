@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,8 @@ import 'package:nets/core/themes/styles.dart';
 import 'package:nets/core/utils/constant_gaping.dart';
 import 'package:nets/core/utils/constants.dart';
 import 'package:nets/core/utils/extensions.dart';
+
+import '../../../../../core/utils/app_icons.dart';
 
 class DropDownModelPhone {
   final String name;
@@ -86,7 +87,6 @@ class _CustomDropDownPhoneState extends State<CustomDropDownPhone> {
   @override
   void initState() {
     newSelected = widget.selectedItem!;
-    log('print selected item====>${newSelected.showName}');
     super.initState();
   }
 
@@ -130,24 +130,9 @@ class _CustomDropDownPhoneState extends State<CustomDropDownPhone> {
                 hint: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(width: 1, height: 45, color: AppColors.greyG200),
-
-                    const FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Icon(Icons.keyboard_arrow_down),
-                    ),
-
-                    Text(
-                      newSelected.name.tr(),
-                      style: Styles.style12400.copyWith(
-                        color: AppColors.textColor,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
                     if (newSelected.showImage && newSelected.image != null)
                       Padding(
-                        padding: const EdgeInsets.only(right: 6.0, left: 5.0),
+                        padding: const EdgeInsets.only(right: 5.0, left: 5.0),
                         child:
                             newSelected.image!.contains('.svg')
                                 ? SvgPicture.asset(
@@ -162,6 +147,27 @@ class _CustomDropDownPhoneState extends State<CustomDropDownPhone> {
                                   width: 20,
                                 ),
                       ),
+                    // SizedBox(width: 4),
+                    Text(
+                      newSelected.name.tr(),
+                      style: Styles.style12400.copyWith(
+                        color: AppColors.textColor,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(width: 4),
+
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: SvgPicture.asset(
+                        AppIcons.arrowDown,
+                        height: 6,
+                        width: 6,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Container(width: 1, height: 45, color: AppColors.greyG200),
                   ],
                 ),
                 onChanged: (DropDownModelPhone? newValue) {

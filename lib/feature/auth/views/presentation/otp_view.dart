@@ -11,16 +11,19 @@ import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/utils/app_icons.dart';
 import 'package:nets/core/utils/custom_show_toast.dart';
 import 'package:nets/core/utils/extensions.dart';
+import 'package:nets/core/utils/navigate.dart';
 import 'package:nets/feature/auth/views/manager/sendOtpCubit/send_otp_cubit.dart';
+import 'package:nets/feature/navigation/view/presentation/navigation_view.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../core/utils/constant_gaping.dart';
+import '../manager/loginCubit/cubit/login_cubit.dart';
 import '../manager/otpCubit/cubit/otp_cubit.dart';
 
 class OTPVerificationView extends StatefulWidget {
-  const OTPVerificationView({super.key});
+  const OTPVerificationView({super.key, required this.phone});
   // final bool? verifyRegistrationEmail;
-  // final String email;
+  final String phone;
   @override
   OTPVerificationViewState createState() => OTPVerificationViewState();
 }
@@ -32,7 +35,7 @@ class OTPVerificationViewState extends State<OTPVerificationView> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // sendOtpCubit.sendOtp(context: context, email: widget.email);
+      // sendOtpCubit.sendOtp(context: context, phone: widget.phone);
     });
     super.initState();
   }
@@ -47,7 +50,8 @@ class OTPVerificationViewState extends State<OTPVerificationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: darkModeValue ? AppColors.black : AppColors.white,
+      backgroundColor:
+          darkModeValue ? AppColors.black : AppColors.scaffoldBackGround,
       // appBar: customAppBar(context: context, title: 'Email Confirmation'.tr()),
       body: BlocProvider.value(
         value: cubit,
@@ -63,7 +67,7 @@ class OTPVerificationViewState extends State<OTPVerificationView> {
                       children: [
                         SvgPicture.asset(AppIcons.appLogo),
                         Text(
-                          'Verification Code'.tr(),
+                          'verification_code'.tr(),
                           style: Theme.of(
                             context,
                           ).textTheme.bodyMedium!.copyWith(
@@ -77,7 +81,7 @@ class OTPVerificationViewState extends State<OTPVerificationView> {
                           child: Column(
                             children: [
                               Text(
-                                'A verification code has been sent to '.tr(),
+                                'A_verification_code_has_been_sent_to'.tr(),
                                 style: Theme.of(
                                   context,
                                 ).textTheme.displayMedium!.copyWith(
@@ -92,7 +96,7 @@ class OTPVerificationViewState extends State<OTPVerificationView> {
                                 maxLines: 1,
                               ),
                               Text(
-                                '123456789',
+                                widget.phone ?? 'your phone number',
                                 style: Theme.of(
                                   context,
                                 ).textTheme.displayMedium!.copyWith(
@@ -124,15 +128,14 @@ class OTPVerificationViewState extends State<OTPVerificationView> {
                               borderRadius: BorderRadius.circular(10.r),
                               fieldHeight: 58.h,
                               fieldWidth: 58.w,
-                              activeFillColor: AppColors.greyG200,
-                              inactiveColor: AppColors.greyG200,
+                              activeFillColor: AppColors.white,
+                              inactiveColor: AppColors.white,
                               inactiveFillColor:
                                   darkModeValue
                                       ? AppColors.darkModeBackground
                                       : Colors.white,
-                              activeColor: AppColors.primaryColor,
-                              selectedFillColor: AppColors.primaryColor
-                                  .withAlpha(20),
+                              activeColor: AppColors.greyG100,
+                              selectedFillColor: AppColors.white.withAlpha(20),
                               selectedColor: AppColors.primaryColor,
                             ),
                             animationDuration: const Duration(
@@ -154,11 +157,25 @@ class OTPVerificationViewState extends State<OTPVerificationView> {
                         ),
                       ].paddingDirectional(top: 24),
                     ),
-
-                    Text(
-                      '2:00',
-                      style: Theme.of(context).textTheme.displayMedium!
-                          .copyWith(color: AppColors.primaryColor),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          state is OTPTimerRunning
+                              ? state.timerText
+                              : state is OTPExpired
+                              ? '00:00'
+                              : '02:00',
+                          style: Theme.of(context).textTheme.displayMedium!
+                              .copyWith(color: AppColors.primaryColor),
+                        ),
+                        w5,
+                        Icon(
+                          Icons.access_time,
+                          color: AppColors.greyG500,
+                          size: 18.sp,
+                        ),
+                      ],
                     ),
                     h15,
                     // Send button at the bottom
@@ -179,7 +196,9 @@ class OTPVerificationViewState extends State<OTPVerificationView> {
                           );
                           return;
                         } else {
-                          // await cubit.verifyOtp(context: context, verifyRegistrationEmail: widget.verifyRegistrationEmail ?? false);
+                          await cubit.verifyOtp(context: context);
+                          //TODO  remember to remove this
+                          LoginCubit.of(context).login(context: context);
                         }
 
                         // if (widget.verifyRegistrationEmail!) {
@@ -192,20 +211,29 @@ class OTPVerificationViewState extends State<OTPVerificationView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        TextButton(
-                          onPressed: cubit.resendCode,
-                          child: Text.rich(
-                            TextSpan(
-                              text: ' ${'resend_code'.tr()} ',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.displayMedium!.copyWith(
-                                color:
-                                    darkModeValue
-                                        ? AppColors.darkModeText
-                                        : AppColors.cP50,
-                              ),
-                              children: const [],
+                        Text(
+                          ' ${'resend_code'.tr()} ',
+                          style: Theme.of(
+                            context,
+                          ).textTheme.displayMedium!.copyWith(
+                            color:
+                                darkModeValue
+                                    ? AppColors.darkModeText
+                                    : AppColors.textColor,
+                          ),
+                        ),
+
+                        GestureDetector(
+                          onTap: cubit.resendCode,
+                          child: Text(
+                            ' ${'resend'.tr()} ',
+                            style: Theme.of(
+                              context,
+                            ).textTheme.displayMedium!.copyWith(
+                              color:
+                                  darkModeValue
+                                      ? AppColors.darkModeText
+                                      : AppColors.primaryColor,
                             ),
                           ),
                         ),

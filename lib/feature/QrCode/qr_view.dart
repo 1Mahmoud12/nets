@@ -416,7 +416,8 @@ END:VCARD
                             ),
                             // QR Code
                             Container(
-                              height: 250,
+                              // height: 280,
+                              // width: 280,
                               padding: const EdgeInsets.all(20),
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -431,7 +432,7 @@ END:VCARD
                               ),
                               child: QrImageView(
                                 data: _generateQrData(),
-                                size: 280.0,
+                                // size: 190.0,
                                 backgroundColor: Colors.white,
                                 foregroundColor: AppColors.black,
                                 errorStateBuilder: (cxt, err) {
@@ -543,9 +544,15 @@ END:VCARD
                               ),
                               const SizedBox(height: 15),
                               // Contact details
-                              _buildContactRow(AppIcons.email, userData['email']!),
+                              _buildContactRow(
+                                AppIcons.email,
+                                userData['email']!,
+                              ),
                               const SizedBox(height: 8),
-                              _buildContactRow(AppIcons.call, userData['phone']!),
+                              _buildContactRow(
+                                AppIcons.call,
+                                userData['phone']!,
+                              ),
                             ],
                           ),
                         ),

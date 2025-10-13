@@ -28,25 +28,7 @@ Color getStatusColor(String status) {
   }
 }
 
-void makeCall(String phone, BuildContext context) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text('Calling $phone...'),
-      backgroundColor: Colors.green,
-      duration: const Duration(seconds: 2),
-    ),
-  );
-}
 
-void sendMessage(Map<String, String> contact, BuildContext context) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text('Opening chat with ${contact['name']}...'),
-      backgroundColor: AppColors.primaryColor,
-      duration: const Duration(seconds: 2),
-    ),
-  );
-}
 
 class ContactsView extends StatefulWidget {
   const ContactsView({super.key});
@@ -803,7 +785,7 @@ class _ContactsViewState extends State<ContactsView> {
                   child: Row(
                     children: [
                       Text(
-                        'Contacts',
+                        'contacts'.tr(),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.w400,
                           color:
@@ -832,7 +814,7 @@ class _ContactsViewState extends State<ContactsView> {
                   child: Row(
                     children: [
                       Text(
-                        '${filteredContacts.length} Contacts',
+                        '${filteredContacts.length} ${'contacts'.tr()}',
                         style: Theme.of(
                           context,
                         ).textTheme.displaySmall?.copyWith(
@@ -875,7 +857,7 @@ class _ContactsViewState extends State<ContactsView> {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            '${filteredContacts.where((c) => c['status'] == 'online').length} online',
+                            '${filteredContacts.where((c) => c['status'] == 'online').length} ${'online'.tr()}',
                             style: Theme.of(
                               context,
                             ).textTheme.bodySmall?.copyWith(
@@ -1074,7 +1056,7 @@ void showContactDetails(Map<String, String> contact, BuildContext context) {
                           Expanded(
                             child: ElevatedButton.icon(
                               onPressed:
-                                  () => makeCall(contact['phone']!, context),
+                                  () => null,
                               icon: const Icon(Icons.call),
                               label: const Text('Call'),
                               style: ElevatedButton.styleFrom(
@@ -1092,7 +1074,7 @@ void showContactDetails(Map<String, String> contact, BuildContext context) {
                           const SizedBox(width: 16),
                           Expanded(
                             child: ElevatedButton.icon(
-                              onPressed: () => sendMessage(contact, context),
+                              onPressed: () => null,
                               icon: const Icon(Icons.message),
                               label: const Text('Message'),
                               style: ElevatedButton.styleFrom(

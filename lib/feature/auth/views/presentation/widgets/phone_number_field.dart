@@ -2,12 +2,10 @@ import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../../../../../core/component/fields/custom_text_form_field.dart';
 import '../../../../../core/themes/colors.dart';
 import '../../../../../core/utils/app_icons.dart';
-import '../../../../../core/utils/utils.dart';
 import '../../manager/loginCubit/cubit/login_cubit.dart';
 import 'custom_drop_down_phone.dart';
 
@@ -44,7 +42,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
         case '+2': // Egypt
           _phoneHint = '01xxxxxxxxx';
           break;
-        case '+973': // Bahrain
+        case '+971': // Bahrain
           _phoneHint = 'xxxxxxxx';
           break;
         default:
@@ -86,49 +84,49 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
     final authCubit = LoginCubit.of(context);
 
     return CustomTextFormField(
-      inputFormatters:
-          LoginCubit.of(context).countryCode == '+966'
-              ? [
-                TextInputFormatter.withFunction((oldValue, newValue) {
-                  final text = newValue.text;
+      // inputFormatters:
+      //     LoginCubit.of(context).countryCode == '+966'
+      //         ? [
+      //           TextInputFormatter.withFunction((oldValue, newValue) {
+      //             final text = newValue.text;
 
-                  if (text.isEmpty) return newValue;
+      //             if (text.isEmpty) return newValue;
 
-                  // Handle +9665XXXXXXXX
-                  if (text.startsWith('+966') &&
-                      text.length > 4 &&
-                      text[4] == '5') {
-                    final trimmed = text.substring(4);
-                    final clampedLength =
-                        trimmed.length > 9 ? 9 : trimmed.length;
-                    final trimmedText = trimmed.substring(0, clampedLength);
+      //             // Handle +9665XXXXXXXX
+      //             if (text.startsWith('+966') &&
+      //                 text.length > 4 &&
+      //                 text[4] == '5') {
+      //               final trimmed = text.substring(4);
+      //               final clampedLength =
+      //                   trimmed.length > 9 ? 9 : trimmed.length;
+      //               final trimmedText = trimmed.substring(0, clampedLength);
 
-                    return TextEditingValue(
-                      text: trimmedText,
-                      selection: TextSelection.collapsed(offset: clampedLength),
-                    );
-                  }
+      //               return TextEditingValue(
+      //                 text: trimmedText,
+      //                 selection: TextSelection.collapsed(offset: clampedLength),
+      //               );
+      //             }
 
-                  if (!text.startsWith('5')) {
-                    Utils.showToast(
-                      title: 'Saudi numbers start with 5'.tr(),
-                      state: UtilState.error,
-                    );
-                    return oldValue;
-                  }
+      //             if (!text.startsWith('5')) {
+      //               Utils.showToast(
+      //                 title: 'Saudi numbers start with 5'.tr(),
+      //                 state: UtilState.error,
+      //               );
+      //               return oldValue;
+      //             }
 
-                  if (text.length > 9) {
-                    final trimmedText = text.substring(0, 9);
-                    return TextEditingValue(
-                      text: trimmedText,
-                      selection: const TextSelection.collapsed(offset: 9),
-                    );
-                  }
+      //             if (text.length > 9) {
+      //               final trimmedText = text.substring(0, 9);
+      //               return TextEditingValue(
+      //                 text: trimmedText,
+      //                 selection: const TextSelection.collapsed(offset: 9),
+      //               );
+      //             }
 
-                  return newValue;
-                }),
-              ]
-              : null,
+      //             return newValue;
+      //           }),
+      //         ]
+      //         : null,
       enable: widget.enabled,
       textInputType: TextInputType.phone,
       // contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 7),
@@ -136,11 +134,10 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
       controller: widget.controller,
       borderRadius: 12,
       nameField: 'phone_number'.tr(),
-      hintText: '',
+      hintText: 'enter_phone_number'.tr(),
       hintStyle: TextStyle(color: AppColors.primaryColor.withOpacity(0.5)),
-      //  labelText: _phoneHint.tr(),
       validator: (value) => _validatePhoneNumber(value, _countryCode),
-      suffixIcon: SizedBox(
+      prefixIcon: SizedBox(
         width: 95,
         child: CountryCodeDropdown(
           initialCountryIndex: _selectedCountryIndex, // Pass the selected index
@@ -174,12 +171,12 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
       if (!regExp.hasMatch(value)) {
         return 'Enter valid Egyptian phone number'.tr();
       }
-    } else if (countryCode == '+973') {
+    } else if (countryCode == '+971') {
       // Bahrain
       // Bahrain phone numbers: 8 digits
       final RegExp regExp = RegExp(r'^\d{8}$');
       if (!regExp.hasMatch(value)) {
-        return 'Enter valid Bahrain phone number'.tr();
+        return 'Enter valid UAE phone number'.tr();
       }
     } else {
       // Generic validation for other countries
@@ -236,9 +233,9 @@ class CountryCodeDropdown extends StatelessWidget {
 }
 
 List<CountryFlag> countriesflage = [
-  CountryFlag(id: 0, name: 'SA', code: '966+', image: AppIcons.SAIc),
-  CountryFlag(id: 1, name: 'EG', code: '2+', image: AppIcons.EGIc),
-  CountryFlag(id: 2, name: 'UAE', code: '971+', image: AppIcons.AEIc),
+  CountryFlag(id: 0, name: 'SA', code: '+966', image: AppIcons.SAIc),
+  CountryFlag(id: 1, name: 'EG', code: '+2', image: AppIcons.EGIc),
+  CountryFlag(id: 2, name: 'UAE', code: '+971', image: AppIcons.AEIc),
 ];
 
 class CountryFlag {

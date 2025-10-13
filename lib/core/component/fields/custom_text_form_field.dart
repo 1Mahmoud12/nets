@@ -9,6 +9,7 @@ import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/themes/styles.dart';
 import 'package:nets/core/utils/app_icons.dart';
+import 'package:nets/core/utils/constants.dart';
 
 class CustomTextFormField extends StatefulWidget {
   final TextEditingController controller;
@@ -107,8 +108,10 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     return Container(
       padding: widget.outPadding ?? EdgeInsets.zero,
       width: widget.width ?? MediaQuery.of(context).size.width,
+
       // Remove height constraint from the outer container
       decoration: BoxDecoration(
+        color: darkModeValue ? AppColors.black : AppColors.white,
         borderRadius: BorderRadius.circular(widget.borderRadius ?? 4),
         boxShadow: const [
           BoxShadow(
@@ -127,11 +130,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             Text(
               widget.nameField!.tr(),
               style: Styles.style14400.copyWith(
-                color:
-                    darkModeValue
-                        ? AppColors.darkModeText
-                        : AppColors.textColor,
-                        fontSize: 12
+                color: darkModeValue ? AppColors.darkModeText : AppColors.black,
+                fontSize: 12,
               ),
             ),
           if (widget.nameField != null) SizedBox(height: 6.h),
@@ -142,7 +142,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               children: [
                 Directionality(
                   textDirection:
-                      widget.enableLtr
+                      (arabicLanguage? widget.enableLtr:false)
                           ? ui.TextDirection.ltr
                           : ui.TextDirection.rtl,
                   child: TextFormField(

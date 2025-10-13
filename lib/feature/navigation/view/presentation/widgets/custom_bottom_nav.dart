@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
@@ -65,7 +64,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
       onTap: () => onTap(index),
       borderRadius: BorderRadius.circular(20),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -80,18 +79,16 @@ class CustomBottomNavigationBar extends StatelessWidget {
             //   size: 24,
             // ),
             SvgPicture.asset(
-              selectedIcons[index],
-              color: isSelected ? AppColors.primaryColor : AppColors.greyG300,
+           isSelected? selectedIcons[index]:unselectedIcons[index],
+              // color: isSelected ? AppColors.primaryColor : null,
               width: 24,
               height: 24,
             ),
             h5,
             Text(
               names[index].tr(),
-              style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                fontSize: 13.sp,
-                fontWeight: FontWeight.w800,
-                color: isSelected ? AppColors.primaryColor : AppColors.black,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: isSelected ? AppColors.primaryColor : AppColors.greyG400,
               ),
             ),
           ],
