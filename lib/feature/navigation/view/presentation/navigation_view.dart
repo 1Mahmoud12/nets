@@ -170,7 +170,9 @@ class _NavigationViewState extends State<NavigationView>
                           context,
                         ).textTheme.displayMedium?.copyWith(
                           color:
-                              darkModeValue ? AppColors.white : AppColors.primaryColor.withBlue(150),
+                              darkModeValue
+                                  ? AppColors.white
+                                  : AppColors.primaryColor.withBlue(150),
                         ),
                       ),
                     ),
@@ -214,7 +216,9 @@ class _NavigationViewState extends State<NavigationView>
                                   ),
                                   const SizedBox(height: 6),
                                   Text(
-                                    'new_message_from'.tr(args: ['Sarah Johnson']),
+                                    'new_message_from'.tr(
+                                      args: ['Sarah Johnson'],
+                                    ),
                                     style: Theme.of(
                                       context,
                                     ).textTheme.displayLarge?.copyWith(

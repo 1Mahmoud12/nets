@@ -305,5 +305,15 @@
   "call_support": "الدعم عبر الهاتف",
   "call_support_desc": "تواصل مع فريق الدعم عبر الهاتف",
   "app_description": "تطبيق حديث للتواصل وإدارة شبكات العلاقات يساعدك على البقاء على اتصال بجهات الاتصال الخاصة بك وإدارة شبكتك الاجتماعية بكفاءة.",
-  "select_language": "اختر اللغة"
+  "select_language": "اختر اللغة",
+  "scan_qr_code": "امسح ال qr",
+  "Yes: Share_all_info_including_phone_number": "نعم: مشاركة جميع المعلومات بما في ذلك رقم الهاتف",
+  "No: Share_all_info_except_phone_number": "لا: مشاركة جميع المعلومات باستثناء رقم الهاتف",
+  "save_Contact":"حفظ الاتصال",
+  "notes":"ملاحظات",
+  "add_notes_about_this_contact":"أضف ملاحظات حول هذا الاتصال",
+  "voice_note":"ملاحظة صوتية",
+  "location":"الموقع"
+
+
 }

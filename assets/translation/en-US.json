@@ -301,5 +301,16 @@
   "call_support": "Call Support",
   "call_support_desc": "Contact our support team via phone",
   "app_description": "A modern networking and communication app designed to help you stay connected with your contacts and manage your social network efficiently.",
-  "select_language": "Select Language"
+  "select_language": "Select Language",
+  "scan_qr_code":"Scan QR Code",
+  "Yes: Share_all_info_including_phone_number":"Yes: Share all info including phone number",
+  "No: Share_all_info_except_phone_number":"No: Share all info except phone number",
+  "save_Contact":"Save Contact",
+  "notes":"Notes",
+  "add_notes_about_this_contact":"Add notes about this contact",
+  "voice_note":"Voice Note",
+  "location":"Location"
+
+
+
 }
