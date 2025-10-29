@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/utils/navigate.dart';
 import 'package:nets/feature/auth/data/models/login_model.dart';
-import 'package:nets/feature/navigation/view/presentation/navigation_view.dart';
+import 'package:nets/feature/auth/views/presentation/otp_view.dart';
 
 part 'login_state.dart';
 
@@ -13,14 +13,16 @@ class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(LoginInitial());
 
   static LoginCubit of(BuildContext context) => BlocProvider.of<LoginCubit>(context);
+  TextEditingController loginPhoneController = TextEditingController();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
+  String countryCode = '+966';
+  // CountryFlag country = countriesflage.first;
   Future<void> login({required BuildContext context}) async {
     emit(LoginLoading());
     Future.delayed(const Duration(seconds: 2), () {
-      context.navigateToPage(const NavigationView());
+      context.navigateToPage(const OTPVerificationView(phone: ''));
     });
     userCacheValue = LoginModel(data: Data(phone: '01127200000', email: 'test@gmail.com', authKey: 'asdasd'));
     await userCache?.put(userCacheKey, jsonEncode(LoginModel(data: Data(phone: '01127200000', email: 'test@gmail.com', authKey: 'asdasd')).toJson()));

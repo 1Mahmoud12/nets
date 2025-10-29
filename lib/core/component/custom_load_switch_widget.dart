@@ -20,7 +20,7 @@ class CustomLoadSwitchWidget extends StatefulWidget {
     required this.label,
     required this.initialValue,
     required this.onChanged,
-    this.activeColor = AppColors.green,
+    this.activeColor = AppColors.primaryColor,
     this.inactiveColor = AppColors.cinActiveColor,
     this.spacer,
     this.labelStyle,
@@ -57,9 +57,11 @@ class _CustomLoadSwitchWidgetState extends State<CustomLoadSwitchWidget> {
           widget.label,
           style:
               widget.labelStyle ??
-              Theme.of(
-                context,
-              ).textTheme.displayMedium!.copyWith(fontWeight: FontWeight.w500, color: AppColors.cNameStatusColor, fontSize: widget.labelFontSize),
+              Theme.of(context).textTheme.displayMedium!.copyWith(
+                fontWeight: FontWeight.w500,
+                color: AppColors.cNameStatusColor,
+                fontSize: widget.labelFontSize,
+              ),
         ),
         widget.spacer ?? SizedBox(width: 12.w),
         Stack(
@@ -67,11 +69,14 @@ class _CustomLoadSwitchWidgetState extends State<CustomLoadSwitchWidget> {
             LoadSwitch(
               value: _value,
               future: widget.future,
-              width: 50.w,
-              height: 28.h,
-              switchDecoration: (value, key) =>
-                  BoxDecoration(color: value ? widget.activeColor : widget.inactiveColor, borderRadius: BorderRadius.circular(30)),
-              thumbSizeRatio: 0.8,
+              width: 45.w,
+              height: 25.h,
+              switchDecoration:
+                  (value, key) => BoxDecoration(
+                    color: value ? widget.activeColor : widget.inactiveColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+              thumbSizeRatio: 0.6,
               onChange: (v) {
                 setState(() {
                   _value = v;
@@ -80,7 +85,12 @@ class _CustomLoadSwitchWidgetState extends State<CustomLoadSwitchWidget> {
               },
               onTap: (v) {},
             ),
-            if (widget.state!) Positioned.fill(child: Container(color: Colors.white.withAlpha((0.4 * 255).toInt()))),
+            if (widget.state!)
+              Positioned.fill(
+                child: Container(
+                  color: Colors.white.withAlpha((0.4 * 255).toInt()),
+                ),
+              ),
           ],
         ),
       ],

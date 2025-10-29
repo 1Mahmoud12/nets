@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/themes/styles.dart';
+import 'package:nets/core/utils/app_icons.dart';
 import 'package:nets/core/utils/constant_gaping.dart';
 import 'package:nets/core/utils/constants.dart';
 import 'package:nets/core/utils/extensions.dart';
@@ -19,7 +20,15 @@ class DropDownModel {
   final int value;
   final Function()? onTap;
 
-  DropDownModel({required this.name, required this.value, this.showImage = false, this.showName = true, this.image, this.additionalText, this.onTap});
+  DropDownModel({
+    required this.name,
+    required this.value,
+    this.showImage = false,
+    this.showName = true,
+    this.image,
+    this.additionalText,
+    this.onTap,
+  });
 }
 
 class CustomDropDownMenu extends StatefulWidget {
@@ -36,8 +45,10 @@ class CustomDropDownMenu extends StatefulWidget {
   final String? nameField;
   final bool hasError;
   final String? errorText;
-  final EdgeInsetsGeometry? menuItemPadding; // New property for menu item padding
-  final EdgeInsetsGeometry? buttonPadding; // New property for dropdown button padding
+  final EdgeInsetsGeometry?
+  menuItemPadding; // New property for menu item padding
+  final EdgeInsetsGeometry?
+  buttonPadding; // New property for dropdown button padding
   final double? menuMaxHeight; // Control max height of dropdown menu
   final bool? state;
 
@@ -67,7 +78,11 @@ class CustomDropDownMenu extends StatefulWidget {
 }
 
 class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
-  DropDownModel newSelected = DropDownModel(name: '', value: -1, showName: false);
+  DropDownModel newSelected = DropDownModel(
+    name: '',
+    value: -1,
+    showName: false,
+  );
 
   @override
   void initState() {
@@ -84,7 +99,10 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
         if (widget.nameField != null)
           Text(
             widget.nameField!.tr(),
-            style: Theme.of(context).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w500, color: AppColors.cP50),
+            style: Theme.of(context).textTheme.displayMedium?.copyWith(
+              fontWeight: FontWeight.w500,
+              color: AppColors.cP50,
+            ),
           ),
         if (widget.nameField != null) h8,
         Stack(
@@ -94,42 +112,58 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(widget.borderRadius ?? 100),
                 color: widget.fillColor ?? AppColors.white,
-                border: Border.all(width: 2, color: widget.hasError ? Colors.red : (widget.borderColor ?? AppColors.cBorderButtonColor)),
+                border: Border.all(
+                  color:
+                      widget.hasError
+                          ? Colors.red
+                          : (widget.borderColor ?? AppColors.greyG200),
+                ),
               ),
               child: DropdownButton<DropDownModel>(
                 underline: Container(),
                 icon: const SizedBox(),
-                padding: widget.buttonPadding ?? EdgeInsets.symmetric(horizontal: newSelected.showImage ? 20 : 24),
+                padding:
+                    widget.buttonPadding ??
+                    EdgeInsets.symmetric(
+                      horizontal: newSelected.showImage ? 20 : 24,
+                    ),
                 iconSize: 0,
                 menuMaxHeight: widget.menuMaxHeight,
 
                 hint: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    if (newSelected.showName)
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 5, right: 5),
-                          child: Text(
-                            newSelected.name.tr(),
-                            style: Styles.style14400.copyWith(color: AppColors.textColor, fontWeight: FontWeight.w600),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ),
                     if (newSelected.showImage && newSelected.image != null)
-                      Expanded(
-                        child: newSelected.image!.contains('.svg')
-                            ? SvgPicture.asset(newSelected.image!, fit: BoxFit.cover, height: 16, width: 16)
-                            : Image.asset(newSelected.image!, fit: BoxFit.cover),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5.0),
+                        child:
+                            newSelected.image!.contains('.svg')
+                                ? SvgPicture.asset(
+                                  newSelected.image!,
+                                  height: 20,
+                                  width: 20,
+                                )
+                                : Image.asset(
+                                  newSelected.image!,
+                                  fit: BoxFit.contain,
+                                  height: 20,
+                                  width: 20,
+                                ),
+                      ),
+                    if (newSelected.showName)
+                      Text(
+                        newSelected.name.tr(),
+                        style: Styles.style14400.copyWith(
+                          color: AppColors.greyG900,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     if (widget.showDropDownIcon)
-                      Align(
-                        // alignment: context.locale.languageCode == 'ar' ? Alignment.centerRight : Alignment.centerLeft,
-                        child: RotatedBox(
-                          quarterTurns: widget.directionArrowButton ?? 0,
-                          child: const FittedBox(fit: BoxFit.scaleDown, child: Icon(Icons.keyboard_arrow_down)),
-                        ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: SvgPicture.asset(AppIcons.arrowDown),
                       ),
                   ],
                 ),
@@ -144,44 +178,64 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
                 //  autofocus: false,
                 focusColor: AppColors.primaryColor,
                 dropdownColor: AppColors.white,
-                alignment: context.locale.languageCode == 'ar' ? Alignment.centerRight : Alignment.centerLeft,
+                alignment:
+                    context.locale.languageCode == 'ar'
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
                 style: widget.textStyleSelected ?? Styles.style14400,
                 itemHeight: null,
                 menuWidth: context.screenWidth * .9,
 
                 // Allow items to determine their own height
-                items: widget.items.map((DropDownModel item) {
-                  return DropdownMenuItem<DropDownModel>(
-                    value: item,
-                    child: Container(
-                      // constraints: BoxConstraints(maxWidth: 120.w),
-                      // width: 120.w,
-                      alignment: context.locale.languageCode == 'ar' ? Alignment.centerRight : Alignment.centerLeft,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.r)),
-                      child: Padding(
-                        padding: widget.menuItemPadding ?? const EdgeInsets.only(left: 10.0).w,
-                        child: item.showImage
-                            ? Padding(
-                                padding: const EdgeInsets.only(left: 5, right: 5),
-                                child: item.image!.contains('.svg')
-                                    ? SvgPicture.asset(item.image!, fit: BoxFit.cover, height: 16, width: 16)
-                                    : Image.asset(item.image!, fit: BoxFit.cover),
-                              )
-                            : Text(
-                                item.name,
-                                style: Styles.style12400,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
-                                maxLines: 1,
+                items:
+                    widget.items.map((DropDownModel item) {
+                      return DropdownMenuItem<DropDownModel>(
+                        value: item,
+                        child: Padding(
+                          padding:
+                              widget.menuItemPadding ??
+                              const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Row(
+                            children: [
+                              if (item.showImage && item.image != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10.0),
+                                  child:
+                                      item.image!.contains('.svg')
+                                          ? SvgPicture.asset(
+                                            item.image!,
+                                            height: 20,
+                                            width: 20,
+                                          )
+                                          : Image.asset(
+                                            item.image!,
+                                            fit: BoxFit.contain,
+                                            height: 20,
+                                            width: 20,
+                                          ),
+                                ),
+                              Expanded(
+                                child: Text(
+                                  item.name,
+                                  style: Styles.style12400.copyWith(
+                                    // color: AppColors.grey,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign:
+                                      context.locale.languageCode == 'ar'
+                                          ? TextAlign.right
+                                          : TextAlign.left,
+                                  maxLines: 1,
+                                ),
                               ),
-                      ),
-                    ),
-
-                    onTap: () {
-                      //debugPrint(widget.selectedItem);
-                    },
-                  );
-                }).toList(),
+                            ],
+                          ),
+                        ),
+                        onTap: () {
+                          //debugPrint(widget.selectedItem);
+                        },
+                      );
+                    }).toList(),
               ),
             ),
             if (widget.state!)
@@ -189,7 +243,9 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.grey.withAlpha((0.3 * 255).toInt()),
-                    borderRadius: BorderRadius.circular(widget.borderRadius ?? 8),
+                    borderRadius: BorderRadius.circular(
+                      widget.borderRadius ?? 8,
+                    ),
                   ),
                   height: double.infinity,
                   width: double.infinity,
@@ -202,7 +258,10 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
             padding: const EdgeInsets.only(top: 5, left: 5),
             child: Text(
               widget.errorText!.tr(),
-              style: TextStyle(color: Colors.red, fontSize: Constants.tablet ? 12 : 12.sp),
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: Constants.tablet ? 12 : 12.sp,
+              ),
             ),
           ),
       ],

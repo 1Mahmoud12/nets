@@ -70,7 +70,10 @@ class _RegisterViewState extends State<RegisterView> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      AuthContent(subTitle: 'personalized_experience_message'.tr(), title: 'create_new_account'.tr()),
+                      AuthContent(
+                        subTitle: 'personalized_experience_message'.tr(),
+                        title: 'create_new_account'.tr(),
+                      ),
 
                       CustomTextFormField(
                         enable: state is! RegisterLoading,
@@ -79,17 +82,6 @@ class _RegisterViewState extends State<RegisterView> {
                         nameField: 'name'.tr(),
                         enableLtr: context.locale.languageCode == 'ar',
                         textInputType: TextInputType.emailAddress,
-                      ),
-                      CustomTextFormField(
-                        enableLtr: true,
-                        arabicLanguage: true,
-                        enable: state is! RegisterLoading,
-                        controller: registerCubit.emailController,
-                        hintText: 'username@mail.com'.tr(),
-                        nameField: 'email'.tr(),
-                        textInputType: TextInputType.emailAddress,
-                        validator: _validateEmail,
-                        // textDirection: ui.TextDirection.ltr,
                       ),
 
                       PhoneFieldWidget(
@@ -123,7 +115,12 @@ class _RegisterViewState extends State<RegisterView> {
                       //  h10,
                       CustomCheckButton(
                         isChecked: registerCubit.isTermsConditions,
-                        onChanged: state is RegisterLoading ? null : (value) => setState(() => registerCubit.isTermsConditions = value),
+                        onChanged:
+                            state is RegisterLoading
+                                ? null
+                                : (value) => setState(
+                                  () => registerCubit.isTermsConditions = value,
+                                ),
                         label: 'accept_terms'.tr(),
                         checkedColor: AppColors.primaryColor,
 
@@ -134,14 +131,18 @@ class _RegisterViewState extends State<RegisterView> {
                         state: state is RegisterLoading,
                         onPress: () {
                           if (_formKey.currentState!.validate()) {
-                            if (registerCubit.passwordController.text == registerCubit.confirmPasswordController.text) {
+                            if (registerCubit.passwordController.text ==
+                                registerCubit.confirmPasswordController.text) {
                               if (registerCubit.isTermsConditions) {
                                 registerCubit.register(context: context);
                               } else {
                                 customShowToast(context, 'accept_terms'.tr());
                               }
                             } else {
-                              customShowToast(context, 'password_not_match'.tr());
+                              customShowToast(
+                                context,
+                                'password_not_match'.tr(),
+                              );
                             }
                           }
                         },
@@ -151,9 +152,14 @@ class _RegisterViewState extends State<RegisterView> {
                         borderRadius: 4,
                         child: Text(
                           'create_account'.tr(),
-                          style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                          style: Theme.of(
+                            context,
+                          ).textTheme.displayMedium?.copyWith(
                             fontSize: 16.sp,
-                            color: (darkModeValue ? AppColors.darkModeText : AppColors.white),
+                            color:
+                                (darkModeValue
+                                    ? AppColors.darkModeText
+                                    : AppColors.white),
                             fontWeight: FontWeight.w400,
                           ),
                           textAlign: TextAlign.center,
@@ -161,17 +167,33 @@ class _RegisterViewState extends State<RegisterView> {
                       ),
                       Row(
                         children: [
-                          const Expanded(child: Divider(color: AppColors.cBorderButtonColor)),
+                          const Expanded(
+                            child: Divider(color: AppColors.cBorderButtonColor),
+                          ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0,
+                            ),
                             child: Text(
                               'or'.tr(),
                               style: Theme.of(
                                 context,
-                              ).textTheme.displayMedium?.copyWith(color: darkModeValue ? AppColors.darkModeText : AppColors.black),
+                              ).textTheme.displayMedium?.copyWith(
+                                color:
+                                    darkModeValue
+                                        ? AppColors.darkModeText
+                                        : AppColors.black,
+                              ),
                             ),
                           ),
-                          Expanded(child: Divider(color: darkModeValue ? AppColors.darkModeText : AppColors.cBorderButtonColor)),
+                          Expanded(
+                            child: Divider(
+                              color:
+                                  darkModeValue
+                                      ? AppColors.darkModeText
+                                      : AppColors.cBorderButtonColor,
+                            ),
+                          ),
                         ],
                       ),
                       // CustomTextButton(
@@ -230,11 +252,12 @@ class _RegisterViewState extends State<RegisterView> {
                         child: LinkText(
                           mainText: 'already_have_an_account'.tr(),
                           linkText: 'sign_in_now'.tr(),
-                          onLinkTap: state is RegisterLoading
-                              ? () {} // No-op function when loading
-                              : () {
-                                  context.navigateToPage(const LoginView());
-                                },
+                          onLinkTap:
+                              state is RegisterLoading
+                                  ? () {} // No-op function when loading
+                                  : () {
+                                    context.navigateToPage(const LoginView());
+                                  },
                         ),
                       ),
                       h20,

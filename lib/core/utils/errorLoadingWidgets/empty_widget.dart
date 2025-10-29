@@ -46,7 +46,10 @@ class EmptyWidget extends StatelessWidget {
                     EmptyImages.noInternetConnection => Image.asset(AppImages.noInternetConnection),
                     EmptyImages.actionBlocked => Image.asset(AppImages.actionBlocked),
                     EmptyImages.emptyWallet => Image.asset(AppImages.emptyWallet),
-                    EmptyImages.newUpdates => Image.asset(AppImages.newUpdates),
+                    EmptyImages.newUpdates => SvgPicture.asset(
+                      AppIcons.newUpdateIc,
+                      colorFilter: const ColorFilter.mode(AppColors.primaryColor, BlendMode.srcIn),
+                    ),
                     EmptyImages.noSearchResults => Image.asset(AppImages.noResult, width: 120, height: 120, fit: BoxFit.cover),
                     EmptyImages.noMessagesInbox => Image.asset(AppImages.noMessagesInbox),
                     EmptyImages.noNotificationYet => Image.asset(AppImages.noNotificationYet),

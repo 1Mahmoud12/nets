@@ -2,15 +2,17 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
+
+import '../../../../../core/utils/constant_gaping.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
-  final List<IconData> selectedIcons;
-  final List<IconData> unselectedIcons;
+  final List<String> selectedIcons;
+  final List<String> unselectedIcons;
   final List<String> names;
   final bool showBadge;
 
@@ -27,11 +29,15 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.only(right: 12.0, bottom: 10, left: 12.0),
       margin: EdgeInsets.only(bottom: Platform.isIOS ? 30 : 0),
       decoration: BoxDecoration(
         color: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
-        border: Border(top: BorderSide(color: darkModeValue ? Colors.transparent : AppColors.cBorderButtonColor)),
+        border: Border(
+          top: BorderSide(
+            color: darkModeValue ? AppColors.greyG200 : AppColors.greyG200,
+          ),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -48,36 +54,41 @@ class CustomBottomNavigationBar extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem({required BuildContext context, required int index, required bool isSelected, bool showBadge = false}) {
+  Widget _buildNavItem({
+    required BuildContext context,
+    required int index,
+    required bool isSelected,
+    bool showBadge = false,
+  }) {
     return InkWell(
       onTap: () => onTap(index),
       borderRadius: BorderRadius.circular(20),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              isSelected ? selectedIcons[index] : unselectedIcons[index],
-              color:
-                  isSelected
-                      ? AppColors.primaryColor
-                      : darkModeValue
-                      ? AppColors.darkModeColor
-                      : AppColors.black,
-              size: 24,
+            // Icon(
+            //   isSelected ? selectedIcons[index] : unselectedIcons[index],
+            //   color:
+            //       isSelected
+            //           ? AppColors.primaryColor
+            //           : darkModeValue
+            //           ? AppColors.darkModeColor
+            //           : AppColors.black,
+            //   size: 24,
+            // ),
+            SvgPicture.asset(
+           isSelected? selectedIcons[index]:unselectedIcons[index],
+              // color: isSelected ? AppColors.primaryColor : null,
+              width: 24,
+              height: 24,
             ),
+            h5,
             Text(
               names[index].tr(),
-              style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                fontSize: 13.sp,
-                fontWeight: FontWeight.w800,
-                color:
-                    isSelected
-                        ? AppColors.primaryColor
-                        : darkModeValue
-                        ? AppColors.darkModeColor
-                        : AppColors.black,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: isSelected ? AppColors.primaryColor : AppColors.greyG400,
               ),
             ),
           ],

@@ -2,15 +2,19 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
+import 'package:nets/core/utils/app_icons.dart';
 import 'package:nets/core/utils/custom_show_toast.dart';
-import 'package:nets/feature/Contacts/contacts_view.dart';
+import 'package:nets/core/utils/versionAndUpdateApp/alert_dialog_for_update_app.dart';
+import 'package:nets/feature/Contacts/views/presentation/contacts_view.dart';
 import 'package:nets/feature/QrCode/qr_view.dart';
 import 'package:nets/feature/navigation/data/homeDataSource/home_data_source.dart';
 import 'package:nets/feature/navigation/view/presentation/widgets/custom_bottom_nav.dart';
-import 'package:nets/feature/profile/profile_view.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:nets/feature/profile/views/presentation/profile_view.dart';
+
+import '../../../my_journey/views/presentation/my_journey_view.dart';
 
 class NavigationView extends StatefulWidget {
   final int customIndex;
@@ -38,6 +42,7 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
     HomeDataSourceImplementation().updateDeviceToken();
 
     _loadedScreens.add(index);
+    checkVersion(context);
   }
 
   @override
@@ -47,19 +52,20 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
     super.dispose();
   }
 
-  final selectedIcons = [PhosphorIcons.house(), PhosphorIcons.addressBook(), PhosphorIcons.user()];
-  final unselectedIcons = [PhosphorIcons.house(), PhosphorIcons.addressBook(), PhosphorIcons.user()];
-  final names = ['Home', 'Contacts', 'Profile'];
+  // final selectedIcons = [PhosphorIcons.house(), PhosphorIcons.addressBook(), PhosphorIcons.user()];
+  final selectedIcons = [AppIcons.homeSel, AppIcons.contactSel, AppIcons.journeySel, AppIcons.profileSel];
+  final unselectedIcons = [AppIcons.home, AppIcons.contact, AppIcons.journey, AppIcons.profile];
+  final names = ['home', 'contacts', 'my_journey', 'profile'];
 
   // Get current time greeting
   String _getGreeting() {
     final hour = DateTime.now().hour;
     if (hour < 12) {
-      return 'Good Morning';
+      return 'good_morning'.tr();
     } else if (hour < 17) {
-      return 'Good Afternoon';
+      return 'good_afternoon'.tr();
     } else {
-      return 'Good Evening';
+      return 'good_evening'.tr();
     }
   }
 
@@ -74,6 +80,8 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
       case 1:
         return const ContactsView();
       case 2:
+        return const MyJourneyView();
+      case 3:
         return const ProfileView();
       default:
         return const SizedBox.shrink();
@@ -106,6 +114,7 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
       backgroundColor: Colors.transparent,
       builder:
           (context) => Container(
+            padding: const EdgeInsets.all(24),
             height: MediaQuery.of(context).size.height * 0.7,
             decoration: BoxDecoration(
               color: darkModeValue ? AppColors.darkModeColor : Colors.white,
@@ -113,39 +122,46 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
             ),
             child: Column(
               children: [
-                Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(color: Colors.grey[400], borderRadius: BorderRadius.circular(2)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Notifications',
+                // Container(
+                //   width: 40,
+                //   height: 4,
+                //   margin: const EdgeInsets.symmetric(vertical: 12),
+                //   decoration: BoxDecoration(
+                //     color: Colors.grey[400],
+                //     borderRadius: BorderRadius.circular(2),
+                //   ),
+                // ),
+                Row(
+                  children: [
+                    Text(
+                      'notifications'.tr(),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400, color: darkModeValue ? AppColors.white : AppColors.black),
+                    ),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'mark_all_read'.tr(),
                         style: Theme.of(
                           context,
-                        ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: darkModeValue ? AppColors.white : AppColors.black),
+                        ).textTheme.displayMedium?.copyWith(color: darkModeValue ? AppColors.white : AppColors.primaryColor.withBlue(150)),
                       ),
-                      const Spacer(),
-                      TextButton(onPressed: () {}, child: const Text('Mark all read', style: TextStyle(color: AppColors.primaryColor))),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 Expanded(
                   child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     itemCount: 5,
                     itemBuilder: (context, index) {
                       return Container(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        padding: const EdgeInsets.all(16),
+                        margin: const EdgeInsets.only(bottom: 20),
+                        padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: darkModeValue ? AppColors.appBarDarkModeColor : Colors.grey[50],
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!),
+                          color: AppColors.transparent,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: AppColors.greyG200),
                         ),
                         child: Row(
                           children: [
@@ -160,16 +176,26 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'New message received',
-                                    style: TextStyle(fontWeight: FontWeight.w600, color: darkModeValue ? AppColors.white : AppColors.black),
+                                    'new_message_received'.tr(),
+                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                      fontWeight: FontWeight.w400,
+                                      color: darkModeValue ? AppColors.white : AppColors.black,
+                                    ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  const SizedBox(height: 6),
                                   Text(
-                                    'You have a new message from Sarah Johnson',
-                                    style: TextStyle(color: darkModeValue ? Colors.grey[400] : Colors.grey[600], fontSize: 13),
+                                    'new_message_from'.tr(args: ['Sarah Johnson']),
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.displayLarge?.copyWith(color: darkModeValue ? AppColors.white : AppColors.cSecondaryBlack),
                                   ),
-                                  const SizedBox(height: 4),
-                                  Text('2 min ago', style: TextStyle(color: darkModeValue ? Colors.grey[500] : Colors.grey[500], fontSize: 12)),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    '2 min ago',
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.displayLarge?.copyWith(color: darkModeValue ? AppColors.white : AppColors.cSecondaryBlack),
+                                  ),
                                 ],
                               ),
                             ),
@@ -178,65 +204,6 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
                         ),
                       );
                     },
-                  ),
-                ),
-              ],
-            ),
-          ),
-    );
-  }
-
-  void _showProfileMenu() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder:
-          (context) => Container(
-            decoration: BoxDecoration(
-              color: darkModeValue ? AppColors.darkModeColor : Colors.white,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(color: Colors.grey[400], borderRadius: BorderRadius.circular(2)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        leading: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
-                          child: Icon(PhosphorIcons.gear(), color: AppColors.primaryColor),
-                        ),
-                        title: Text('Settings', style: TextStyle(color: darkModeValue ? AppColors.white : AppColors.black)),
-                        onTap: () => Navigator.pop(context),
-                      ),
-                      ListTile(
-                        leading: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(color: Colors.orange.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
-                          child: Icon(PhosphorIcons.question(), color: Colors.orange),
-                        ),
-                        title: Text('Help & Support', style: TextStyle(color: darkModeValue ? AppColors.white : AppColors.black)),
-                        onTap: () => Navigator.pop(context),
-                      ),
-                      ListTile(
-                        leading: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(color: Colors.red.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
-                          child: Icon(PhosphorIcons.signOut(), color: Colors.red),
-                        ),
-                        title: const Text('Logout', style: TextStyle(color: Colors.red)),
-                        onTap: () => Navigator.pop(context),
-                      ),
-                    ],
                   ),
                 ),
               ],
@@ -266,138 +233,112 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(80),
+          preferredSize: const Size.fromHeight(70),
           child: Container(
             decoration: BoxDecoration(
+              border: const Border(bottom: BorderSide(color: AppColors.greyG100)),
               color: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
               boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 2))],
             ),
             child: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                 child: Row(
                   children: [
-                    // Logo and app name
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [AppColors.primaryColor, AppColors.primaryColor.withOpacity(0.8)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(PhosphorIcons.network(), color: Colors.white, size: 24),
-                    ),
-                    const SizedBox(width: 12),
-
-                    // Greeting and user name
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            _getGreeting(),
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: darkModeValue ? Colors.grey[400] : Colors.grey[600],
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            'Ahmed Hassan',
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: darkModeValue ? AppColors.white : AppColors.black,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // Status indicator
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.green.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.green.withOpacity(0.3)),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(width: 6, height: 6, decoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle)),
-                          const SizedBox(width: 4),
-                          Text('Online', style: TextStyle(color: Colors.green[700], fontSize: 10, fontWeight: FontWeight.w600)),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(width: 12),
-
-                    // Notifications button with animation
-                    GestureDetector(
-                      onTap: _showNotifications,
-                      child: AnimatedBuilder(
-                        animation: _notificationAnimation,
-                        builder: (context, child) {
-                          return Transform.scale(
-                            scale: _notificationAnimation.value,
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: darkModeValue ? Colors.grey[800] : Colors.grey[100],
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Stack(
-                                children: [
-                                  Icon(PhosphorIcons.bell(), color: darkModeValue ? AppColors.white : AppColors.black, size: 24),
-                                  Positioned(
-                                    right: 0,
-                                    top: 0,
-                                    child: Container(
-                                      padding: const EdgeInsets.all(3),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(color: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white, width: 1.5),
-                                      ),
-                                      constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
-                                      child: const Text(
-                                        '3',
-                                        style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-
-                    const SizedBox(width: 12),
-
                     // Profile avatar with menu
                     GestureDetector(
-                      onTap: _showProfileMenu,
+                      // onTap: _showProfileMenu,
                       child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.primaryColor, width: 2),
-                          boxShadow: [BoxShadow(color: AppColors.primaryColor.withOpacity(0.3), blurRadius: 8, offset: const Offset(0, 2))],
-                        ),
-                        child: const CircleAvatar(
+                        decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.primaryColor, width: 2)),
+                        child: CircleAvatar(
                           radius: 20,
                           backgroundColor: AppColors.primaryColor,
-                          child: Text('AH', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                          child: Text(
+                            'AH',
+                            style: Theme.of(context).textTheme.displayMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                          ),
                         ),
+                      ),
+                    ),
+
+                    const SizedBox(width: 8),
+
+                    // Greeting and user name
+                    Flexible(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(_getGreeting(), style: Theme.of(context).textTheme.displayMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
+                              const SizedBox(height: 2),
+                              Text(
+                                'Ahmed Hassan',
+                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                  color: darkModeValue ? AppColors.white : AppColors.black,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                          // const Spacer(),
+                          // Status indicator
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(color: Color(0xFFEDFFEA), borderRadius: BorderRadius.circular(12)),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(width: 8, height: 8, decoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle)),
+                                const SizedBox(width: 4),
+                                Text('online'.tr(), style: TextStyle(color: Colors.green[700], fontSize: 10, fontWeight: FontWeight.w600)),
+                              ],
+                            ),
+                          ),
+
+                          // Notifications button with animation
+                          GestureDetector(
+                            onTap: _showNotifications,
+                            child: Stack(
+                              children: [
+                                Container(
+                                  width: 35,
+                                  height: 35,
+                                  // padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: darkModeValue ? AppColors.greyG200 : AppColors.greyG200),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Center(
+                                    child: SvgPicture.asset(AppIcons.notificationBill, color: darkModeValue ? AppColors.white : AppColors.black),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 0,
+                                  top: 4,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(8),
+                                      // border: Border.all(
+                                      //   color:
+                                      //       darkModeValue
+                                      //           ? AppColors.appBarDarkModeColor
+                                      //           : AppColors.white,
+                                      //   width: 1.5,
+                                      // ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -418,7 +359,7 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
               ],
             ),
           ),
-          child: IndexedStack(index: index, children: List.generate(3, (index) => _buildScreen(index))),
+          child: IndexedStack(index: index, children: List.generate(4, (index) => _buildScreen(index))),
         ),
 
         bottomSheet: Column(
@@ -426,9 +367,18 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
           children: [
             SafeArea(
               child: Container(
-                decoration: BoxDecoration(
-                  color: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
-                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, -2))],
+                decoration: const BoxDecoration(
+                  // color:
+                  //     darkModeValue
+                  //         ? AppColors.appBarDarkModeColor
+                  //         : AppColors.white,
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: Colors.black.withOpacity(0.1),
+                  //     blurRadius: 10,
+                  //     offset: const Offset(0, -2),
+                  //   ),
+                  // ],
                 ),
                 child: CustomBottomNavigationBar(
                   currentIndex: index,

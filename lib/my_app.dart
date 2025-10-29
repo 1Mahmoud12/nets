@@ -12,7 +12,6 @@ import 'package:nets/core/utils/notification/notification.dart';
 import 'package:nets/feature/navigation/view/manager/homeBloc/cubit.dart';
 import 'package:nets/feature/navigation/view/manager/homeBloc/state.dart';
 import 'package:nets/main.dart';
-import 'package:nets/mamlaka_view.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -76,7 +75,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    arabicLanguage = context.locale.languageCode == 'ar';
+    arabicLanguage = context.locale.languageCode == 'en';
     // if (false) {
     //   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     // }
@@ -102,6 +101,7 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
+
       //locale: DevicePreview.locale(context),
       //builder: DevicePreview.appBuilder,
       navigatorKey: navigatorKey,
@@ -112,7 +112,7 @@ class _MyAppState extends State<MyApp> {
       themeAnimationDuration: const Duration(milliseconds: 300),
       themeAnimationCurve: Curves.easeInCubic,
       // themeAnimationStyle: AnimationStyle(),
-      home: const MamlakaApp(),
+      home: appStartScreen,
     );
   }
 }

@@ -1,7 +1,7 @@
 class AppIcons {
   static const baseUrl = 'assets/images/svg';
   // app logo
-  static const appLogo = '$baseUrl/app-logo.svg';
+  static const appLogo = '$baseUrl/logo.svg';
   static const smallAppLogo = '$baseUrl/small-svg-app-logo.svg';
   static const splashNotificationIdc = '$baseUrl/splace-notification-ic.svg';
   static const profileIcons = '$baseUrl/profile-icon.svg';
@@ -12,6 +12,7 @@ class AppIcons {
   static const aa = '$baseUrl/aa.svg';
   static const appIcons = '$baseUrl/appIcon.svg';
   static const weather = '$baseUrl/day-status.svg';
+  static const newUpdateIc = '$baseUrl/newUpdateIc.svg';
   static const edit = '$baseUrl/edit-profile.svg';
   static const editImage = '$baseUrl/PencilSimple.svg';
   static const unselectedDiscoverDarkMode = '$baseUrl/un-selected-discover-darkMode.svg';
@@ -78,4 +79,40 @@ class AppIcons {
   static const faceIdIc = '$baseUrl/faceIdIc.svg';
   static const fingerPrintIc = '$baseUrl/fingerPrintIc.svg';
   static const bioMetricIc = '$baseUrl/bioMetricIc.svg';
+
+  // Flags
+  static const AEIc = '$baseUrl/emiratesFlag.svg';
+  static const EGIc = '$baseUrl/egyptFlag.svg';
+  static const SAIc = '$baseUrl/saudiArabiaFlag.svg';
+  static const EN = '$baseUrl/englishIc.svg';
+  //icons navigation
+  static const home = '$baseUrl/home_icon.svg';
+  static const contact = '$baseUrl/contact_icon.svg';
+  static const journey = '$baseUrl/journey_icon.svg';
+  static const profile = '$baseUrl/profile_icon.svg';
+  static const homeSel = '$baseUrl/home_sel.svg';
+  static const contactSel = '$baseUrl/contact_sel.svg';
+  static const journeySel = '$baseUrl/journey_sel.svg';
+  static const profileSel = '$baseUrl/profile_sel.svg';
+  static const email = '$baseUrl/email.svg';
+  static const call = '$baseUrl/call.svg';
+  static const notificationBill = '$baseUrl/notification_bill.svg';
+  static const message = '$baseUrl/message.svg';
+  static const fillter = '$baseUrl/fillter.svg';
+  static const addContact = '$baseUrl/addContact.svg';
+  static const filtterIcon = '$baseUrl/filtter_icon.svg';
+  static const maps = '$baseUrl/maps.svg';
+  static const person = '$baseUrl/person.svg';
+  static const arrowDown = '$baseUrl/arrow.svg';
+  static const date = '$baseUrl/date.svg';
+  static const emptyJourney = '$baseUrl/emptyJourney.svg';
+  static const settings = '$baseUrl/settings.svg';
+  static const notificationSetting = '$baseUrl/notification_setting.svg';
+  static const logoutSetting = '$baseUrl/logout_setting.svg';
+  static const deleteSetting = '$baseUrl/delete_setting.svg';
+  static const instagramSetting = '$baseUrl/instagram2.svg';
+  static const x = '$baseUrl/x.svg';
+  static const facebook = '$baseUrl/facebook.svg';
+  static const linkedin = '$baseUrl/linkedin.svg';
+  static const help = '$baseUrl/help.svg';
 }

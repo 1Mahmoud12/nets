@@ -3,7 +3,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Constants {
-  static String fontFamily = 'ALMAMLAKAFONT';
+  // static String fontFamily = 'ALMAMLAKAFONT';
+  static String fontFamily = 'Montserrat';
   static String appName = 'TAU';
   static LatLng locationCache = const LatLng(30.033333, 31.233334);
   static int distance = 100; // Km
@@ -28,13 +29,11 @@ class Constants {
   static String? mapStyleString;
   static bool noInternet = false;
   static String versionApp = '';
-  static String packageName = 'com.unitedDiamond.chesselha';
+  static String packageName = 'com.codgoo.nets';
   static String appleId = '6737690297';
 
-  static String urlGoogleMapPlace =
-      'https://maps.googleapis.com/maps/api/place/autocomplete/json';
-  static String urlGoogleMapLocation =
-      'https://maps.googleapis.com/maps/api/place/details/json';
+  static String urlGoogleMapPlace = 'https://maps.googleapis.com/maps/api/place/autocomplete/json';
+  static String urlGoogleMapLocation = 'https://maps.googleapis.com/maps/api/place/details/json';
   static String kGoogleMap = 'AIzaSyAgfXPnIUsG1t0RFfsefqcq7eJdPE1WdA8';
 }
 
@@ -72,12 +71,7 @@ class Country {
   final String code;
   final String image;
 
-  Country({
-    required this.id,
-    required this.name,
-    required this.code,
-    required this.image,
-  });
+  Country({required this.id, required this.name, required this.code, required this.image});
 }
 
 class PricingModel {

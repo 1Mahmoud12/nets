@@ -29,7 +29,7 @@ class _SplashScreenViewState extends State<SplashScreenView> {
   void initState() {
     super.initState();
 
-    Timer(const Duration(milliseconds: 500), () {
+    Timer(const Duration(milliseconds: 1000), () {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
         //  await splashHomeCubit.getSplashHome(context: context);
 
@@ -50,7 +50,10 @@ class _SplashScreenViewState extends State<SplashScreenView> {
       });
     });
 
-    checkedNotification = userCache?.get(checkedNotificationKey, defaultValue: false);
+    checkedNotification = userCache?.get(
+      checkedNotificationKey,
+      defaultValue: false,
+    );
   }
 
   @override
@@ -61,13 +64,21 @@ class _SplashScreenViewState extends State<SplashScreenView> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
-            child: SvgPicture.asset(AppIcons.appIcons, width: context.screenWidth * .5)
+            child: SvgPicture.asset(
+                  AppIcons.appLogo,
+                  width: context.screenWidth * .5,
+                )
                 .animate()
                 .fade(duration: const Duration(milliseconds: 700))
-                .slide(duration: const Duration(milliseconds: 800), begin: const Offset(0, 1), end: Offset.zero, curve: Curves.fastOutSlowIn)
+                .slide(
+                  duration: const Duration(milliseconds: 800),
+                  begin: const Offset(0, 1),
+                  end: Offset.zero,
+                  curve: Curves.fastOutSlowIn,
+                )
                 .scale(
                   //  delay: const Duration(milliseconds: 400),
-                  duration: const Duration(milliseconds: 800),
+                  duration: const Duration(milliseconds: 1000),
                   begin: const Offset(.9, .9),
                   end: const Offset(1, 1),
                 ),
@@ -78,9 +89,14 @@ class _SplashScreenViewState extends State<SplashScreenView> {
             child: BlocBuilder<SplashHomeCubit, SplashHomeState>(
               builder:
                   (context, state) =>
-                      state is SplashHomeLoading ? const LoadingWidget().animate().fade(duration: const Duration(milliseconds: 700)) : Container(),
+                      state is SplashHomeLoading
+                          ? const LoadingWidget().animate().fade(
+                            duration: const Duration(milliseconds: 700),
+                          )
+                          : Container(),
             ),
           ),
+        
         ],
       ),
     );
