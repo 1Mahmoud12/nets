@@ -313,7 +313,10 @@
   "notes":"ملاحظات",
   "add_notes_about_this_contact":"أضف ملاحظات حول هذا الاتصال",
   "voice_note":"ملاحظة صوتية",
-  "location":"الموقع"
-
-
+  "location": "الموقع",
+  "can_not_launch_that_url": "لا يمكن تشغيل هذا الرابط",
+  "new_updates_are_available": "توجد تحديثات جديدة",
+  "we_have_new_updates_for_our_app": "لدينا تحديثات جديدة لتطبيقنا",
+  "update_later": "تحديث لاحقاً",
+  "update_now": "تحديث الآن"
 }

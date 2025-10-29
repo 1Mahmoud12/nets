@@ -29,13 +29,11 @@ class Constants {
   static String? mapStyleString;
   static bool noInternet = false;
   static String versionApp = '';
-  static String packageName = 'com.unitedDiamond.chesselha';
+  static String packageName = 'com.codgoo.nets';
   static String appleId = '6737690297';
 
-  static String urlGoogleMapPlace =
-      'https://maps.googleapis.com/maps/api/place/autocomplete/json';
-  static String urlGoogleMapLocation =
-      'https://maps.googleapis.com/maps/api/place/details/json';
+  static String urlGoogleMapPlace = 'https://maps.googleapis.com/maps/api/place/autocomplete/json';
+  static String urlGoogleMapLocation = 'https://maps.googleapis.com/maps/api/place/details/json';
   static String kGoogleMap = 'AIzaSyAgfXPnIUsG1t0RFfsefqcq7eJdPE1WdA8';
 }
 
@@ -73,12 +71,7 @@ class Country {
   final String code;
   final String image;
 
-  Country({
-    required this.id,
-    required this.name,
-    required this.code,
-    required this.image,
-  });
+  Country({required this.id, required this.name, required this.code, required this.image});
 }
 
 class PricingModel {

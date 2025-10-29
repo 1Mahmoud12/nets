@@ -13,11 +13,10 @@ import 'package:nets/core/utils/navigate.dart';
 import 'package:nets/core/utils/utils.dart';
 import 'package:nets/feature/auth/views/presentation/login_view.dart';
 
-import '../../../../core/utils/constants.dart';
-import './edit_profile_view.dart';
-
 import '../../../../core/component/buttons/custom_text_button.dart';
 import '../../../../core/component/custom_drop_down_menu.dart';
+import '../../../../core/utils/constants.dart';
+import './edit_profile_view.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -46,18 +45,13 @@ class _ProfileViewState extends State<ProfileView> {
             height: MediaQuery.of(context).size.height * 0.8,
             decoration: BoxDecoration(
               color: darkModeValue ? AppColors.darkModeColor : Colors.white,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(20),
-              ),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
             ),
             child: Column(
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                     child: Column(
                       children: [
                         Row(
@@ -65,14 +59,7 @@ class _ProfileViewState extends State<ProfileView> {
                           children: [
                             Text(
                               'filters'.tr(),
-                              style: Theme.of(
-                                context,
-                              ).textTheme.displaySmall?.copyWith(
-                                color:
-                                    darkModeValue
-                                        ? AppColors.white
-                                        : AppColors.black,
-                              ),
+                              style: Theme.of(context).textTheme.displaySmall?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black),
                             ),
                             IconButton(
                               onPressed: () {
@@ -87,42 +74,24 @@ class _ProfileViewState extends State<ProfileView> {
                         CustomDropDownMenu(
                           borderRadius: 8,
                           nameField: 'position'.tr(),
-                          selectedItem: DropDownModel(
-                            name: 'select_position'.tr(),
-                            value: 1,
-                          ),
-                          items: [
-                            DropDownModel(name: 'name', value: 1),
-                            DropDownModel(name: 'name1', value: 2),
-                          ],
+                          selectedItem: DropDownModel(name: 'select_position'.tr(), value: 1),
+                          items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
                         ),
                         const SizedBox(height: 8),
                         CustomDropDownMenu(
                           borderRadius: 8,
                           nameField: 'country'.tr(),
 
-                          selectedItem: DropDownModel(
-                            name: 'select_country'.tr(),
-                            value: 1,
-                          ),
-                          items: [
-                            DropDownModel(name: 'name', value: 1),
-                            DropDownModel(name: 'name1', value: 2),
-                          ],
+                          selectedItem: DropDownModel(name: 'select_country'.tr(), value: 1),
+                          items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
                         ),
                         const SizedBox(height: 8),
                         CustomDropDownMenu(
                           borderRadius: 8,
                           nameField: 'journey'.tr(),
 
-                          selectedItem: DropDownModel(
-                            name: 'select_journey'.tr(),
-                            value: 1,
-                          ),
-                          items: [
-                            DropDownModel(name: 'name', value: 1),
-                            DropDownModel(name: 'name1', value: 2),
-                          ],
+                          selectedItem: DropDownModel(name: 'select_journey'.tr(), value: 1),
+                          items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
                         ),
                         const SizedBox(height: 20),
                         Row(
@@ -132,8 +101,7 @@ class _ProfileViewState extends State<ProfileView> {
                               borderColor: AppColors.transparent,
                               borderRadius: 8,
                               colorText: AppColors.black,
-                              backgroundColor: AppColors.primaryColor
-                                  .withOpacity(.3),
+                              backgroundColor: AppColors.primaryColor.withOpacity(.3),
                               onPress: () {},
                               childText: 'reset_all'.tr(),
                             ),
@@ -161,10 +129,7 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          darkModeValue
-              ? AppColors.appBarDarkModeColor
-              : AppColors.scaffoldBackGround,
+      backgroundColor: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.scaffoldBackGround,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -180,28 +145,11 @@ class _ProfileViewState extends State<ProfileView> {
                     Container(
                       width: 88,
                       height: 88,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.primaryColor,
-                          width: 4,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primaryColor.withOpacity(0.3),
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
+                      decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.primaryColor, width: 4)),
                       child: const CircleAvatar(
                         radius: 56,
                         backgroundColor: AppColors.primaryColor,
-                        child: Icon(
-                          Icons.person,
-                          size: 45,
-                          color: Colors.white,
-                        ),
+                        child: Icon(Icons.person, size: 45, color: Colors.white),
                       ),
                     ),
 
@@ -210,11 +158,9 @@ class _ProfileViewState extends State<ProfileView> {
                     // User Name
                     Text(
                       'Ahmed Hassan',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w400,
-                        color:
-                            darkModeValue ? AppColors.white : AppColors.black,
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400, color: darkModeValue ? AppColors.white : AppColors.black),
                     ),
 
                     const SizedBox(height: 4),
@@ -222,10 +168,7 @@ class _ProfileViewState extends State<ProfileView> {
                     // User Email
                     Text(
                       /*  userCacheValue?.data?.email ??  */ 'ahmed.hassan@nets.com',
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color:
-                            darkModeValue ? AppColors.white : AppColors.black,
-                      ),
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black),
                     ),
                     const SizedBox(height: 4),
                     GestureDetector(
@@ -235,10 +178,7 @@ class _ProfileViewState extends State<ProfileView> {
                       child: Text(
                         'edit_profile'.tr(),
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color:
-                              darkModeValue
-                                  ? Colors.grey[400]
-                                  : Colors.grey[600],
+                          color: darkModeValue ? Colors.grey[400] : Colors.grey[600],
                           decoration: TextDecoration.underline,
                           decorationColor: Colors.grey[400],
                         ),
@@ -255,10 +195,7 @@ class _ProfileViewState extends State<ProfileView> {
                 decoration: BoxDecoration(
                   color: darkModeValue ? AppColors.darkModeColor : Colors.white,
                   borderRadius: BorderRadius.circular(15),
-                  border: Border.all(
-                    color:
-                        darkModeValue ? Colors.grey[700]! : Colors.grey[200]!,
-                  ),
+                  border: Border.all(color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!),
                   // boxShadow: [
                   //   BoxShadow(
                   //     color: Colors.black.withOpacity(0.05),
@@ -285,10 +222,7 @@ class _ProfileViewState extends State<ProfileView> {
                 decoration: BoxDecoration(
                   color: darkModeValue ? AppColors.darkModeColor : Colors.white,
                   borderRadius: BorderRadius.circular(15),
-                  border: Border.all(
-                    color:
-                        darkModeValue ? Colors.grey[700]! : Colors.grey[200]!,
-                  ),
+                  border: Border.all(color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!),
                 ),
                 child: Column(
                   children: [
@@ -321,8 +255,7 @@ class _ProfileViewState extends State<ProfileView> {
                       context,
                       icon: Icons.language,
                       title: 'language'.tr(),
-                      subtitle:
-                          !arabicLanguage ? 'arabic'.tr() : 'english_us'.tr(),
+                      subtitle: !arabicLanguage ? 'arabic'.tr() : 'english_us'.tr(),
                       onTap: _showLanguageSettings,
                     ),
                     _buildDivider(),
@@ -345,10 +278,7 @@ class _ProfileViewState extends State<ProfileView> {
                             });
                           },
                           future: () {
-                            return Future.delayed(
-                              const Duration(seconds: 1),
-                              () => true,
-                            );
+                            return Future.delayed(const Duration(seconds: 1), () => true);
                           },
                         ),
                       ),
@@ -383,13 +313,7 @@ class _ProfileViewState extends State<ProfileView> {
                       },
                     ),
                     _buildDivider(),
-                    _buildSettingsItem(
-                      context,
-                      icon: Icons.info,
-                      title: 'about'.tr(),
-                      subtitle: 'app_version'.tr(),
-                      onTap: _showAbout,
-                    ),
+                    _buildSettingsItem(context, icon: Icons.info, title: 'about'.tr(), subtitle: 'app_version'.tr(), onTap: _showAbout),
                   ],
                 ),
               ),
@@ -407,12 +331,7 @@ class _ProfileViewState extends State<ProfileView> {
                   children: [
                     SvgPicture.asset(AppIcons.logoutSetting),
                     SizedBox(width: 10),
-                    Text(
-                      'logout'.tr(),
-                      style: Theme.of(
-                        context,
-                      ).textTheme.titleLarge?.copyWith(color: AppColors.white),
-                    ),
+                    Text('logout'.tr(), style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.white)),
                   ],
                 ),
               ),
@@ -430,12 +349,7 @@ class _ProfileViewState extends State<ProfileView> {
                   children: [
                     SvgPicture.asset(AppIcons.deleteSetting),
                     SizedBox(width: 10),
-                    Text(
-                      'delete_account'.tr(),
-                      style: Theme.of(
-                        context,
-                      ).textTheme.titleLarge?.copyWith(color: AppColors.red),
-                    ),
+                    Text('delete_account'.tr(), style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.red)),
                   ],
                 ),
               ),
@@ -451,20 +365,9 @@ class _ProfileViewState extends State<ProfileView> {
   Widget _buildStatItem(BuildContext context, String label, String value) {
     return Column(
       children: [
-        Text(
-          value,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: AppColors.primaryColor,
-          ),
-        ),
+        Text(value, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: AppColors.primaryColor)),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: darkModeValue ? AppColors.white : Colors.grey[600],
-          ),
-        ),
+        Text(label, style: Theme.of(context).textTheme.labelMedium?.copyWith(color: darkModeValue ? AppColors.white : Colors.grey[600])),
       ],
     );
   }
@@ -483,46 +386,26 @@ class _ProfileViewState extends State<ProfileView> {
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       leading: Container(
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: AppColors.primaryColor.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child:
-            isSvg
-                ? SvgPicture.asset(iconPath!)
-                : Icon(icon, color: AppColors.primaryColor, size: 20),
+        decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
+        child: isSvg ? SvgPicture.asset(iconPath!) : Icon(icon, color: AppColors.primaryColor, size: 20),
       ),
       title: Text(
         title,
-        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          fontWeight: FontWeight.w400,
-          color: darkModeValue ? AppColors.white : AppColors.black,
-        ),
+        style: Theme.of(
+          context,
+        ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400, color: darkModeValue ? AppColors.white : AppColors.black),
       ),
       subtitle: Text(
         subtitle,
-        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-          color: darkModeValue ? AppColors.greyG100 : AppColors.greyG300,
-        ),
+        style: Theme.of(context).textTheme.labelMedium?.copyWith(color: darkModeValue ? AppColors.greyG100 : AppColors.greyG300),
       ),
-      trailing:
-          trailing ??
-          RotatedBox(
-            quarterTurns: arabicLanguage ? 3 : 1,
-
-            child: SvgPicture.asset(AppIcons.arrowDown),
-          ),
+      trailing: trailing ?? RotatedBox(quarterTurns: arabicLanguage ? 3 : 1, child: SvgPicture.asset(AppIcons.arrowDown)),
       onTap: onTap,
     );
   }
 
   Widget _buildDivider({double indent = 20}) {
-    return Divider(
-      height: 1,
-      color: darkModeValue ? Colors.grey[700] : Colors.grey[200],
-      indent: indent,
-      endIndent: 20,
-    );
+    return Divider(height: 1, color: darkModeValue ? Colors.grey[700] : Colors.grey[200], indent: indent, endIndent: 20);
   }
 
   void _showLogoutDialog() {
@@ -533,25 +416,18 @@ class _ProfileViewState extends State<ProfileView> {
           backgroundColor: isDarkMode ? AppColors.darkModeColor : Colors.white,
           title: Text(
             'logout_button'.tr(),
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: darkModeValue ? AppColors.white : AppColors.black,
-            ),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black),
           ),
           content: Text(
             'logout_confirmation_title'.tr(),
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: darkModeValue ? AppColors.greyG100 : AppColors.greyG300,
-            ),
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(color: darkModeValue ? AppColors.greyG100 : AppColors.greyG300),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 'cancel_button'.tr(),
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color:
-                      darkModeValue ? AppColors.greyG100 : AppColors.greyG300,
-                ),
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(color: darkModeValue ? AppColors.greyG100 : AppColors.greyG300),
               ),
             ),
             ElevatedButton(
@@ -560,16 +436,10 @@ class _ProfileViewState extends State<ProfileView> {
 
                 userCacheValue?.data = null;
                 userCache?.clear();
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const LoginView()),
-                  (route) => false,
-                );
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const LoginView()), (route) => false);
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red[400]),
-              child: Text(
-                'logout_button'.tr(),
-                style: const TextStyle(color: Colors.white),
-              ),
+              child: Text('logout_button'.tr(), style: const TextStyle(color: Colors.white)),
             ),
           ],
         );
@@ -583,20 +453,12 @@ class _ProfileViewState extends State<ProfileView> {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: isDarkMode ? AppColors.darkModeColor : Colors.white,
-          title: Text(
-            'delete_account'.tr(),
-            style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
-          ),
+          title: Text('delete_account'.tr(), style: TextStyle(color: isDarkMode ? Colors.white : Colors.black)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'delete_account_warning'.tr(),
-                style: TextStyle(
-                  color: isDarkMode ? Colors.grey[300] : Colors.grey[700],
-                ),
-              ),
+              Text('delete_account_warning'.tr(), style: TextStyle(color: isDarkMode ? Colors.grey[300] : Colors.grey[700])),
               const SizedBox(height: 10),
               Container(
                 padding: const EdgeInsets.all(12),
@@ -612,11 +474,7 @@ class _ProfileViewState extends State<ProfileView> {
                     Expanded(
                       child: Text(
                         'account_deletion_info_30_days'.tr(),
-                        style: TextStyle(
-                          color: Colors.orange[800],
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                        ),
+                        style: TextStyle(color: Colors.orange[800], fontSize: 12, fontWeight: FontWeight.w500),
                       ),
                     ),
                   ],
@@ -627,27 +485,16 @@ class _ProfileViewState extends State<ProfileView> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text(
-                'cancel'.tr(),
-                style: TextStyle(
-                  color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                ),
-              ),
+              child: Text('cancel'.tr(), style: TextStyle(color: isDarkMode ? Colors.grey[400] : Colors.grey[600])),
             ),
             ElevatedButton(
               onPressed: () async {
                 await userCache?.put(userCacheKey, null);
                 userCacheValue?.data = null;
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const LoginView()),
-                  (route) => false,
-                );
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const LoginView()), (route) => false);
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red[600]),
-              child: Text(
-                'delete_account'.tr(),
-                style: const TextStyle(color: Colors.white),
-              ),
+              child: Text('delete_account'.tr(), style: const TextStyle(color: Colors.white)),
             ),
           ],
         );
@@ -659,9 +506,7 @@ class _ProfileViewState extends State<ProfileView> {
     showModalBottomSheet(
       context: context,
       backgroundColor: isDarkMode ? AppColors.darkModeColor : Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setModalState) {
@@ -679,17 +524,11 @@ class _ProfileViewState extends State<ProfileView> {
                           'notification_settings'.tr(),
                           style: Theme.of(
                             context,
-                          ).textTheme.displaySmall?.copyWith(
-                            color: darkModeValue ? Colors.black : Colors.black,
-                            fontWeight: FontWeight.w400,
-                          ),
+                          ).textTheme.displaySmall?.copyWith(color: darkModeValue ? Colors.black : Colors.black, fontWeight: FontWeight.w400),
                         ),
                         IconButton(
                           onPressed: () => Navigator.pop(context),
-                          icon: Icon(
-                            Icons.close,
-                            color: darkModeValue ? Colors.black : Colors.black,
-                          ),
+                          icon: Icon(Icons.close, color: darkModeValue ? Colors.black : Colors.black),
                         ),
                       ],
                     ),
@@ -705,8 +544,7 @@ class _ProfileViewState extends State<ProfileView> {
                       'email_notifications'.tr(),
                       'receive_email_notifications'.tr(),
                       emailNotifications,
-                      (value) =>
-                          setModalState(() => emailNotifications = value),
+                      (value) => setModalState(() => emailNotifications = value),
                     ),
                     _buildNotificationToggle(
                       'sms_notifications'.tr(),
@@ -718,20 +556,12 @@ class _ProfileViewState extends State<ProfileView> {
 
                     CustomTextButton(
                       onPress: () {
-                        customShowToast(
-                          context,
-                          'notification_settings_saved'.tr(),
-                        );
+                        customShowToast(context, 'notification_settings_saved'.tr());
                       },
                       backgroundColor: AppColors.primaryColor,
                       borderRadius: 8,
                       borderColor: AppColors.transparent,
-                      child: Text(
-                        'save_settings'.tr(),
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: AppColors.white,
-                        ),
-                      ),
+                      child: Text('save_settings'.tr(), style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.white)),
                     ),
 
                     const SizedBox(height: 40),
@@ -749,9 +579,7 @@ class _ProfileViewState extends State<ProfileView> {
     showModalBottomSheet(
       context: context,
       backgroundColor: isDarkMode ? AppColors.darkModeColor : Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setModalState) {
@@ -770,22 +598,12 @@ class _ProfileViewState extends State<ProfileView> {
                             'phone_number_sharing'.tr(),
                             style: Theme.of(
                               context,
-                            ).textTheme.displaySmall?.copyWith(
-                              color:
-                                  darkModeValue ? Colors.black : Colors.black,
-                              fontWeight: FontWeight.w400,
-                            ),
+                            ).textTheme.displaySmall?.copyWith(color: darkModeValue ? Colors.black : Colors.black, fontWeight: FontWeight.w400),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        IconButton(
-                          onPressed: () => Navigator.pop(context),
-                          icon: Icon(
-                            Icons.close,
-                            color: isDarkMode ? Colors.white : Colors.black,
-                          ),
-                        ),
+                        IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close, color: isDarkMode ? Colors.white : Colors.black)),
                       ],
                     ),
                     _buildDivider(indent: 5),
@@ -800,8 +618,7 @@ class _ProfileViewState extends State<ProfileView> {
                       'remove_share_notification'.tr(),
                       'disable_share_phone_number_notification_desc'.tr(),
                       emailNotifications,
-                      (value) =>
-                          setModalState(() => emailNotifications = value),
+                      (value) => setModalState(() => emailNotifications = value),
                     ),
                     _buildNotificationToggle(
                       'auto_sync'.tr(),
@@ -837,27 +654,14 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  Widget _buildNotificationToggle(
-    String title,
-    String subtitle,
-    bool value,
-    Function(bool) onChanged,
-  ) {
+  Widget _buildNotificationToggle(String title, String subtitle, bool value, Function(bool) onChanged) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       title: Text(
         title,
-        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          color: darkModeValue ? Colors.black : Colors.black,
-          fontWeight: FontWeight.w400,
-        ),
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(color: darkModeValue ? Colors.black : Colors.black, fontWeight: FontWeight.w400),
       ),
-      subtitle: Text(
-        subtitle,
-        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-          color: darkModeValue ? Colors.grey[400] : Colors.grey[600],
-        ),
-      ),
+      subtitle: Text(subtitle, style: Theme.of(context).textTheme.labelMedium?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600])),
       trailing: SizedBox(
         width: 65,
         child: CustomLoadSwitchWidget(
@@ -878,9 +682,7 @@ class _ProfileViewState extends State<ProfileView> {
     showModalBottomSheet(
       context: context,
       backgroundColor: isDarkMode ? AppColors.darkModeColor : Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (BuildContext context) {
         return Container(
           padding: const EdgeInsets.all(20),
@@ -894,42 +696,19 @@ class _ProfileViewState extends State<ProfileView> {
                   children: [
                     Text(
                       'privacy_security'.tr(),
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: darkModeValue ? Colors.black : Colors.black,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleLarge?.copyWith(color: darkModeValue ? Colors.black : Colors.black, fontWeight: FontWeight.w600),
                     ),
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: Icon(
-                        Icons.close,
-                        color: isDarkMode ? Colors.white : Colors.black,
-                      ),
-                    ),
+                    IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close, color: isDarkMode ? Colors.white : Colors.black)),
                   ],
                 ),
                 _buildDivider(indent: 5),
                 const SizedBox(height: 20),
-                _buildPrivacyItem(
-                  Icons.lock,
-                  'two_factor_authentication'.tr(),
-                  'two_factor_authentication_desc'.tr(),
-                ),
-                _buildPrivacyItem(
-                  Icons.visibility,
-                  'profile_visibility'.tr(),
-                  'profile_visibility_desc'.tr(),
-                ),
-                _buildPrivacyItem(
-                  Icons.block,
-                  'blocked_users'.tr(),
-                  'blocked_users_desc'.tr(),
-                ),
-                _buildPrivacyItem(
-                  Icons.security,
-                  'data_encryption'.tr(),
-                  'data_encryption_desc'.tr(),
-                ),
+                _buildPrivacyItem(Icons.lock, 'two_factor_authentication'.tr(), 'two_factor_authentication_desc'.tr()),
+                _buildPrivacyItem(Icons.visibility, 'profile_visibility'.tr(), 'profile_visibility_desc'.tr()),
+                _buildPrivacyItem(Icons.block, 'blocked_users'.tr(), 'blocked_users_desc'.tr()),
+                _buildPrivacyItem(Icons.security, 'data_encryption'.tr(), 'data_encryption_desc'.tr()),
                 const SizedBox(height: 10),
               ],
             ),
@@ -944,30 +723,15 @@ class _ProfileViewState extends State<ProfileView> {
       contentPadding: EdgeInsets.zero,
       leading: Container(
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: AppColors.primaryColor.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(8),
-        ),
+        decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
         child: Icon(icon, color: AppColors.primaryColor, size: 20),
       ),
       title: Text(
         title,
-        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          color: darkModeValue ? Colors.black : Colors.black,
-          fontWeight: FontWeight.w400,
-        ),
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(color: darkModeValue ? Colors.black : Colors.black, fontWeight: FontWeight.w400),
       ),
-      subtitle: Text(
-        subtitle,
-        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-          color: darkModeValue ? Colors.grey[400] : Colors.grey[600],
-        ),
-      ),
-      trailing: RotatedBox(
-        quarterTurns: arabicLanguage ? 3 : 1,
-
-        child: SvgPicture.asset(AppIcons.arrowDown),
-      ),
+      subtitle: Text(subtitle, style: Theme.of(context).textTheme.labelMedium?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600])),
+      trailing: RotatedBox(quarterTurns: arabicLanguage ? 3 : 1, child: SvgPicture.asset(AppIcons.arrowDown)),
       onTap: () {
         customShowToast(context, '$title settings would open here');
       },
@@ -975,24 +739,12 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   void _showLanguageSettings() {
-    final languages = [
-      'English'.tr(),
-      'Arabic'.tr(),
-      'Spanish',
-      'French',
-      'German',
-      'Italian',
-      'Portuguese',
-      'Chinese',
-      'Japanese',
-    ];
+    final languages = ['English'.tr(), 'Arabic'.tr(), 'Spanish', 'French', 'German', 'Italian', 'Portuguese', 'Chinese', 'Japanese'];
 
     showModalBottomSheet(
       context: context,
       backgroundColor: isDarkMode ? AppColors.darkModeColor : Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (BuildContext context) {
         return Container(
           padding: const EdgeInsets.all(24),
@@ -1005,17 +757,13 @@ class _ProfileViewState extends State<ProfileView> {
                 children: [
                   Text(
                     'select_language'.tr(),
-                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                      color: darkModeValue ? Colors.black : Colors.black,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.displaySmall?.copyWith(color: darkModeValue ? Colors.black : Colors.black, fontWeight: FontWeight.w400),
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: Icon(
-                      Icons.close,
-                      color: darkModeValue ? AppColors.black : AppColors.black,
-                    ),
+                    icon: Icon(Icons.close, color: darkModeValue ? AppColors.black : AppColors.black),
                   ),
                 ],
               ),
@@ -1032,18 +780,11 @@ class _ProfileViewState extends State<ProfileView> {
                       contentPadding: EdgeInsets.zero,
                       title: Text(
                         language,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: darkModeValue ? Colors.black : Colors.black,
-                          fontWeight: FontWeight.w400,
-                        ),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleLarge?.copyWith(color: darkModeValue ? Colors.black : Colors.black, fontWeight: FontWeight.w400),
                       ),
-                      trailing:
-                          isSelected
-                              ? const Icon(
-                                Icons.check,
-                                color: AppColors.primaryColor,
-                              )
-                              : null,
+                      trailing: isSelected ? const Icon(Icons.check, color: AppColors.primaryColor) : null,
                       onTap: () {
                         if (language == 'Arabic') {
                           context.setLocale(const Locale('ar', 'SA'));
@@ -1076,9 +817,7 @@ class _ProfileViewState extends State<ProfileView> {
     showModalBottomSheet(
       context: context,
       backgroundColor: isDarkMode ? AppColors.darkModeColor : Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (BuildContext context) {
         return Container(
           padding: const EdgeInsets.all(24),
@@ -1092,38 +831,19 @@ class _ProfileViewState extends State<ProfileView> {
                   children: [
                     Text(
                       'help_support'.tr(),
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: darkModeValue ? Colors.black : Colors.black,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleLarge?.copyWith(color: darkModeValue ? Colors.black : Colors.black, fontWeight: FontWeight.w600),
                     ),
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: Icon(
-                        Icons.close,
-                        color: darkModeValue ? Colors.black : Colors.black,
-                      ),
-                    ),
+                    IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close, color: darkModeValue ? Colors.black : Colors.black)),
                   ],
                 ),
                 _buildDivider(indent: 5),
                 const SizedBox(height: 20),
                 _buildHelpItem(AppIcons.help, 'faq'.tr(), 'faq_desc'.tr()),
-                _buildHelpItem(
-                  AppIcons.message,
-                  'live_chat'.tr(),
-                  'live_chat_desc'.tr(),
-                ),
-                _buildHelpItem(
-                  AppIcons.email,
-                  'email_support'.tr(),
-                  'email_support_desc'.tr(),
-                ),
-                _buildHelpItem(
-                  AppIcons.call,
-                  'call_support'.tr(),
-                  '+1 (555) 123-4567',
-                ),
+                _buildHelpItem(AppIcons.message, 'live_chat'.tr(), 'live_chat_desc'.tr()),
+                _buildHelpItem(AppIcons.email, 'email_support'.tr(), 'email_support_desc'.tr()),
+                _buildHelpItem(AppIcons.call, 'call_support'.tr(), '+1 (555) 123-4567'),
 
                 const SizedBox(height: 10),
               ],
@@ -1139,29 +859,15 @@ class _ProfileViewState extends State<ProfileView> {
       contentPadding: EdgeInsets.zero,
       leading: Container(
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: AppColors.primaryColor.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(8),
-        ),
+        decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
         child: SvgPicture.asset(icon, color: AppColors.primaryColor),
       ),
       title: Text(
         title,
-        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          color: darkModeValue ? Colors.black : Colors.black,
-          fontWeight: FontWeight.w400,
-        ),
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(color: darkModeValue ? Colors.black : Colors.black, fontWeight: FontWeight.w400),
       ),
-      subtitle: Text(
-        subtitle,
-        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-          color: darkModeValue ? Colors.grey[400] : Colors.grey[600],
-        ),
-      ),
-      trailing: RotatedBox(
-        quarterTurns: arabicLanguage ? 3 : 1,
-        child: SvgPicture.asset(AppIcons.arrowDown),
-      ),
+      subtitle: Text(subtitle, style: Theme.of(context).textTheme.labelMedium?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600])),
+      trailing: RotatedBox(quarterTurns: arabicLanguage ? 3 : 1, child: SvgPicture.asset(AppIcons.arrowDown)),
       onTap: () {
         customShowToast(context, '$title settings would open here');
       },
@@ -1172,9 +878,7 @@ class _ProfileViewState extends State<ProfileView> {
     showModalBottomSheet(
       context: context,
       backgroundColor: isDarkMode ? AppColors.darkModeColor : Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (BuildContext context) {
         return Container(
           padding: const EdgeInsets.all(20),
@@ -1187,18 +891,11 @@ class _ProfileViewState extends State<ProfileView> {
                   children: [
                     Text(
                       'about'.tr(),
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: darkModeValue ? Colors.black : Colors.black,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleLarge?.copyWith(color: darkModeValue ? Colors.black : Colors.black, fontWeight: FontWeight.w600),
                     ),
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: Icon(
-                        Icons.close,
-                        color: darkModeValue ? Colors.black : Colors.black,
-                      ),
-                    ),
+                    IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close, color: darkModeValue ? Colors.black : Colors.black)),
                   ],
                 ),
                 _buildDivider(indent: 5),
@@ -1206,35 +903,26 @@ class _ProfileViewState extends State<ProfileView> {
                 Container(
                   width: 80,
                   height: 80,
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+                  decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.circular(20)),
                   child: SvgPicture.asset(AppIcons.appLogo),
                 ),
                 const SizedBox(height: 12),
                 Text(
                   'NETS',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: darkModeValue ? Colors.black : Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(color: darkModeValue ? Colors.black : Colors.black, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'app_version'.tr(),
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: darkModeValue ? Colors.grey[600] : Colors.grey[600],
-                  ),
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(color: darkModeValue ? Colors.grey[600] : Colors.grey[600]),
                 ),
                 const SizedBox(height: 20),
                 Text(
                   'app_description'.tr(),
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: darkModeValue ? Colors.grey[400] : Colors.grey[600],
-                    height: 1.5,
-                  ),
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600], height: 1.5),
                 ),
                 const SizedBox(height: 24),
                 Row(
@@ -1247,10 +935,7 @@ class _ProfileViewState extends State<ProfileView> {
                       child: Text(
                         'terms_and_conditions'.tr(),
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color:
-                              darkModeValue
-                                  ? AppColors.primaryColor
-                                  : AppColors.primaryColor,
+                          color: darkModeValue ? AppColors.primaryColor : AppColors.primaryColor,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -1262,10 +947,7 @@ class _ProfileViewState extends State<ProfileView> {
                       child: Text(
                         'privacy_policy'.tr(),
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color:
-                              darkModeValue
-                                  ? AppColors.primaryColor
-                                  : AppColors.primaryColor,
+                          color: darkModeValue ? AppColors.primaryColor : AppColors.primaryColor,
                           fontWeight: FontWeight.w400,
                         ),
                       ),

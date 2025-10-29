@@ -309,8 +309,10 @@
   "notes":"Notes",
   "add_notes_about_this_contact":"Add notes about this contact",
   "voice_note":"Voice Note",
-  "location":"Location"
-
-
-
+  "location": "Location",
+  "can_not_launch_that_url": "Can not launch that URL",
+  "new_updates_are_available": "New updates are available",
+  "we_have_new_updates_for_our_app": "We have new updates for our app",
+  "update_later": "Update Later",
+  "update_now": "Update Now"
 }

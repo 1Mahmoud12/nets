@@ -79,10 +79,7 @@ class _LoginViewState extends State<LoginView> {
       child: Scaffold(
         backgroundColor: darkModeValue ? AppColors.black : AppColors.white,
         // appBar: customAppBar(context: context, title: 'login'.tr()),
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: darkModeValue ? AppColors.black : AppColors.white,
-        ),
+        appBar: AppBar(automaticallyImplyLeading: false, backgroundColor: darkModeValue ? AppColors.black : AppColors.white),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Form(
@@ -100,9 +97,7 @@ class _LoginViewState extends State<LoginView> {
                       setState(() {
                         isLoading = false;
                       });
-                      context.navigateToPageWithReplacement(
-                        const NavigationView(),
-                      );
+                      context.navigateToPageWithReplacement(const NavigationView());
 
                       //   customShowToast(context, 'Success');
                     } else if (state is LoginError) {
@@ -115,16 +110,10 @@ class _LoginViewState extends State<LoginView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      AuthContent(
-                        subTitle: 'login_to_continue'.tr(),
-                        title: 'welcome_back'.tr(),
-                      ),
+                      AuthContent(subTitle: 'login_to_continue'.tr(), title: 'welcome_back'.tr()),
                       SizedBox(height: 32.h),
 
-                      PhoneNumberField(
-                        initialCountryCode: loginCubit.countryCode,
-                        controller: loginCubit.loginPhoneController,
-                      ),
+                      PhoneNumberField(initialCountryCode: loginCubit.countryCode, controller: loginCubit.loginPhoneController),
 
                       // Column(
                       //   crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,12 +152,7 @@ class _LoginViewState extends State<LoginView> {
                           if (_formKey.currentState!.validate()) {
                             // loginCubit.login(context: context);
                             context.navigateToPage(
-                              BlocProvider.value(
-                                value: loginCubit,
-                                child: OTPVerificationView(
-                                  phone: loginCubit.loginPhoneController.text,
-                                ),
-                              ),
+                              BlocProvider.value(value: loginCubit, child: OTPVerificationView(phone: loginCubit.loginPhoneController.text)),
                             );
                           }
                         },
@@ -287,32 +271,21 @@ class AuthContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Center(
-          child: SvgPicture.asset(AppIcons.appLogo, width: 56.w, height: 56.h),
-        ),
+        Center(child: SvgPicture.asset(AppIcons.appLogo, width: 56.w, height: 56.h)),
         h8,
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Text(
-            'login'.tr(),
-            style: Theme.of(
-              context,
-            ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w400),
-          ),
+          child: Text('login'.tr(), style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w400)),
         ),
         h8,
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Text(
             'enter_your_phone_number'.tr(),
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w400,
-
-              color:
-                  darkModeValue ? AppColors.darkModeText : AppColors.textColor,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400, color: darkModeValue ? AppColors.darkModeText : AppColors.textColor),
           ),
           // textAlign: TextAlign.center,
         ),

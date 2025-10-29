@@ -12,10 +12,10 @@ class AppIcons {
   static const aa = '$baseUrl/aa.svg';
   static const appIcons = '$baseUrl/appIcon.svg';
   static const weather = '$baseUrl/day-status.svg';
+  static const newUpdateIc = '$baseUrl/newUpdateIc.svg';
   static const edit = '$baseUrl/edit-profile.svg';
   static const editImage = '$baseUrl/PencilSimple.svg';
-  static const unselectedDiscoverDarkMode =
-      '$baseUrl/un-selected-discover-darkMode.svg';
+  static const unselectedDiscoverDarkMode = '$baseUrl/un-selected-discover-darkMode.svg';
 
   //navigation icons
   static const selectedhHomeIc = '$baseUrl/selected-home.svg';

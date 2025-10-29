@@ -1,13 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/utils/navigate.dart';
 import 'package:nets/feature/auth/data/dataSource/reset_password_data_source.dart';
-import 'package:nets/feature/auth/views/presentation/login_view.dart';
-import 'package:nets/feature/auth/views/presentation/reset_password_view.dart';
-
-import '../../../../../../core/utils/custom_show_toast.dart';
+import 'package:nets/feature/auth/data/models/login_model.dart';
+import 'package:nets/feature/navigation/view/presentation/navigation_view.dart';
 
 part 'otp_state.dart';
 
@@ -20,38 +20,33 @@ class OTPCubit extends Cubit<OTPState> {
   Timer? timer;
   int _seconds = 120;
 
-  ResetPasswordDataSourceInterface resetPasswordDataSourceInterface =
-      ResetPasswordDataSourceImplementation();
+  ResetPasswordDataSourceInterface resetPasswordDataSourceInterface = ResetPasswordDataSourceImplementation();
 
   Future<void> verifyOtp({required BuildContext context}) async {
     emit(OTPLoading());
-    // Future.delayed(const Duration(seconds: 2), () {
-    //   context.navigateToPage(const ResetPasswordView(homeView: false, tempToken: ''));
-    // });
-    await resetPasswordDataSourceInterface
-        .verifyOtp(otp: codeController.text)
-        .then((value) {
-          value.fold(
-            (l) {
-              emit(OTPError(e: l.errMessage));
-              customShowToast(
-                context,
-                l.errMessage,
-                showToastStatus: ShowToastStatus.error,
-              );
-            },
-            (r) async {
-              // if (verifyRegistrationEmail) {
-              customShowToast(context, r.message ?? '');
-              context.navigateToPage(const LoginView());
-              // } else {
-              //   context.navigateToPage(ResetPasswordView(homeView: false, tempToken: r.data?.authKey));
-              // }
+    userCacheValue = LoginModel(data: Data(phone: '01127200000', email: 'test@gmail.com', authKey: 'asdasd'));
+    await userCache?.put(userCacheKey, jsonEncode(LoginModel(data: Data(phone: '01127200000', email: 'test@gmail.com', authKey: 'asdasd')).toJson()));
 
-              emit(OTPSuccess());
-            },
-          );
-        });
+    context.navigateToPage(const NavigationView());
+
+    // await resetPasswordDataSourceInterface.verifyOtp(otp: codeController.text).then((value) {
+    //   value.fold(
+    //     (l) {
+    //       emit(OTPError(e: l.errMessage));
+    //       // customShowToast(context, l.errMessage, showToastStatus: ShowToastStatus.error);
+    //     },
+    //     (r) async {
+    //       // if (verifyRegistrationEmail) {
+    //       customShowToast(context, r.message ?? '');
+    //       context.navigateToPage(const LoginView());
+    //       // } else {
+    //       //   context.navigateToPage(ResetPasswordView(homeView: false, tempToken: r.data?.authKey));
+    //       // }
+    //
+    //       emit(OTPSuccess());
+    //     },
+    //   );
+    // });
   }
 
   void startTimer() {
