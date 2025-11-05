@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
@@ -12,6 +13,7 @@ import 'package:nets/feature/Contacts/views/presentation/contacts_view.dart';
 import 'package:nets/feature/QrCode/qr_view.dart';
 import 'package:nets/feature/navigation/data/homeDataSource/home_data_source.dart';
 import 'package:nets/feature/navigation/view/presentation/widgets/custom_bottom_nav.dart';
+import 'package:nets/feature/profile/views/manager/cubit/user_data_cubit.dart';
 import 'package:nets/feature/profile/views/presentation/profile_view.dart';
 
 import '../../../my_journey/views/presentation/my_journey_view.dart';
@@ -243,93 +245,104 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
             child: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                child: Row(
-                  children: [
-                    // Profile avatar with menu
-                    GestureDetector(
-                      // onTap: _showProfileMenu,
-                      child: Container(
-                        decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.primaryColor, width: 2)),
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: AppColors.primaryColor,
-                          child: Text(
-                            userCacheValue?.data?.user?.profile?.firstName?.substring(0, 2).toUpperCase() ?? 'UK',
-                            style: Theme.of(context).textTheme.displayMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                child: BlocBuilder<UserDataCubit, UserDataState>(
+                  builder: (context, state) {
+                    final firstName = userCacheValue?.data?.user?.profile?.firstName ?? '';
+                    final initials = firstName.length >= 2 ? firstName.substring(0, 2).toUpperCase() : 'UK';
+                    return Row(
+                      children: [
+                        // Profile avatar with menu
+                        GestureDetector(
+                          // onTap: _showProfileMenu,
+                          child: Container(
+                            decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.primaryColor, width: 2)),
+                            child: CircleAvatar(
+                              radius: 20,
+                              backgroundColor: AppColors.primaryColor,
+                              child: Text(
+                                initials,
+                                style: Theme.of(context).textTheme.displayMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
 
-                    const SizedBox(width: 8),
+                        const SizedBox(width: 8),
 
-                    // Greeting and user name
-                    Flexible(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                        // Greeting and user name
+                        Flexible(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(_getGreeting(), style: Theme.of(context).textTheme.displayMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
-                              const SizedBox(height: 2),
-                              Text(
-                                userCacheValue?.data?.user?.profile?.firstName ?? 'unknown'.tr(),
-                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  fontWeight: FontWeight.w400,
-                                  color: darkModeValue ? AppColors.white : AppColors.black,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    _getGreeting(),
+                                    style: Theme.of(context).textTheme.displayMedium,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    userCacheValue?.data?.user?.profile?.firstName ?? 'unknown'.tr(),
+                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                      fontWeight: FontWeight.w400,
+                                      color: darkModeValue ? AppColors.white : AppColors.black,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                              // const Spacer(),
+                              // Status indicator
+
+                              // Notifications button with animation
+                              GestureDetector(
+                                onTap: _showNotifications,
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: 35,
+                                      height: 35,
+                                      // padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: darkModeValue ? AppColors.greyG200 : AppColors.greyG200),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Center(
+                                        child: SvgPicture.asset(AppIcons.notificationBill, color: darkModeValue ? AppColors.white : AppColors.black),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: 0,
+                                      top: 4,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          borderRadius: BorderRadius.circular(8),
+                                          // border: Border.all(
+                                          //   color:
+                                          //       darkModeValue
+                                          //           ? AppColors.appBarDarkModeColor
+                                          //           : AppColors.white,
+                                          //   width: 1.5,
+                                          // ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
                               ),
                             ],
                           ),
-                          // const Spacer(),
-                          // Status indicator
-
-                          // Notifications button with animation
-                          GestureDetector(
-                            onTap: _showNotifications,
-                            child: Stack(
-                              children: [
-                                Container(
-                                  width: 35,
-                                  height: 35,
-                                  // padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: darkModeValue ? AppColors.greyG200 : AppColors.greyG200),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Center(
-                                    child: SvgPicture.asset(AppIcons.notificationBill, color: darkModeValue ? AppColors.white : AppColors.black),
-                                  ),
-                                ),
-                                Positioned(
-                                  right: 0,
-                                  top: 4,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(8),
-                                      // border: Border.all(
-                                      //   color:
-                                      //       darkModeValue
-                                      //           ? AppColors.appBarDarkModeColor
-                                      //           : AppColors.white,
-                                      //   width: 1.5,
-                                      // ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
             ),

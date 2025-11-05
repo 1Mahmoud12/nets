@@ -30,8 +30,6 @@ class EditProfileView extends StatefulWidget {
 
 class _EditProfileViewState extends State<EditProfileView> {
   final _formKey = GlobalKey<FormState>();
-  late UserDataCubit userDataCubit;
-  late UpdateUserDataCubit updateUserDataCubit;
   late ProfileDataModel profileData;
   File? selectedImage;
   UserData? originalUserData;
@@ -41,8 +39,6 @@ class _EditProfileViewState extends State<EditProfileView> {
   @override
   void initState() {
     super.initState();
-    userDataCubit = UserDataCubit();
-    updateUserDataCubit = UpdateUserDataCubit();
     profileData = ProfileDataModel();
     // Initialize with at least one phone
     profileData.phones.add(PhoneData(controller: TextEditingController()));
@@ -50,7 +46,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   }
 
   void _loadUserData() {
-    userDataCubit.getUserData();
+    context.read<UserDataCubit>().getUserData();
   }
 
   void _initializeFields() {
@@ -235,6 +231,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   }
 
   Future<void> _saveProfile() async {
+    final updateCubit = context.read<UpdateUserDataCubit>();
     // Reset flags
     _isImageUpdateComplete = false;
     _isDataUpdateComplete = false;
@@ -242,14 +239,14 @@ class _EditProfileViewState extends State<EditProfileView> {
     try {
       // Update image first if a new one was selected
       if (selectedImage != null) {
-        await updateUserDataCubit.updateUserImage(selectedImage!);
+        await updateCubit.updateUserImage(selectedImage!);
         // Wait for image update to complete - handled in listener
       } else {
         // No image to update, mark as complete
         _isImageUpdateComplete = true;
         // Proceed with data update
         final userDataParam = _buildUserDataParam();
-        await updateUserDataCubit.updateUserData(userDataParam);
+        await updateCubit.updateUserData(userDataParam);
       }
     } catch (e) {
       // Error handling is done in BlocListener
@@ -260,7 +257,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     // Only navigate if both updates are complete and context is still mounted
     if (_isImageUpdateComplete && _isDataUpdateComplete && mounted) {
       // Reload user data after successful update
-      userDataCubit.getUserData();
+      context.read<UserDataCubit>().getUserData();
       // Navigate back
       Navigator.pop(context);
       // Reset flags
@@ -272,147 +269,143 @@ class _EditProfileViewState extends State<EditProfileView> {
   @override
   void dispose() {
     profileData.dispose();
-    userDataCubit.close();
-    updateUserDataCubit.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [BlocProvider.value(value: userDataCubit), BlocProvider.value(value: updateUserDataCubit)],
-      child: MultiBlocListener(
-        listeners: [
-          BlocListener<UserDataCubit, UserDataState>(
-            listener: (context, state) {
-              if (state is UserDataSuccess) {
-                _initializeFields();
-              } else if (state is UserDataError) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
-              }
-            },
-          ),
-          BlocListener<UpdateUserDataCubit, UpdateUserDataState>(
-            listener: (context, state) {
-              if (state is UpdateUserDataImageSuccess) {
-                // Image update completed successfully
-                _isImageUpdateComplete = true;
-                // Now update the user data
-                final userDataParam = _buildUserDataParam();
-                updateUserDataCubit.updateUserData(userDataParam);
-              } else if (state is UpdateUserDataImageError) {
-                _isImageUpdateComplete = true; // Mark as complete even on error to avoid hanging
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
-              } else if (state is UpdateUserDataSuccess) {
-                // Data update completed successfully
-                _isDataUpdateComplete = true;
-                _checkAndNavigate();
-              } else if (state is UpdateUserDataError) {
-                _isDataUpdateComplete = true; // Mark as complete even on error
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
-              }
-            },
-          ),
-        ],
-        child: Scaffold(
-          appBar: customAppBar(context: context, title: 'edit_profile'.tr()),
-          backgroundColor: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
-          body: BlocBuilder<UserDataCubit, UserDataState>(
-            builder: (context, state) {
-              if (state is UserDataLoading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.only(bottom: 24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 8),
-                            PersonalInformation(
-                              isDarkMode: darkModeValue,
-                              firstNameCtrl: profileData.firstNameCtrl,
-                              lastNameCtrl: profileData.lastNameCtrl,
-                              emailCtrl: profileData.emailCtrl,
-                              websiteCtrl: profileData.websiteCtrl,
-                              imageUrl: profileData.profileImageUrl,
-                              onImageSelected: (image) {
-                                selectedImage = image;
-                              },
-                            ),
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<UserDataCubit, UserDataState>(
+          listener: (context, state) {
+            if (state is UserDataSuccess) {
+              _initializeFields();
+            } else if (state is UserDataError) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
+            }
+          },
+        ),
+        BlocListener<UpdateUserDataCubit, UpdateUserDataState>(
+          listener: (context, state) {
+            if (state is UpdateUserDataImageSuccess) {
+              // Image update completed successfully
+              _isImageUpdateComplete = true;
+              // Now update the user data
+              final userDataParam = _buildUserDataParam();
+              context.read<UpdateUserDataCubit>().updateUserData(userDataParam);
+            } else if (state is UpdateUserDataImageError) {
+              _isImageUpdateComplete = true; // Mark as complete even on error to avoid hanging
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
+            } else if (state is UpdateUserDataSuccess) {
+              // Data update completed successfully
+              _isDataUpdateComplete = true;
+              _checkAndNavigate();
+            } else if (state is UpdateUserDataError) {
+              _isDataUpdateComplete = true; // Mark as complete even on error
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
+            }
+          },
+        ),
+      ],
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: customAppBar(context: context, title: 'edit_profile'.tr()),
+        backgroundColor: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
+        body: BlocBuilder<UserDataCubit, UserDataState>(
+          builder: (context, state) {
+            if (state is UserDataLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.only(bottom: 24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 8),
+                          PersonalInformation(
+                            isDarkMode: darkModeValue,
+                            firstNameCtrl: profileData.firstNameCtrl,
+                            lastNameCtrl: profileData.lastNameCtrl,
+                            emailCtrl: profileData.emailCtrl,
+                            websiteCtrl: profileData.websiteCtrl,
+                            imageUrl: profileData.profileImageUrl,
+                            onImageSelected: (image) {
+                              selectedImage = image;
+                            },
+                          ),
 
-                            const SizedBox(height: 16),
-                            ContactInformation(
-                              phones: profileData.phones,
-                              isDarkMode: darkModeValue,
-                              zipCtrl: profileData.zipCtrl,
-                              onPhoneChanged: (index, type, isPrimary) {
-                                setState(() {
-                                  profileData.phones[index].type = type;
-                                  profileData.phones[index].isPrimary = isPrimary;
-                                });
-                              },
-                              onAddPhone: () {
-                                setState(() {
-                                  final hasPrimary = profileData.phones.any((p) => p.isPrimary);
-                                  profileData.phones.add(PhoneData(controller: TextEditingController(), isPrimary: !hasPrimary));
-                                });
-                              },
-                            ),
+                          const SizedBox(height: 16),
+                          ContactInformation(
+                            phones: profileData.phones,
+                            isDarkMode: darkModeValue,
+                            zipCtrl: profileData.zipCtrl,
+                            onPhoneChanged: (index, type, isPrimary) {
+                              setState(() {
+                                profileData.phones[index].type = type;
+                                profileData.phones[index].isPrimary = isPrimary;
+                              });
+                            },
+                            onAddPhone: () {
+                              setState(() {
+                                final hasPrimary = profileData.phones.any((p) => p.isPrimary);
+                                profileData.phones.add(PhoneData(controller: TextEditingController(), isPrimary: !hasPrimary));
+                              });
+                            },
+                          ),
 
-                            const SizedBox(height: 16),
-                            SocialMediaWidget(
-                              isDarkMode: darkModeValue,
-                              facebookCtrl: profileData.facebookCtrl,
-                              twitterCtrl: profileData.twitterCtrl,
-                              instagramCtrl: profileData.instagramCtrl,
-                              linkedinCtrl: profileData.linkedinCtrl,
-                              dynamicSocialMedia: profileData.dynamicSocialMedia,
-                              onSocialMediaChanged: (updatedList) {
-                                setState(() {});
-                              },
-                            ),
+                          const SizedBox(height: 16),
+                          SocialMediaWidget(
+                            isDarkMode: darkModeValue,
+                            facebookCtrl: profileData.facebookCtrl,
+                            twitterCtrl: profileData.twitterCtrl,
+                            instagramCtrl: profileData.instagramCtrl,
+                            linkedinCtrl: profileData.linkedinCtrl,
+                            dynamicSocialMedia: profileData.dynamicSocialMedia,
+                            onSocialMediaChanged: (updatedList) {
+                              setState(() {});
+                            },
+                          ),
 
-                            const SizedBox(height: 16),
-                            AddressInformation(
-                              isDarkMode: darkModeValue,
-                              streetOfficeCtrl: profileData.streetOfficeCtrl,
-                              buildingOfficeCtrl: profileData.buildingOfficeCtrl,
-                              officeNumberOfficeCtrl: profileData.officeNumberOfficeCtrl,
-                            ),
+                          const SizedBox(height: 16),
+                          AddressInformation(
+                            isDarkMode: darkModeValue,
+                            streetOfficeCtrl: profileData.streetOfficeCtrl,
+                            buildingOfficeCtrl: profileData.buildingOfficeCtrl,
+                            officeNumberOfficeCtrl: profileData.officeNumberOfficeCtrl,
+                          ),
 
-                            const SizedBox(height: 16),
-                            AdditionalInformationWidget(isDarkMode: darkModeValue, controller: profileData.otherDetailsCtrl),
+                          const SizedBox(height: 16),
+                          AdditionalInformationWidget(isDarkMode: darkModeValue, controller: profileData.otherDetailsCtrl),
 
-                            const SizedBox(height: 24), // Extra padding at bottom for persistent button
-                          ],
-                        ),
+                          const SizedBox(height: 24), // Extra padding at bottom for persistent button
+                        ],
                       ),
                     ),
-                    // Persistent Save Button
-                    BlocBuilder<UpdateUserDataCubit, UpdateUserDataState>(
-                      builder: (context, updateState) {
-                        final isLoading = updateState is UpdateUserDataLoading || updateState is UpdateUserDataImageLoading;
-                        return Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
-                            border: Border(top: BorderSide(color: Colors.grey[200]!)),
-                            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -2))],
-                          ),
-                          child: SafeArea(top: false, child: SaveChangesButton(isLoading: isLoading, onPressed: _saveProfile)),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+                  ),
+                  // Persistent Save Button
+                  BlocBuilder<UpdateUserDataCubit, UpdateUserDataState>(
+                    builder: (context, updateState) {
+                      final isLoading = updateState is UpdateUserDataLoading || updateState is UpdateUserDataImageLoading;
+                      return Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
+                          border: Border(top: BorderSide(color: Colors.grey[200]!)),
+                          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -2))],
+                        ),
+                        child: SafeArea(top: false, child: SaveChangesButton(isLoading: isLoading, onPressed: _saveProfile)),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

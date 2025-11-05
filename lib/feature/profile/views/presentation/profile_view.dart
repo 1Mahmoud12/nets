@@ -1,9 +1,12 @@
 import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:nets/core/component/cache_image.dart';
 import 'package:nets/core/component/custom_load_switch_widget.dart';
+import 'package:nets/core/network/end_points.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/utils/app_icons.dart';
@@ -14,6 +17,7 @@ import 'package:nets/feature/auth/views/presentation/login_view.dart';
 import '../../../../core/component/buttons/custom_text_button.dart';
 import '../../../../core/component/custom_drop_down_menu.dart';
 import '../../../../core/utils/constants.dart';
+import '../manager/cubit/user_data_cubit.dart';
 import './edit_profile_view.dart';
 
 class ProfileView extends StatefulWidget {
@@ -135,55 +139,71 @@ class _ProfileViewState extends State<ProfileView> {
               // const SizedBox(height: 20),
 
               // Profile Header
-              Container(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    // Profile Picture
-                    Container(
-                      width: 88,
-                      height: 88,
-                      decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.primaryColor, width: 4)),
-                      child: const CircleAvatar(
-                        radius: 56,
-                        backgroundColor: AppColors.primaryColor,
-                        child: Icon(Icons.person, size: 45, color: Colors.white),
-                      ),
-                    ),
+              BlocBuilder<UserDataCubit, UserDataState>(
+                builder: (context, state) {
+                  // Format image URL - if it's a relative path, prepend base URL
+                  String? imageUrl = userCacheValue?.data?.user?.profile?.image;
+                  if (imageUrl != null && imageUrl.isNotEmpty) {
+                    if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
+                      // If it's a relative path, prepend the domain
+                      imageUrl = '${EndPoints.domain}${imageUrl.startsWith('/') ? '' : '/'}$imageUrl';
+                    }
+                  }
 
-                    const SizedBox(height: 12),
-
-                    // User Name
-                    Text(
-                      userCacheValue?.data?.user?.profile?.firstName ?? 'unknown'.tr(),
-                      style: Theme.of(
-                        context,
-                      ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400, color: darkModeValue ? AppColors.white : AppColors.black),
-                    ),
-
-                    const SizedBox(height: 4),
-
-                    // User Email
-                    Text(
-                      userCacheValue?.data?.user?.phone ?? 'unknown'.tr(),
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black),
-                    ),
-                    const SizedBox(height: 4),
-                    GestureDetector(
-                      onTap: () {
-                        context.navigateToPage(const EditProfileView());
-                      },
-                      child: Text(
-                        'edit_profile'.tr(),
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: darkModeValue ? Colors.grey[400] : Colors.grey[600],
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.grey[400],
+                  return Container(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        // Profile Picture
+                        Container(
+                          width: 88,
+                          height: 88,
+                          decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.primaryColor, width: 4)),
+                          child:
+                              imageUrl != null && imageUrl.isNotEmpty
+                                  ? CacheImage(urlImage: imageUrl, circle: true, width: 88, height: 88, fit: BoxFit.cover, profileImage: true)
+                                  : const CircleAvatar(
+                                    radius: 56,
+                                    backgroundColor: AppColors.primaryColor,
+                                    child: Icon(Icons.person, size: 45, color: Colors.white),
+                                  ),
                         ),
-                      ),
+
+                        const SizedBox(height: 12),
+
+                        // User Name
+                        Text(
+                          userCacheValue?.data?.user?.profile?.firstName ?? 'unknown'.tr(),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400, color: darkModeValue ? AppColors.white : AppColors.black),
+                        ),
+
+                        const SizedBox(height: 4),
+
+                        // User Email
+                        Text(
+                          userCacheValue?.data?.user?.phone ?? 'unknown'.tr(),
+                          style: Theme.of(context).textTheme.titleSmall?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black),
+                        ),
+                        const SizedBox(height: 4),
+                        GestureDetector(
+                          onTap: () {
+                            context.navigateToPage(const EditProfileView());
+                          },
+                          child: Text(
+                            'edit_profile'.tr(),
+                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                              color: darkModeValue ? Colors.grey[400] : Colors.grey[600],
+                              decoration: TextDecoration.underline,
+                              decorationColor: Colors.grey[400],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
 
               // Stats Section

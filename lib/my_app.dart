@@ -11,6 +11,8 @@ import 'package:nets/core/utils/constants.dart';
 import 'package:nets/core/utils/notification/notification.dart';
 import 'package:nets/feature/navigation/view/manager/homeBloc/cubit.dart';
 import 'package:nets/feature/navigation/view/manager/homeBloc/state.dart';
+import 'package:nets/feature/profile/views/manager/cubit/user_data_cubit.dart';
+import 'package:nets/feature/profile/views/manager/update/cubit/update_user_data_cubit.dart';
 import 'package:nets/main.dart';
 
 class MyApp extends StatefulWidget {
@@ -84,7 +86,11 @@ class _MyAppState extends State<MyApp> {
       splitScreenMode: true,
       builder:
           (_, child) => MultiBlocProvider(
-            providers: [BlocProvider(create: (context) => MainCubit())],
+            providers: [
+              BlocProvider(create: (context) => MainCubit()),
+              BlocProvider(create: (context) => UserDataCubit()),
+              BlocProvider(create: (context) => UpdateUserDataCubit()),
+            ],
             child: BlocBuilder<MainCubit, MainState>(
               builder: (context, state) {
                 //    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
