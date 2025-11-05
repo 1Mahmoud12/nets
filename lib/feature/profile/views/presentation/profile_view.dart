@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +11,6 @@ import 'package:nets/core/utils/custom_show_toast.dart';
 import 'package:nets/core/utils/navigate.dart';
 import 'package:nets/core/utils/utils.dart';
 import 'package:nets/feature/auth/views/presentation/login_view.dart';
-
 import '../../../../core/component/buttons/custom_text_button.dart';
 import '../../../../core/component/custom_drop_down_menu.dart';
 import '../../../../core/utils/constants.dart';
@@ -157,7 +155,7 @@ class _ProfileViewState extends State<ProfileView> {
 
                     // User Name
                     Text(
-                      'Ahmed Hassan',
+                      userCacheValue?.data?.user?.profile?.firstName ?? 'unknown'.tr(),
                       style: Theme.of(
                         context,
                       ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400, color: darkModeValue ? AppColors.white : AppColors.black),
@@ -167,7 +165,7 @@ class _ProfileViewState extends State<ProfileView> {
 
                     // User Email
                     Text(
-                      /*  userCacheValue?.data?.email ??  */ 'ahmed.hassan@nets.com',
+                      userCacheValue?.data?.user?.phone ?? 'unknown'.tr(),
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black),
                     ),
                     const SizedBox(height: 4),
@@ -330,7 +328,7 @@ class _ProfileViewState extends State<ProfileView> {
                 child: Row(
                   children: [
                     SvgPicture.asset(AppIcons.logoutSetting),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Text('logout'.tr(), style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.white)),
                   ],
                 ),
@@ -348,7 +346,7 @@ class _ProfileViewState extends State<ProfileView> {
                 child: Row(
                   children: [
                     SvgPicture.asset(AppIcons.deleteSetting),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Text('delete_account'.tr(), style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.red)),
                   ],
                 ),

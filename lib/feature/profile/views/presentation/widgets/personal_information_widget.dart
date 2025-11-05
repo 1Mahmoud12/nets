@@ -17,6 +17,7 @@ class PersonalInformation extends StatefulWidget {
     required this.lastNameCtrl,
     required this.emailCtrl,
     required this.websiteCtrl,
+    this.imageUrl,
   });
 
   final bool isDarkMode;
@@ -24,6 +25,7 @@ class PersonalInformation extends StatefulWidget {
   final TextEditingController lastNameCtrl;
   final TextEditingController emailCtrl;
   final TextEditingController websiteCtrl;
+  final String? imageUrl;
 
   @override
   State<PersonalInformation> createState() => _PersonalInformationState();
@@ -83,23 +85,31 @@ class _PersonalInformationState extends State<PersonalInformation> {
                         ),
                       ],
                     ),
-                    child:
-                        onImageSelected.path.isNotEmpty
+                    child: onImageSelected.path.isNotEmpty
+                        ? CacheImage(
+                            fileImage: onImageSelected,
+                            circle: true,
+                            width: 88,
+                            height: 88,
+                            fit: BoxFit.cover,
+                          )
+                        : widget.imageUrl != null && widget.imageUrl!.isNotEmpty
                             ? CacheImage(
-                              fileImage: onImageSelected,
-                              circle: true,
-                              width: 88,
-                              height: 88,
-                              fit: BoxFit.cover,
-                            )
+                                urlImage: widget.imageUrl,
+                                circle: true,
+                                width: 88,
+                                height: 88,
+                                fit: BoxFit.cover,
+                                profileImage: true,
+                              )
                             : const CircleAvatar(
-                              backgroundColor: AppColors.primaryColor,
-                              child: Icon(
-                                Icons.person,
-                                color: Colors.white,
-                                size: 45,
+                                backgroundColor: AppColors.primaryColor,
+                                child: Icon(
+                                  Icons.person,
+                                  color: Colors.white,
+                                  size: 45,
+                                ),
                               ),
-                            ),
                   ),
                   Container(
                     decoration: BoxDecoration(

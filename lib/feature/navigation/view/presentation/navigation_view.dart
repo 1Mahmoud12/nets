@@ -254,7 +254,7 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
                           radius: 20,
                           backgroundColor: AppColors.primaryColor,
                           child: Text(
-                            'AH',
+                            userCacheValue?.data?.user?.profile?.firstName?.substring(0, 2).toUpperCase() ?? 'UK',
                             style: Theme.of(context).textTheme.displayMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
                           ),
                         ),
@@ -275,7 +275,7 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
                               Text(_getGreeting(), style: Theme.of(context).textTheme.displayMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
                               const SizedBox(height: 2),
                               Text(
-                                'Ahmed Hassan',
+                                userCacheValue?.data?.user?.profile?.firstName ?? 'unknown'.tr(),
                                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                   fontWeight: FontWeight.w400,
                                   color: darkModeValue ? AppColors.white : AppColors.black,
@@ -287,18 +287,6 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
                           ),
                           // const Spacer(),
                           // Status indicator
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(color: Color(0xFFEDFFEA), borderRadius: BorderRadius.circular(12)),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(width: 8, height: 8, decoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle)),
-                                const SizedBox(width: 4),
-                                Text('online'.tr(), style: TextStyle(color: Colors.green[700], fontSize: 10, fontWeight: FontWeight.w600)),
-                              ],
-                            ),
-                          ),
 
                           // Notifications button with animation
                           GestureDetector(

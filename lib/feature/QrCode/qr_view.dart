@@ -11,7 +11,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../core/component/buttons/custom_text_button.dart';
-import '../../core/utils/custom_show_toast.dart';
 
 class QrView extends StatefulWidget {
   const QrView({super.key});

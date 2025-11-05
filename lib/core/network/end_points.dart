@@ -17,7 +17,7 @@ class EndPoints {
   static const verifyOtp = 'auth/verify-otp';
   static const updateProfile = 'update-profile';
   static const deactivateAccount = 'deactivate-account';
-
+  static const userData = 'profile';
   static const deleteUser = 'Account/DeleteUser';
 
   //home page
