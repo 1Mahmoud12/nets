@@ -122,7 +122,14 @@ class _ContactInformationState extends State<ContactInformation> {
                             },
                             activeColor: AppColors.primaryColor,
                           ),
-                          const Text('Primary *'),
+                          Text(
+                            'Primary',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: widget.isDarkMode ? AppColors.white : AppColors.black,
+                                ),
+                          ),
                         ],
                       ),
                     ],

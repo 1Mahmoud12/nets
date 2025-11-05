@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nets/feature/profile/views/presentation/widgets/contact_information_widget.dart';
+import 'package:nets/feature/profile/views/presentation/widgets/social_media_data.dart';
 
 /// Model class to hold all profile form data
 class ProfileDataModel {
@@ -13,11 +14,14 @@ class ProfileDataModel {
   final TextEditingController zipCtrl = TextEditingController();
   final List<PhoneData> phones = [];
 
-  // Social Media
+  // Social Media - Fixed platforms
   final TextEditingController facebookCtrl = TextEditingController();
   final TextEditingController twitterCtrl = TextEditingController();
   final TextEditingController instagramCtrl = TextEditingController();
   final TextEditingController linkedinCtrl = TextEditingController();
+
+  // Social Media - Dynamic entries
+  final List<SocialMediaData> dynamicSocialMedia = [];
 
   // Address Information
   final TextEditingController streetOfficeCtrl = TextEditingController();
@@ -50,6 +54,11 @@ class ProfileDataModel {
     for (final phone in phones) {
       phone.controller.dispose();
       phone.typeController.dispose();
+    }
+
+    // Dispose dynamic social media controllers
+    for (final social in dynamicSocialMedia) {
+      social.dispose();
     }
   }
 }

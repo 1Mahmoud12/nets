@@ -6,12 +6,14 @@ import 'package:nets/core/utils/constants_models.dart';
 import 'package:nets/core/network/end_points.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:nets/feature/profile/data/models/user_data_model.dart';
 
 import '../manager/cubit/user_data_cubit.dart';
 import 'widgets/address_information_widget.dart';
 import 'widgets/contact_information_widget.dart';
 import 'widgets/personal_information_widget.dart';
 import 'widgets/social_media_widget.dart';
+import 'widgets/social_media_data.dart';
 import 'widgets/additional_information_widget.dart';
 import 'widgets/save_changes_button.dart';
 import 'widgets/profile_data_model.dart';
@@ -52,7 +54,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     setState(() {}); // Update UI
   }
 
-  void _initializeProfileData(dynamic userData) {
+  void _initializeProfileData(UserData userData) {
     final profile = userData.profile;
     if (profile == null) return;
 
@@ -115,11 +117,16 @@ class _EditProfileViewState extends State<EditProfileView> {
     }
   }
 
-  void _initializeSocialLinks(dynamic userData) {
+  void _initializeSocialLinks(UserData userData) {
     if (userData.socialLinks == null) return;
 
+    // List of fixed platforms
+    const fixedPlatforms = ['facebook', 'twitter', 'x', 'instagram', 'linkedin'];
+
     for (final socialLink in userData.socialLinks!) {
-      switch (socialLink.platform?.toLowerCase()) {
+      final platform = socialLink.platform?.toLowerCase() ?? '';
+
+      switch (platform) {
         case 'facebook':
           profileData.facebookCtrl.text = socialLink.url ?? '';
           break;
@@ -132,6 +139,14 @@ class _EditProfileViewState extends State<EditProfileView> {
           break;
         case 'linkedin':
           profileData.linkedinCtrl.text = socialLink.url ?? '';
+          break;
+        default:
+          // Add to dynamic social media if it's not a fixed platform
+          if (!fixedPlatforms.contains(platform) && platform.isNotEmpty) {
+            profileData.dynamicSocialMedia.add(
+              SocialMediaData(controller: TextEditingController(text: socialLink.url ?? ''), platform: socialLink.platform ?? '', id: socialLink.id),
+            );
+          }
           break;
       }
     }
@@ -209,6 +224,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                           twitterCtrl: profileData.twitterCtrl,
                           instagramCtrl: profileData.instagramCtrl,
                           linkedinCtrl: profileData.linkedinCtrl,
+                          dynamicSocialMedia: profileData.dynamicSocialMedia,
+                          onSocialMediaChanged: (updatedList) {
+                            setState(() {});
+                          },
                         ),
 
                         const SizedBox(height: 16),
