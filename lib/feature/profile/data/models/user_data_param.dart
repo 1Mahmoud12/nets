@@ -56,7 +56,7 @@ class UserDataParam {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['first_name'] = firstName;
     data['last_name'] = lastName;
-    data['email'] = email;
+    data['email'] = email;  
     data['website'] = website;
     data['zip_code'] = zipCode;
     data['street_name'] = streetName;

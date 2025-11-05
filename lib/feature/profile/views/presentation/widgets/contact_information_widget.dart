@@ -2,18 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:nets/core/themes/colors.dart';
 
 import '../../../../../core/component/fields/custom_text_form_field.dart';
+import 'phone_field_with_country_code.dart';
 
 class PhoneData {
   final TextEditingController controller;
   final TextEditingController typeController;
   bool isPrimary;
+  String countryCode; // Store country code for each phone
 
   PhoneData({
     required this.controller,
     TextEditingController? typeController,
     String type = 'mobile',
     this.isPrimary = false,
-  }) : typeController = typeController ?? TextEditingController(text: type);
+    String? countryCode,
+  })  : typeController = typeController ?? TextEditingController(text: type),
+        countryCode = countryCode ?? '+966'; // Default to Saudi Arabia
 
   String get type => typeController.text;
   set type(String value) {
@@ -70,13 +74,15 @@ class _ContactInformationState extends State<ContactInformation> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomTextFormField(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                  PhoneFieldWithCountryCode(
                     controller: phone.controller,
-                    hintText: 'Phone Number',
+                    initialCountryCode: phone.countryCode,
                     nameField: i == 0 ? 'Phone Numbers' : null,
-                    textInputType: TextInputType.phone,
-                    borderRadius: 8,
+                    enabled: true,
+                    onCountryCodeChanged: (countryCode) {
+                      phone.countryCode = countryCode;
+                      widget.onPhoneChanged?.call(i, phone.type, phone.isPrimary);
+                    },
                   ),
                   const SizedBox(height: 12),
                   Row(

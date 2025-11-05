@@ -35,6 +35,8 @@ class _EditProfileViewState extends State<EditProfileView> {
   late ProfileDataModel profileData;
   File? selectedImage;
   UserData? originalUserData;
+  bool _isImageUpdateComplete = false;
+  bool _isDataUpdateComplete = false;
 
   @override
   void initState() {
@@ -113,9 +115,24 @@ class _EditProfileViewState extends State<EditProfileView> {
 
     // Initialize phones from API data
     for (final phoneData in sortedPhones) {
-      final controller = TextEditingController(text: phoneData.phone ?? '');
+      String phoneNumber = phoneData.phone ?? '';
+      String countryCode = '+966'; // Default country code
+
+      // Extract country code from phone number if it exists
+      if (phoneNumber.startsWith('+966')) {
+        countryCode = '+966';
+        phoneNumber = phoneNumber.substring(4); // Remove +966
+      } else if (phoneNumber.startsWith('+971')) {
+        countryCode = '+971';
+        phoneNumber = phoneNumber.substring(4); // Remove +971
+      } else if (phoneNumber.startsWith('+2')) {
+        countryCode = '+2';
+        phoneNumber = phoneNumber.substring(2); // Remove +2
+      }
+
+      final controller = TextEditingController(text: phoneNumber);
       final String phoneType = phoneData.type ?? 'mobile';
-      profileData.phones.add(PhoneData(controller: controller, type: phoneType, isPrimary: phoneData.isPrimary == true));
+      profileData.phones.add(PhoneData(controller: controller, type: phoneType, isPrimary: phoneData.isPrimary == true, countryCode: countryCode));
     }
 
     // Ensure at least one phone is primary
@@ -165,10 +182,16 @@ class _EditProfileViewState extends State<EditProfileView> {
 
     // Build phones list using UserDataParam.Phones
     final phones =
-        profileData.phones
-            .where((phone) => phone.controller.text.trim().isNotEmpty)
-            .map((phone) => param.Phones(phone: phone.controller.text.trim(), type: phone.type, isPrimary: phone.isPrimary))
-            .toList();
+        profileData.phones.where((phone) => phone.controller.text.trim().isNotEmpty).map((phone) {
+          // Combine country code with phone number
+          String phoneNumber = phone.controller.text.trim();
+          // Remove leading '0' for Saudi Arabia (+966) if present
+          if (phone.countryCode == '+966' && phoneNumber.startsWith('0')) {
+            phoneNumber = phoneNumber.substring(1);
+          }
+          final fullPhoneNumber = phone.countryCode + phoneNumber;
+          return param.Phones(phone: fullPhoneNumber, type: phone.type, isPrimary: phone.isPrimary);
+        }).toList();
 
     // Build social links list using UserDataParam.SocialLinks
     final socialLinks = <param.SocialLinks>[];
@@ -212,19 +235,37 @@ class _EditProfileViewState extends State<EditProfileView> {
   }
 
   Future<void> _saveProfile() async {
+    // Reset flags
+    _isImageUpdateComplete = false;
+    _isDataUpdateComplete = false;
+
     try {
       // Update image first if a new one was selected
       if (selectedImage != null) {
         await updateUserDataCubit.updateUserImage(selectedImage!);
-        // Wait a bit to ensure image is processed
-        await Future.delayed(const Duration(milliseconds: 500));
+        // Wait for image update to complete - handled in listener
+      } else {
+        // No image to update, mark as complete
+        _isImageUpdateComplete = true;
+        // Proceed with data update
+        final userDataParam = _buildUserDataParam();
+        await updateUserDataCubit.updateUserData(userDataParam);
       }
-
-      // Update user data
-      final userDataParam = _buildUserDataParam();
-      await updateUserDataCubit.updateUserData(userDataParam);
     } catch (e) {
       // Error handling is done in BlocListener
+    }
+  }
+
+  void _checkAndNavigate() {
+    // Only navigate if both updates are complete and context is still mounted
+    if (_isImageUpdateComplete && _isDataUpdateComplete && mounted) {
+      // Reload user data after successful update
+      userDataCubit.getUserData();
+      // Navigate back
+      Navigator.pop(context);
+      // Reset flags
+      _isImageUpdateComplete = false;
+      _isDataUpdateComplete = false;
     }
   }
 
@@ -253,14 +294,21 @@ class _EditProfileViewState extends State<EditProfileView> {
           ),
           BlocListener<UpdateUserDataCubit, UpdateUserDataState>(
             listener: (context, state) {
-              if (state is UpdateUserDataSuccess) {
-                // Reload user data after successful update
-                userDataCubit.getUserData();
-                // Navigate back
-                Navigator.pop(context);
-              } else if (state is UpdateUserDataError) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
+              if (state is UpdateUserDataImageSuccess) {
+                // Image update completed successfully
+                _isImageUpdateComplete = true;
+                // Now update the user data
+                final userDataParam = _buildUserDataParam();
+                updateUserDataCubit.updateUserData(userDataParam);
               } else if (state is UpdateUserDataImageError) {
+                _isImageUpdateComplete = true; // Mark as complete even on error to avoid hanging
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
+              } else if (state is UpdateUserDataSuccess) {
+                // Data update completed successfully
+                _isDataUpdateComplete = true;
+                _checkAndNavigate();
+              } else if (state is UpdateUserDataError) {
+                _isDataUpdateComplete = true; // Mark as complete even on error
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
               }
             },
@@ -274,80 +322,93 @@ class _EditProfileViewState extends State<EditProfileView> {
               if (state is UserDataLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
-              return SafeArea(
-                child: Form(
-                  key: _formKey,
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.only(bottom: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 8),
-                        PersonalInformation(
-                          isDarkMode: darkModeValue,
-                          firstNameCtrl: profileData.firstNameCtrl,
-                          lastNameCtrl: profileData.lastNameCtrl,
-                          emailCtrl: profileData.emailCtrl,
-                          websiteCtrl: profileData.websiteCtrl,
-                          imageUrl: profileData.profileImageUrl,
-                          onImageSelected: (image) {
-                            selectedImage = image;
-                          },
-                        ),
+              return Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.only(bottom: 24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 8),
+                            PersonalInformation(
+                              isDarkMode: darkModeValue,
+                              firstNameCtrl: profileData.firstNameCtrl,
+                              lastNameCtrl: profileData.lastNameCtrl,
+                              emailCtrl: profileData.emailCtrl,
+                              websiteCtrl: profileData.websiteCtrl,
+                              imageUrl: profileData.profileImageUrl,
+                              onImageSelected: (image) {
+                                selectedImage = image;
+                              },
+                            ),
 
-                        const SizedBox(height: 16),
-                        ContactInformation(
-                          phones: profileData.phones,
-                          isDarkMode: darkModeValue,
-                          zipCtrl: profileData.zipCtrl,
-                          onPhoneChanged: (index, type, isPrimary) {
-                            setState(() {
-                              profileData.phones[index].type = type;
-                              profileData.phones[index].isPrimary = isPrimary;
-                            });
-                          },
-                          onAddPhone: () {
-                            setState(() {
-                              final hasPrimary = profileData.phones.any((p) => p.isPrimary);
-                              profileData.phones.add(PhoneData(controller: TextEditingController(), isPrimary: !hasPrimary));
-                            });
-                          },
-                        ),
+                            const SizedBox(height: 16),
+                            ContactInformation(
+                              phones: profileData.phones,
+                              isDarkMode: darkModeValue,
+                              zipCtrl: profileData.zipCtrl,
+                              onPhoneChanged: (index, type, isPrimary) {
+                                setState(() {
+                                  profileData.phones[index].type = type;
+                                  profileData.phones[index].isPrimary = isPrimary;
+                                });
+                              },
+                              onAddPhone: () {
+                                setState(() {
+                                  final hasPrimary = profileData.phones.any((p) => p.isPrimary);
+                                  profileData.phones.add(PhoneData(controller: TextEditingController(), isPrimary: !hasPrimary));
+                                });
+                              },
+                            ),
 
-                        const SizedBox(height: 16),
-                        SocialMediaWidget(
-                          isDarkMode: darkModeValue,
-                          facebookCtrl: profileData.facebookCtrl,
-                          twitterCtrl: profileData.twitterCtrl,
-                          instagramCtrl: profileData.instagramCtrl,
-                          linkedinCtrl: profileData.linkedinCtrl,
-                          dynamicSocialMedia: profileData.dynamicSocialMedia,
-                          onSocialMediaChanged: (updatedList) {
-                            setState(() {});
-                          },
-                        ),
+                            const SizedBox(height: 16),
+                            SocialMediaWidget(
+                              isDarkMode: darkModeValue,
+                              facebookCtrl: profileData.facebookCtrl,
+                              twitterCtrl: profileData.twitterCtrl,
+                              instagramCtrl: profileData.instagramCtrl,
+                              linkedinCtrl: profileData.linkedinCtrl,
+                              dynamicSocialMedia: profileData.dynamicSocialMedia,
+                              onSocialMediaChanged: (updatedList) {
+                                setState(() {});
+                              },
+                            ),
 
-                        const SizedBox(height: 16),
-                        AddressInformation(
-                          isDarkMode: darkModeValue,
-                          streetOfficeCtrl: profileData.streetOfficeCtrl,
-                          buildingOfficeCtrl: profileData.buildingOfficeCtrl,
-                          officeNumberOfficeCtrl: profileData.officeNumberOfficeCtrl,
-                        ),
+                            const SizedBox(height: 16),
+                            AddressInformation(
+                              isDarkMode: darkModeValue,
+                              streetOfficeCtrl: profileData.streetOfficeCtrl,
+                              buildingOfficeCtrl: profileData.buildingOfficeCtrl,
+                              officeNumberOfficeCtrl: profileData.officeNumberOfficeCtrl,
+                            ),
 
-                        const SizedBox(height: 16),
-                        AdditionalInformationWidget(isDarkMode: darkModeValue, controller: profileData.otherDetailsCtrl),
+                            const SizedBox(height: 16),
+                            AdditionalInformationWidget(isDarkMode: darkModeValue, controller: profileData.otherDetailsCtrl),
 
-                        const SizedBox(height: 24),
-                        BlocBuilder<UpdateUserDataCubit, UpdateUserDataState>(
-                          builder: (context, updateState) {
-                            final isLoading = updateState is UpdateUserDataLoading || updateState is UpdateUserDataImageLoading;
-                            return SaveChangesButton(isLoading: isLoading, onPressed: _saveProfile);
-                          },
+                            const SizedBox(height: 24), // Extra padding at bottom for persistent button
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                    // Persistent Save Button
+                    BlocBuilder<UpdateUserDataCubit, UpdateUserDataState>(
+                      builder: (context, updateState) {
+                        final isLoading = updateState is UpdateUserDataLoading || updateState is UpdateUserDataImageLoading;
+                        return Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
+                            border: Border(top: BorderSide(color: Colors.grey[200]!)),
+                            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -2))],
+                          ),
+                          child: SafeArea(top: false, child: SaveChangesButton(isLoading: isLoading, onPressed: _saveProfile)),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               );
             },
