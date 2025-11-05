@@ -100,7 +100,7 @@ void main() async {
     logger.d(uri);
     _handleDeepLink(uri);
   });
-  Constants.token = ConstantsModels.loginModel?.data?.authKey ?? '';
+  Constants.token = ConstantsModels.loginModel?.data?.token ?? '';
   Constants.fcmToken = await userCache?.get(fcmTokenKey, defaultValue: '');
   Constants.deviceId = await userCache?.get(deviceIdKey, defaultValue: '');
   arabicLanguage = await userCache?.get(languageAppKey, defaultValue: false);

@@ -17,7 +17,7 @@ abstract class ResetPasswordDataSourceInterface {
 
   Future<Either<Failure, OtpModel>> otp({required String email});
 
-  Future<Either<Failure, LoginModel>> verifyOtp({required String otp});
+  Future<Either<Failure, LoginModel>> verifyOtp({required String otp,required String phone});
 }
 
 class ResetPasswordDataSourceImplementation
@@ -63,12 +63,11 @@ class ResetPasswordDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, LoginModel>> verifyOtp({required String otp}) async {
+  Future<Either<Failure, LoginModel>> verifyOtp({required String otp,required String phone}) async {
     try {
       final response = await DioHelper.postData(
-        endPoint: EndPoints.generalEndpoint,
-        query: {'url': EndPoints.verifyOtp},
-        data: {'otp': otp},
+        endPoint: EndPoints.verifyOtp,
+        data: {'otp': otp, 'phone': phone},
       );
       final loginModel = LoginModel.fromJson(response.data);
       return right(loginModel);

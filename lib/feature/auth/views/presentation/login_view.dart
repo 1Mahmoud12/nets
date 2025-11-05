@@ -8,11 +8,8 @@ import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/utils/app_icons.dart';
 import 'package:nets/core/utils/constant_gaping.dart';
-import 'package:nets/core/utils/navigate.dart';
 import 'package:nets/feature/auth/views/manager/loginCubit/cubit/login_cubit.dart';
-import 'package:nets/feature/navigation/view/presentation/navigation_view.dart';
 
-import 'otp_view.dart';
 import 'widgets/phone_number_field.dart';
 
 class LoginView extends StatefulWidget {
@@ -97,14 +94,11 @@ class _LoginViewState extends State<LoginView> {
                       setState(() {
                         isLoading = false;
                       });
-                      context.navigateToPageWithReplacement(const NavigationView());
-
-                      //   customShowToast(context, 'Success');
+                      // Navigation to OTP view is handled by login cubit
                     } else if (state is LoginError) {
                       setState(() {
                         isLoading = false;
                       });
-                      //  customShowToast(context, state.e.errMessage, showToastStatus: ShowToastStatus.error);
                     }
                   },
                   child: Column(
@@ -150,10 +144,7 @@ class _LoginViewState extends State<LoginView> {
                         height: 48.h,
                         onPress: () {
                           if (_formKey.currentState!.validate()) {
-                            // loginCubit.login(context: context);
-                            context.navigateToPage(
-                              BlocProvider.value(value: loginCubit, child: OTPVerificationView(phone: loginCubit.loginPhoneController.text)),
-                            );
+                            loginCubit.login(context: context);
                           }
                         },
                         childText: 'send_otp'.tr(),

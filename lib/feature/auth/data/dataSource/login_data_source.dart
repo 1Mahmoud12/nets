@@ -10,7 +10,7 @@ import 'package:nets/feature/auth/data/models/login_model.dart';
 class LoginDataSource {
   static Future<Either<Failure, LoginModel>> login({required Map<String, dynamic> data}) async {
     try {
-      final response = await DioHelper.postData(query: {'url': 'login'}, endPoint: EndPoints.generalEndpoint, data: data);
+      final response = await DioHelper.postData( endPoint: EndPoints.login, data: data);
       if (response.statusCode == 200 && response.data['status'] == false) {
         return Left(ServerFailure(response.data['message']));
       } else {

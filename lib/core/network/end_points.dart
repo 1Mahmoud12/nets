@@ -1,5 +1,5 @@
 class EndPoints {
-  static const domain = 'https://gootravell.com';
+  static const domain = 'https://nets.web-demo.website';
 
   //static const domain = 'https://almamlka01jo2025.dev2.dot.jo';
   static const baseUrl = '$domain/api/';
@@ -7,14 +7,14 @@ class EndPoints {
   // Auth
   static const countryCodes = 'Account/CountryCodes';
   static const register = 'general/register';
-  static const login = 'general/login';
+  static const login = 'auth/send-otp';
   static const updateDeviceToken = 'update-device-info';
   static const validateOTP = 'Account/ValidateOTP';
   static const updateFcmToken = 'Account/UpdateFCMToken';
   static const staticPages = 'basic-page';
   static const resetPassword = 'update-password';
   static const otp = 'otp';
-  static const verifyOtp = 'verify-otp';
+  static const verifyOtp = 'auth/verify-otp';
   static const updateProfile = 'update-profile';
   static const deactivateAccount = 'deactivate-account';
 
