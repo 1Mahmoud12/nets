@@ -7,8 +7,11 @@ import 'package:nets/core/network/end_points.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:nets/feature/profile/data/models/user_data_model.dart';
+import 'package:nets/feature/profile/data/models/user_data_param.dart' as param;
 
+import 'dart:io';
 import '../manager/cubit/user_data_cubit.dart';
+import '../manager/update/cubit/update_user_data_cubit.dart';
 import 'widgets/address_information_widget.dart';
 import 'widgets/contact_information_widget.dart';
 import 'widgets/personal_information_widget.dart';
@@ -28,12 +31,16 @@ class EditProfileView extends StatefulWidget {
 class _EditProfileViewState extends State<EditProfileView> {
   final _formKey = GlobalKey<FormState>();
   late UserDataCubit userDataCubit;
+  late UpdateUserDataCubit updateUserDataCubit;
   late ProfileDataModel profileData;
+  File? selectedImage;
+  UserData? originalUserData;
 
   @override
   void initState() {
     super.initState();
     userDataCubit = UserDataCubit();
+    updateUserDataCubit = UpdateUserDataCubit();
     profileData = ProfileDataModel();
     // Initialize with at least one phone
     profileData.phones.add(PhoneData(controller: TextEditingController()));
@@ -48,6 +55,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     final userData = ConstantsModels.userDataModel?.data;
     if (userData == null) return;
 
+    originalUserData = userData;
     _initializeProfileData(userData);
     _initializePhones(userData);
     _initializeSocialLinks(userData);
@@ -152,26 +160,112 @@ class _EditProfileViewState extends State<EditProfileView> {
     }
   }
 
+  param.UserDataParam _buildUserDataParam() {
+    final original = originalUserData ?? ConstantsModels.userDataModel?.data;
+
+    // Build phones list using UserDataParam.Phones
+    final phones =
+        profileData.phones
+            .where((phone) => phone.controller.text.trim().isNotEmpty)
+            .map((phone) => param.Phones(phone: phone.controller.text.trim(), type: phone.type, isPrimary: phone.isPrimary))
+            .toList();
+
+    // Build social links list using UserDataParam.SocialLinks
+    final socialLinks = <param.SocialLinks>[];
+
+    // Add fixed platforms if they have URLs
+    if (profileData.facebookCtrl.text.trim().isNotEmpty) {
+      socialLinks.add(param.SocialLinks(platform: 'facebook', url: profileData.facebookCtrl.text.trim()));
+    }
+    if (profileData.twitterCtrl.text.trim().isNotEmpty) {
+      socialLinks.add(param.SocialLinks(platform: 'twitter', url: profileData.twitterCtrl.text.trim()));
+    }
+    if (profileData.instagramCtrl.text.trim().isNotEmpty) {
+      socialLinks.add(param.SocialLinks(platform: 'instagram', url: profileData.instagramCtrl.text.trim()));
+    }
+    if (profileData.linkedinCtrl.text.trim().isNotEmpty) {
+      socialLinks.add(param.SocialLinks(platform: 'linkedin', url: profileData.linkedinCtrl.text.trim()));
+    }
+
+    // Add dynamic social media
+    for (final social in profileData.dynamicSocialMedia) {
+      if (social.controller.text.trim().isNotEmpty) {
+        socialLinks.add(param.SocialLinks(platform: social.platform, url: social.controller.text.trim()));
+      }
+    }
+
+    // Build UserDataParam
+    return param.UserDataParam(
+      firstName: profileData.firstNameCtrl.text.trim(),
+      lastName: profileData.lastNameCtrl.text.trim(),
+      email: profileData.emailCtrl.text.trim(),
+      website: profileData.websiteCtrl.text.trim(),
+      zipCode: profileData.zipCtrl.text.trim(),
+      streetName: profileData.streetOfficeCtrl.text.trim(),
+      buildingNumber: profileData.buildingOfficeCtrl.text.trim(),
+      streetNumber: profileData.officeNumberOfficeCtrl.text.trim(),
+      additionalInformation: profileData.otherDetailsCtrl.text.trim(),
+      titleWork: original?.profile?.titleWork,
+      phones: phones,
+      socialLinks: socialLinks,
+    );
+  }
+
+  Future<void> _saveProfile() async {
+    try {
+      // Update image first if a new one was selected
+      if (selectedImage != null) {
+        await updateUserDataCubit.updateUserImage(selectedImage!);
+        // Wait a bit to ensure image is processed
+        await Future.delayed(const Duration(milliseconds: 500));
+      }
+
+      // Update user data
+      final userDataParam = _buildUserDataParam();
+      await updateUserDataCubit.updateUserData(userDataParam);
+    } catch (e) {
+      // Error handling is done in BlocListener
+    }
+  }
+
   @override
   void dispose() {
     profileData.dispose();
     userDataCubit.close();
+    updateUserDataCubit.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: userDataCubit,
-      child: BlocListener<UserDataCubit, UserDataState>(
-        listener: (context, state) {
-          if (state is UserDataSuccess) {
-            _initializeFields();
-          } else if (state is UserDataError) {
-            // Handle error - you can show a toast or snackbar here
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
-          }
-        },
+    return MultiBlocProvider(
+      providers: [BlocProvider.value(value: userDataCubit), BlocProvider.value(value: updateUserDataCubit)],
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<UserDataCubit, UserDataState>(
+            listener: (context, state) {
+              if (state is UserDataSuccess) {
+                _initializeFields();
+              } else if (state is UserDataError) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
+              }
+            },
+          ),
+          BlocListener<UpdateUserDataCubit, UpdateUserDataState>(
+            listener: (context, state) {
+              if (state is UpdateUserDataSuccess) {
+                // Reload user data after successful update
+                userDataCubit.getUserData();
+                // Navigate back
+                Navigator.pop(context);
+              } else if (state is UpdateUserDataError) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
+              } else if (state is UpdateUserDataImageError) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
+              }
+            },
+          ),
+        ],
         child: Scaffold(
           appBar: customAppBar(context: context, title: 'edit_profile'.tr()),
           backgroundColor: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
@@ -196,6 +290,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                           emailCtrl: profileData.emailCtrl,
                           websiteCtrl: profileData.websiteCtrl,
                           imageUrl: profileData.profileImageUrl,
+                          onImageSelected: (image) {
+                            selectedImage = image;
+                          },
                         ),
 
                         const SizedBox(height: 16),
@@ -242,11 +339,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                         AdditionalInformationWidget(isDarkMode: darkModeValue, controller: profileData.otherDetailsCtrl),
 
                         const SizedBox(height: 24),
-                        SaveChangesButton(
-                          onPressed: () {
-                            if (_formKey.currentState?.validate() ?? false) {
-                              Navigator.pop(context);
-                            }
+                        BlocBuilder<UpdateUserDataCubit, UpdateUserDataState>(
+                          builder: (context, updateState) {
+                            final isLoading = updateState is UpdateUserDataLoading || updateState is UpdateUserDataImageLoading;
+                            return SaveChangesButton(isLoading: isLoading, onPressed: _saveProfile);
                           },
                         ),
                       ],

@@ -23,22 +23,13 @@ class _AddSocialMediaDialogState extends State<AddSocialMediaDialog> {
   }
 
   void _onSave() {
-    if (_formKey.currentState?.validate() ?? false) {
-      final platform = _platformController.text.trim();
-      final url = _urlController.text.trim();
+    final platform = _platformController.text.trim();
+    final url = _urlController.text.trim();
 
-      if (platform.isEmpty || url.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please fill in all fields')),
-        );
-        return;
-      }
-
-      Navigator.of(context).pop({
-        'platform': platform,
-        'url': url,
-      });
-    }
+    Navigator.of(context).pop({
+      'platform': platform,
+      'url': url,
+    });
   }
 
   @override
@@ -70,12 +61,6 @@ class _AddSocialMediaDialogState extends State<AddSocialMediaDialog> {
                 hintText: 'Platform Name',
                 nameField: 'Platform Name',
                 borderRadius: 8,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter platform name';
-                  }
-                  return null;
-                },
               ),
               const SizedBox(height: 16),
               CustomTextFormField(
@@ -84,16 +69,6 @@ class _AddSocialMediaDialogState extends State<AddSocialMediaDialog> {
                 nameField: 'URL',
                 borderRadius: 8,
                 textInputType: TextInputType.url,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter URL';
-                  }
-                  final uri = Uri.tryParse(value.trim());
-                  if (uri == null || !uri.hasAbsolutePath) {
-                    return 'Please enter a valid URL';
-                  }
-                  return null;
-                },
               ),
               const SizedBox(height: 24),
               Row(

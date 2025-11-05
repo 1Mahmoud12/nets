@@ -138,6 +138,7 @@ class _SocialMediaWidgetState extends State<SocialMediaWidget> {
                         controller: social.controller,
                         hintText: '${social.platform} URL',
                         borderRadius: 8,
+                        validator: (value) => null, // Disable validation
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -222,6 +223,7 @@ class _SocialFieldState extends State<SocialField> {
             controller: widget.controller,
             hintText: widget.hint,
             borderRadius: 8,
+            validator: (value) => null, // Disable validation
           ),
         ),
         if (hasContent && widget.onDelete != null) ...[

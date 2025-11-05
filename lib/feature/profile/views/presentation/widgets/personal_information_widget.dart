@@ -18,6 +18,7 @@ class PersonalInformation extends StatefulWidget {
     required this.emailCtrl,
     required this.websiteCtrl,
     this.imageUrl,
+    this.onImageSelected,
   });
 
   final bool isDarkMode;
@@ -26,6 +27,7 @@ class PersonalInformation extends StatefulWidget {
   final TextEditingController emailCtrl;
   final TextEditingController websiteCtrl;
   final String? imageUrl;
+  final Function(File)? onImageSelected;
 
   @override
   State<PersonalInformation> createState() => _PersonalInformationState();
@@ -62,6 +64,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                 setState(() {
                   onImageSelected = image;
                 });
+                widget.onImageSelected?.call(image);
               }
             },
             child: Center(
