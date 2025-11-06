@@ -18,6 +18,7 @@ class EndPoints {
   static const updateProfile = 'update-profile';
   static const deactivateAccount = 'deactivate-account';
   static const userData = 'profile';
+  static const notificationSettings = 'profile/notification-settings';
   static const userStatistics = 'profile/general-information';
   static const deleteUser = 'Account/DeleteUser';
 

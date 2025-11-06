@@ -20,6 +20,7 @@ import '../../../../core/component/custom_drop_down_menu.dart';
 import '../../../../core/utils/constants.dart';
 import '../manager/cubit/user_data_cubit.dart';
 import '../manager/getUesrStatistics/cubit/get_user_statistics_cubit.dart';
+import '../manager/notificationSettign/cubit/notification_setting_cubit.dart';
 import './edit_profile_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'widgets/profile_section_divider.dart';
@@ -410,26 +411,32 @@ class _ProfileViewState extends State<ProfileView> {
       backgroundColor: isDarkMode ? AppColors.darkModeColor : Colors.white,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (BuildContext context) {
-        return NotificationSettingsSheet(
-          isDarkMode: isDarkMode,
-          darkModeValue: darkModeValue,
-          pushNotifications: pushNotifications,
-          emailNotifications: emailNotifications,
-          smsNotifications: smsNotifications,
-          onPushChanged: (value) => setState(() => pushNotifications = value),
-          onEmailChanged: (value) => setState(() => emailNotifications = value),
-          onSmsChanged: (value) => setState(() => smsNotifications = value),
-          onSave: () {
-            customShowToast(context, 'notification_settings_saved'.tr());
-          },
-          title: 'notification_settings'.tr(),
-          pushLabel: 'push_notifications'.tr(),
-          pushDescription: 'receive_push_notifications'.tr(),
-          emailLabel: 'email_notifications'.tr(),
-          emailDescription: 'receive_email_notifications'.tr(),
-          smsLabel: 'sms_notifications'.tr(),
-          smsDescription: 'receive_sms_notifications'.tr(),
-          saveButtonText: 'save_settings'.tr(),
+        return BlocProvider(
+          create: (_) => NotificationSettingCubit(),
+          child: NotificationSettingsSheet(
+            isDarkMode: isDarkMode,
+            darkModeValue: darkModeValue,
+            pushNotifications: pushNotifications,
+            emailNotifications: emailNotifications,
+            smsNotifications: smsNotifications,
+            onPushChanged: (value) => setState(() => pushNotifications = value),
+            onEmailChanged: (value) => setState(() => emailNotifications = value),
+            onSmsChanged: (value) => setState(() => smsNotifications = value),
+            onSave: () {
+              customShowToast(context, 'notification_settings_saved'.tr());
+            },
+            onError: (message) {
+              customShowToast(context, message, showToastStatus: ShowToastStatus.error);
+            },
+            title: 'notification_settings'.tr(),
+            pushLabel: 'push_notifications'.tr(),
+            pushDescription: 'receive_push_notifications'.tr(),
+            emailLabel: 'email_notifications'.tr(),
+            emailDescription: 'receive_email_notifications'.tr(),
+            smsLabel: 'sms_notifications'.tr(),
+            smsDescription: 'receive_sms_notifications'.tr(),
+            saveButtonText: 'save_settings'.tr(),
+          ),
         );
       },
     );

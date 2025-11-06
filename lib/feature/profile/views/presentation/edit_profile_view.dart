@@ -46,7 +46,12 @@ class _EditProfileViewState extends State<EditProfileView> {
   }
 
   void _loadUserData() {
-    context.read<UserDataCubit>().getUserData();
+    final cachedUserData = ConstantsModels.userDataModel?.data;
+    if (cachedUserData != null) {
+      _initializeFields();
+    } else {
+      context.read<UserDataCubit>().getUserData();
+    }
   }
 
   void _initializeFields() {

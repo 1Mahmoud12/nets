@@ -9,6 +9,7 @@ import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/utils/app_icons.dart';
 import 'package:nets/core/utils/custom_show_toast.dart';
 import 'package:nets/core/utils/versionAndUpdateApp/alert_dialog_for_update_app.dart';
+import 'package:nets/core/utils/constants_models.dart';
 import 'package:nets/feature/Contacts/views/presentation/contacts_view.dart';
 import 'package:nets/feature/QrCode/qr_view.dart';
 import 'package:nets/feature/navigation/data/homeDataSource/home_data_source.dart';
@@ -45,6 +46,13 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
 
     _loadedScreens.add(index);
     checkVersion(context);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (ConstantsModels.userDataModel?.data == null) {
+        context.read<UserDataCubit>().getUserData();
+      }
+    });
   }
 
   @override

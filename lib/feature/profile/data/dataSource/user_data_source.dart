@@ -19,6 +19,7 @@ class UserDataSource {
       return Left(ServerFailure(error.toString()));
     }
   }
+
   static Future<Either<Failure, UserStatisticsModel>> getUserStatistics() async {
     try {
       final response = await DioHelper.getData(url: EndPoints.userStatistics);
@@ -42,9 +43,25 @@ class UserDataSource {
       return Left(ServerFailure(error.toString()));
     }
   }
+
+  static Future<Either<Failure, void>> updateUserDataNotificationSettings(bool pushNotification, bool emailNotification, bool smsNotification) async {
+    try {
+      await DioHelper.putData(
+        endPoint: EndPoints.notificationSettings,
+        data: {'push_notification': pushNotification, 'email_notification': emailNotification, 'sms_notification': smsNotification},
+      );
+      return right(null);
+    } catch (error) {
+      if (error is DioException) {
+        return Left(ServerFailure.fromDioException(error));
+      }
+      return Left(ServerFailure(error.toString()));
+    }
+  }
+
   static Future<Either<Failure, void>> updateUserImage(dynamic data) async {
     try {
-      await DioHelper.postData( formDataIsEnabled: true, endPoint: EndPoints.userData, data: data);
+      await DioHelper.postData(formDataIsEnabled: true, endPoint: EndPoints.userData, data: data);
       return right(null);
     } catch (error) {
       if (error is DioException) {
