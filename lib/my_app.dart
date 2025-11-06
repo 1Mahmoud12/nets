@@ -12,6 +12,7 @@ import 'package:nets/core/utils/notification/notification.dart';
 import 'package:nets/feature/navigation/view/manager/homeBloc/cubit.dart';
 import 'package:nets/feature/navigation/view/manager/homeBloc/state.dart';
 import 'package:nets/feature/profile/views/manager/cubit/user_data_cubit.dart';
+import 'package:nets/feature/profile/views/manager/getUesrStatistics/cubit/get_user_statistics_cubit.dart';
 import 'package:nets/feature/profile/views/manager/update/cubit/update_user_data_cubit.dart';
 import 'package:nets/main.dart';
 
@@ -89,6 +90,7 @@ class _MyAppState extends State<MyApp> {
             providers: [
               BlocProvider(create: (context) => MainCubit()),
               BlocProvider(create: (context) => UserDataCubit()),
+              BlocProvider(create: (context) => GetUserStatisticsCubit()),
               BlocProvider(create: (context) => UpdateUserDataCubit()),
             ],
             child: BlocBuilder<MainCubit, MainState>(

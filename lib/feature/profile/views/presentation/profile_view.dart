@@ -10,6 +10,7 @@ import 'package:nets/core/network/end_points.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/utils/app_icons.dart';
+import 'package:nets/core/utils/constants_models.dart';
 import 'package:nets/core/utils/custom_show_toast.dart';
 import 'package:nets/core/utils/navigate.dart';
 import 'package:nets/core/utils/utils.dart';
@@ -18,7 +19,9 @@ import '../../../../core/component/buttons/custom_text_button.dart';
 import '../../../../core/component/custom_drop_down_menu.dart';
 import '../../../../core/utils/constants.dart';
 import '../manager/cubit/user_data_cubit.dart';
+import '../manager/getUesrStatistics/cubit/get_user_statistics_cubit.dart';
 import './edit_profile_view.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -36,6 +39,15 @@ class _ProfileViewState extends State<ProfileView> {
   bool emailNotifications = false;
   bool smsNotifications = true;
   TextEditingController search = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<GetUserStatisticsCubit>().getUserStatistics();
+    });
+  }
 
   void showFiltersMyJourney(BuildContext context) {
     showModalBottomSheet(
@@ -150,6 +162,15 @@ class _ProfileViewState extends State<ProfileView> {
                     }
                   }
 
+                  // Determine which phone number to show (prefer primary phone from latest user data)
+                  String? displayPhone;
+                  final phones = ConstantsModels.userDataModel?.data?.phones;
+                  if (phones != null && phones.isNotEmpty) {
+                    final primaryPhone = phones.firstWhere((phone) => phone.isPrimary == true, orElse: () => phones.first);
+                    displayPhone = primaryPhone.phone;
+                  }
+                  displayPhone ??= userCacheValue?.data?.user?.phone;
+
                   return Container(
                     padding: const EdgeInsets.all(16),
                     child: Column(
@@ -183,7 +204,7 @@ class _ProfileViewState extends State<ProfileView> {
 
                         // User Email
                         Text(
-                          userCacheValue?.data?.user?.phone ?? 'unknown'.tr(),
+                          displayPhone ?? 'unknown'.tr(),
                           style: Theme.of(context).textTheme.titleSmall?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black),
                         ),
                         const SizedBox(height: 4),
@@ -207,29 +228,37 @@ class _ProfileViewState extends State<ProfileView> {
               ),
 
               // Stats Section
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: darkModeValue ? AppColors.darkModeColor : Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!),
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //     color: Colors.black.withOpacity(0.05),
-                  //     blurRadius: 10,
-                  //     offset: const Offset(0, 2),
-                  //   ),
-                  // ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildStatItem(context, 'contacts'.tr(), '156'),
-                    _buildStatItem(context, 'groups'.tr(), '12'),
-                    _buildStatItem(context, 'qr_scan'.tr(), '89'),
-                  ],
-                ),
+              BlocBuilder<GetUserStatisticsCubit, GetUserStatisticsState>(
+                builder: (context, statsState) {
+                  final isLoading = statsState is GetUserStatisticsLoading;
+                  final hasError = statsState is GetUserStatisticsError;
+                  final statistics = statsState is GetUserStatisticsSuccess ? statsState.statistics.data : null;
+
+                  final contactsCount = statistics?.numContacts?.toString() ?? (hasError ? '--' : '0');
+                  final groupsCount = statistics?.numGroups?.toString() ?? (hasError ? '--' : '0');
+                  final qrCount = statistics?.numScanQrCode?.toString() ?? (hasError ? '--' : '0');
+
+                  return Skeletonizer(
+                    enabled: isLoading,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: darkModeValue ? AppColors.darkModeColor : Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _buildStatItem(context, 'contacts'.tr(), contactsCount),
+                          _buildStatItem(context, 'groups'.tr(), groupsCount),
+                          _buildStatItem(context, 'qr_scan'.tr(), qrCount),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
 
               const SizedBox(height: 16),
