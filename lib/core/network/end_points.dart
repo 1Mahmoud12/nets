@@ -22,6 +22,7 @@ class EndPoints {
   static const userStatistics = 'profile/general-information';
   static const phoneNumberSharing = 'profile/preferences';
   static const contacts = 'contacts';
+  static const journeys = 'journeys';
   static const deleteUser = 'Account/DeleteUser';
 
   //home page
