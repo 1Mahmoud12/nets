@@ -185,14 +185,14 @@ void _navigateToLinkScreen(String linkId) {
       // Navigate to the main screen (NavigationView)
       // You can add additional logic here to pass the linkId to a specific screen
       //  navigatorKey.currentState!.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const NavigationView()), (route) => false);
-      if (userCacheValue?.data != null) {
-        showContactDetails({
-          'name': 'Ahmed Hassan',
-          'phone': '+20 123 456 7890',
-          'email': 'ahmed.hassan@email.com',
-          'status': 'online',
-        }, navigatorKey.currentState!.context);
-      }
+      // if (userCacheValue?.data != null) {
+      //   showContactDetails({
+      //     'name': 'Ahmed Hassan',
+      //     'phone': '+20 123 456 7890',
+      //     'email': 'ahmed.hassan@email.com',
+      //     'status': 'online',
+      //   }, navigatorKey.currentState!.context);
+      // }
       // Optional: Show a message or navigate to a specific tab based on linkId
       log('Successfully navigated to main screen for link ID: $linkId');
     } else {

@@ -9,6 +9,7 @@ import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/light.dart';
 import 'package:nets/core/utils/constants.dart';
 import 'package:nets/core/utils/notification/notification.dart';
+import 'package:nets/feature/Contacts/views/manager/cubit/contacts_cubit.dart';
 import 'package:nets/feature/navigation/view/manager/homeBloc/cubit.dart';
 import 'package:nets/feature/navigation/view/manager/homeBloc/state.dart';
 import 'package:nets/feature/profile/views/manager/cubit/user_data_cubit.dart';
@@ -91,6 +92,7 @@ class _MyAppState extends State<MyApp> {
               BlocProvider(create: (context) => MainCubit()),
               BlocProvider(create: (context) => UserDataCubit()),
               BlocProvider(create: (context) => GetUserStatisticsCubit()),
+              BlocProvider(create: (context) => ContactsCubit()),
               BlocProvider(create: (context) => UpdateUserDataCubit()),
             ],
             child: BlocBuilder<MainCubit, MainState>(

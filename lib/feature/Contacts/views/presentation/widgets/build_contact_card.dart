@@ -4,9 +4,14 @@ import 'package:flutter_svg/svg.dart';
 import '../../../../../core/network/local/cache.dart';
 import '../../../../../core/themes/colors.dart';
 import '../../../../../core/utils/app_icons.dart';
+import '../../../data/models/contact_model.dart';
 import '../contacts_view.dart';
 
-Widget buildContactCard(Map<String, String> contact, BuildContext context) {
+Widget buildContactCard(Data contact, BuildContext context) {
+  final name = (contact.name ?? '').trim().isEmpty ? 'Unknown' : contact.name!.trim();
+  final phone = (contact.phone ?? '').trim();
+  final email = (contact.email ?? '').trim();
+  final status = (contact.status ?? contact.notes ?? 'offline').toLowerCase();
   return Container(
     margin: const EdgeInsets.only(bottom: 12),
     decoration: BoxDecoration(
@@ -27,7 +32,7 @@ Widget buildContactCard(Map<String, String> contact, BuildContext context) {
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        // onTap: () => showContactDetails(contact, context),
+        onTap: () => showContactDetails(contact, context),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
@@ -39,7 +44,7 @@ Widget buildContactCard(Map<String, String> contact, BuildContext context) {
                     radius: 28,
                     backgroundColor: AppColors.primaryColor,
                     child: Text(
-                      contact['name']!.split(' ').map((e) => e[0]).join(),
+                      name.split(' ').where((element) => element.isNotEmpty).map((e) => e[0]).take(2).join().toUpperCase(),
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -54,7 +59,7 @@ Widget buildContactCard(Map<String, String> contact, BuildContext context) {
                       width: 14,
                       height: 14,
                       decoration: BoxDecoration(
-                        color: getStatusColor(contact['status']!),
+                        color: getStatusColor(status),
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: darkModeValue ? AppColors.white : Colors.white,
@@ -73,7 +78,7 @@ Widget buildContactCard(Map<String, String> contact, BuildContext context) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      contact['name']!,
+                      name,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w400,
                         color:
@@ -95,7 +100,7 @@ Widget buildContactCard(Map<String, String> contact, BuildContext context) {
                         const SizedBox(width: 5),
                         Expanded(
                           child: Text(
-                            contact['phone']!,
+                            phone.isEmpty ? '—' : phone,
                             style: Theme.of(
                               context,
                             ).textTheme.titleSmall?.copyWith(
@@ -123,7 +128,7 @@ Widget buildContactCard(Map<String, String> contact, BuildContext context) {
                         const SizedBox(width: 6),
                         Expanded(
                           child: Text(
-                            contact['email']!,
+                            email.isEmpty ? '—' : email,
                             style: Theme.of(
                               context,
                             ).textTheme.titleSmall?.copyWith(

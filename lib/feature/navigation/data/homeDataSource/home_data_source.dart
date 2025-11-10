@@ -18,14 +18,14 @@ class HomeDataSourceImplementation implements HomeDataSourceInterface {
         endPoint: EndPoints.checkLink,
         data: {},
       );
-      if (response.data['exists'] == true) {
-        showContactDetails({
-          'name': 'Ahmed Hassan',
-          'phone': '+20 123 456 7890',
-          'email': 'ahmed.hassan@email.com',
-          'status': 'online',
-        }, navigatorKey.currentState!.context);
-      }
+      // if (response.data['exists'] == true) {
+      //   showContactDetails({
+      //     'name': 'Ahmed Hassan',
+      //     'phone': '+20 123 456 7890',
+      //     'email': 'ahmed.hassan@email.com',
+      //     'status': 'online',
+      //   }, navigatorKey.currentState!.context);
+      // }
       return right(null);
     } catch (error) {
       if (error is DioException) {

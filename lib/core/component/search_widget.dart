@@ -6,18 +6,75 @@ import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/utils/app_icons.dart';
 
 class SearchWidget extends StatefulWidget {
-  const SearchWidget({super.key, this.onChange, this.onTap, this.hintText});
+  const SearchWidget({
+    super.key,
+    this.onChange,
+    this.onTap,
+    this.hintText,
+    this.controller,
+    this.initialText,
+    this.showClearButton = false,
+    this.onClear,
+    this.focusNode,
+  });
 
   final Function(String value)? onChange;
   final Function()? onTap;
   final String? hintText;
+  final TextEditingController? controller;
+  final String? initialText;
+  final bool showClearButton;
+  final VoidCallback? onClear;
+  final FocusNode? focusNode;
 
   @override
   State<SearchWidget> createState() => _SearchWidgetState();
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
-  final TextEditingController controller = TextEditingController();
+  late final TextEditingController _controller;
+  late final bool _isExternalController;
+
+  @override
+  void initState() {
+    super.initState();
+    _isExternalController = widget.controller != null;
+    _controller = widget.controller ?? TextEditingController();
+    if ((widget.initialText ?? '').isNotEmpty && _controller.text != widget.initialText) {
+      _controller.text = widget.initialText!;
+    }
+    _controller.addListener(_handleControllerChanged);
+  }
+
+  @override
+  void didUpdateWidget(covariant SearchWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!_isExternalController && (widget.initialText ?? '').isNotEmpty && _controller.text != widget.initialText) {
+      _controller.text = widget.initialText!;
+    }
+  }
+
+  void _handleControllerChanged() {
+    if (mounted && widget.showClearButton) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_handleControllerChanged);
+    if (!_isExternalController) {
+      _controller.dispose();
+    }
+    super.dispose();
+  }
+
+  void _clearSearch() {
+    _controller.clear();
+    widget.onChange?.call('');
+    widget.onClear?.call();
+    widget.focusNode?.requestFocus();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,22 +87,21 @@ class _SearchWidgetState extends State<SearchWidget> {
           enable: widget.onTap == null,
           outPadding: EdgeInsets.zero,
           height: 45,
-          //  contentPadding: const EdgeInsets.symmetric(vertical: 16),
           focusedBorderColor: AppColors.primaryColor,
           enabledBorder: AppColors.greyG200,
           fillColor: AppColors.white,
-          controller: controller,
-          // hintText: 'search_hint'.tr(),
-          hintText: 'Search contacts, phone, or email',
-          // labelText: (widget.hintText ?? 'search').tr(),
+          controller: _controller,
+          focusNode: widget.focusNode,
+          hintText: widget.hintText ?? 'Search contacts, phone, or email',
           labelStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.w400,
-            color: AppColors.cP50.withAlpha((0.5 * 255).toInt()),
-            
-          ),
-
+                fontWeight: FontWeight.w400,
+                color: AppColors.cP50.withAlpha((0.5 * 255).toInt()),
+              ),
           onChange: (value) {
             widget.onChange?.call(value);
+            if (widget.showClearButton && mounted) {
+              setState(() {});
+            }
           },
           borderRadius: 8,
           prefixIcon: Row(
@@ -60,6 +116,12 @@ class _SearchWidgetState extends State<SearchWidget> {
               ),
             ],
           ),
+          suffixIcon: widget.showClearButton && _controller.text.isNotEmpty
+              ? IconButton(
+                  onPressed: _clearSearch,
+                  icon: Icon(Icons.close, size: 18, color: AppColors.grey),
+                )
+              : null,
         ),
       ),
     );

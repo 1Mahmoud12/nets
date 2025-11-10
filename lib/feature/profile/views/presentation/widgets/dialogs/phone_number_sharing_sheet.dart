@@ -75,11 +75,7 @@ class _PhoneNumberSharingSheetState extends State<PhoneNumberSharingSheet> {
   void _submitUpdate() {
     final cubit = context.read<PhoneNumberSharingCubit>();
     if (cubit.state is PhoneNumberSharingLoading) return;
-    cubit.updatePhoneNumberSharing(
-      sharePhoneNumber: shareMobileValue,
-      notifyMe: removeShareValue,
-      allUserAutoAsync: autoSyncValue,
-    );
+    cubit.updatePhoneNumberSharing(sharePhoneNumber: shareMobileValue, notifyMe: removeShareValue, allUserAutoAsync: autoSyncValue);
   }
 
   @override
@@ -127,10 +123,9 @@ class _PhoneNumberSharingSheetState extends State<PhoneNumberSharingSheet> {
                       Flexible(
                         child: Text(
                           widget.title,
-                          style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                                color: widget.darkModeValue ? Colors.black : Colors.black,
-                                fontWeight: FontWeight.w400,
-                              ),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.displaySmall?.copyWith(color: widget.darkModeValue ? Colors.black : Colors.black, fontWeight: FontWeight.w400),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -141,12 +136,7 @@ class _PhoneNumberSharingSheetState extends State<PhoneNumberSharingSheet> {
                       ),
                     ],
                   ),
-                  Divider(
-                    height: 1,
-                    color: widget.darkModeValue ? Colors.grey[700] : Colors.grey[200],
-                    indent: 5,
-                    endIndent: 5,
-                  ),
+                  Divider(height: 1, color: widget.darkModeValue ? Colors.grey[700] : Colors.grey[200], indent: 5, endIndent: 5),
                   const SizedBox(height: 20),
                   NotificationToggleTile(
                     title: widget.shareMobileLabel,
@@ -195,7 +185,7 @@ class _PhoneNumberSharingSheetState extends State<PhoneNumberSharingSheet> {
                   ),
                   const SizedBox(height: 40),
                 ],
-                ),
+              ),
             ),
           );
         },
@@ -203,4 +193,3 @@ class _PhoneNumberSharingSheetState extends State<PhoneNumberSharingSheet> {
     );
   }
 }
-
