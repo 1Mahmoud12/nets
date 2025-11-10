@@ -7,7 +7,6 @@ import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/utils/app_icons.dart';
 import 'package:nets/core/utils/constants_models.dart';
 import 'package:nets/core/utils/custom_show_toast.dart';
-import 'package:nets/core/utils/constant_gaping.dart';
 import 'package:nets/feature/my_journey/data/models/journy_model.dart';
 
 import '../../../../core/component/buttons/custom_text_button.dart';
@@ -25,6 +24,8 @@ class MyJourneyView extends StatefulWidget {
 class _MyJourneyViewState extends State<MyJourneyView> {
   TextEditingController search = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
+  DateTime? _startDate;
+  DateTime? _endDate;
 
   @override
   void initState() {
@@ -42,13 +43,106 @@ class _MyJourneyViewState extends State<MyJourneyView> {
     super.dispose();
   }
 
+  void _fetchJourneys() {
+    context.read<MyJourneyCubit>().fetchJourneys(
+      search: search.text.trim().isEmpty ? null : search.text.trim(),
+      startDate: _startDate != null ? DateFormat('yyyy-MM-dd').format(_startDate!) : null,
+      endDate: _endDate != null ? DateFormat('yyyy-MM-dd').format(_endDate!) : null,
+    );
+  }
+
   void _onSearchChanged(String value) {
-    context.read<MyJourneyCubit>().fetchJourneys(search: value.trim().isEmpty ? null : value.trim());
+    setState(() {});
+    _fetchJourneys();
   }
 
   void _onSearchCleared() {
-    context.read<MyJourneyCubit>().fetchJourneys();
-    _searchFocusNode.requestFocus();
+    if (search.text.isEmpty) return;
+    setState(() {
+      search.clear();
+    });
+    FocusScope.of(context).unfocus();
+    _fetchJourneys();
+  }
+
+  String _dateRangeLabel() {
+    final startText = _startDate != null ? DateFormat('dd MMM yyyy').format(_startDate!) : null;
+    final endText = _endDate != null ? DateFormat('dd MMM yyyy').format(_endDate!) : null;
+    if (startText != null && endText != null) {
+      return '$startText  →  $endText';
+    } else if (startText != null) {
+      return 'From $startText onwards';
+    } else if (endText != null) {
+      return 'Until $endText';
+    }
+    return '';
+  }
+
+  Future<DateTime?> _showStyledDatePicker({
+    required DateTime initialDate,
+    required DateTime firstDate,
+    required DateTime lastDate,
+    required String helpText,
+  }) {
+    final theme = Theme.of(context);
+    final headerStyle = theme.textTheme.headlineSmall?.copyWith(fontSize: 18, color: Colors.white);
+    final bodyStyle = theme.textTheme.bodyMedium?.copyWith(fontSize: 14, color: AppColors.black);
+    final weekDayStyle = theme.textTheme.labelSmall?.copyWith(fontSize: 12, color: AppColors.primaryColor);
+
+    return showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      helpText: helpText,
+      builder: (context, child) {
+        return Theme(
+          data: theme.copyWith(
+            colorScheme: theme.colorScheme.copyWith(primary: AppColors.primaryColor, onPrimary: Colors.white, onSurface: AppColors.black),
+            textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(foregroundColor: AppColors.primaryColor)),
+            datePickerTheme: theme.datePickerTheme.copyWith(
+              headerBackgroundColor: AppColors.primaryColor,
+              headerForegroundColor: Colors.white,
+              headerHeadlineStyle: headerStyle,
+              dayStyle: bodyStyle,
+              weekdayStyle: weekDayStyle,
+              yearStyle: bodyStyle,
+            ),
+            textTheme: theme.textTheme.apply(bodyColor: AppColors.black, displayColor: AppColors.black),
+          ),
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
+    );
+  }
+
+  Future<void> _openDateFilter() async {
+    final now = DateTime.now();
+    final DateTime initialStart = _startDate ?? now.subtract(const Duration(days: 30));
+    final pickedStart = await _showStyledDatePicker(
+      initialDate: initialStart,
+      firstDate: DateTime(now.year - 5),
+      lastDate: now,
+      helpText: 'Select start date',
+    );
+
+    if (pickedStart == null) return;
+
+    final pickedEnd = await _showStyledDatePicker(
+      initialDate: (_endDate != null && !_endDate!.isBefore(pickedStart)) ? _endDate! : pickedStart,
+      firstDate: pickedStart,
+      lastDate: DateTime(now.year + 5),
+      helpText: 'Select end date',
+    );
+
+    if (pickedEnd == null) return;
+
+    setState(() {
+      _startDate = pickedStart;
+      _endDate = pickedEnd;
+    });
+
+    _fetchJourneys();
   }
 
   void showFiltersMyJourney(BuildContext context) {
@@ -164,34 +258,44 @@ class _MyJourneyViewState extends State<MyJourneyView> {
                       onChange: _onSearchChanged,
                       suffixIcon:
                           search.text.isNotEmpty
-                              ? IconButton(
-                                onPressed: () {
-                                  search.clear();
-                                  _onSearchCleared();
-                                },
-                                icon: const Icon(Icons.close, size: 18, color: Colors.grey),
-                              )
+                              ? IconButton(onPressed: _onSearchCleared, icon: const Icon(Icons.close, size: 18, color: Colors.grey))
                               : null,
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Sort by', style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black87)),
-                        w5,
-                        SvgPicture.asset(AppIcons.arrowDown),
-                      ],
-                    ),
-                  ),
-                  w5,
-                  GestureDetector(onTap: () => showFiltersMyJourney(context), child: SvgPicture.asset(AppIcons.filtterIcon)),
+                  GestureDetector(onTap: _openDateFilter, child: SvgPicture.asset(AppIcons.filtterIcon)),
                 ],
               ),
               const SizedBox(height: 16),
+              if (_startDate != null || _endDate != null)
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.08), borderRadius: BorderRadius.circular(8)),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.event, color: AppColors.primaryColor, size: 18),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          _dateRangeLabel(),
+                          style: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.primaryColor, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _startDate = null;
+                            _endDate = null;
+                          });
+                          _fetchJourneys();
+                        },
+                        child: const Text('Clear'),
+                      ),
+                    ],
+                  ),
+                ),
               BlocConsumer<MyJourneyCubit, MyJourneyState>(
                 listener: (context, state) {
                   if (state is MyJourneyError) {
