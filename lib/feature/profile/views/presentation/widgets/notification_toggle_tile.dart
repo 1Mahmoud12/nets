@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nets/core/component/custom_load_switch_widget.dart';
 
 class NotificationToggleTile extends StatelessWidget {
   const NotificationToggleTile({
@@ -37,13 +36,10 @@ class NotificationToggleTile extends StatelessWidget {
       ),
       trailing: SizedBox(
         width: 65,
-        child: CustomLoadSwitchWidget(
-          label: '',
-          initialValue: value,
-          onChanged: ({required bool value}) {
-            onChanged(value);
-          },
-          future: () => Future.delayed(const Duration(seconds: 1), () => true),
+        child: Switch.adaptive(
+          value: value,
+          onChanged: onChanged,
+          activeColor: Theme.of(context).colorScheme.primary,
         ),
       ),
     );

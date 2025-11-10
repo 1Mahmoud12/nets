@@ -20,6 +20,7 @@ class EndPoints {
   static const userData = 'profile';
   static const notificationSettings = 'profile/notification-settings';
   static const userStatistics = 'profile/general-information';
+  static const phoneNumberSharing = 'profile/preferences';
   static const deleteUser = 'Account/DeleteUser';
 
   //home page

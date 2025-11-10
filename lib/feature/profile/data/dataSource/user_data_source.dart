@@ -70,4 +70,23 @@ class UserDataSource {
       return Left(ServerFailure(error.toString()));
     }
   }
+
+  static Future<Either<Failure, void>> updatePhoneNumberSharingSettings({
+    required bool sharePhoneNumber,
+    required bool notifyMe,
+    required bool allUserAutoAsync,
+  }) async {
+    try {
+      await DioHelper.putData(
+        endPoint: EndPoints.phoneNumberSharing,
+        data: {'share_phone_number': sharePhoneNumber, 'notify_me': notifyMe, 'all_user_auto_async': allUserAutoAsync},
+      );
+      return right(null);
+    } catch (error) {
+      if (error is DioException) {
+        return Left(ServerFailure.fromDioException(error));
+      }
+      return Left(ServerFailure(error.toString()));
+    }
+  }
 }
