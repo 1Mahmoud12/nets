@@ -1,16 +1,13 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:nets/core/component/fields/custom_text_form_field.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/utils/app_icons.dart';
+import 'package:nets/feature/QrCode/manager/cubit/qr_cubit.dart';
+import 'package:nets/feature/QrCode/widgets/qr_camera_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-
-import '../../core/component/buttons/custom_text_button.dart';
 
 class QrView extends StatefulWidget {
   const QrView({super.key});
@@ -22,40 +19,26 @@ class QrView extends StatefulWidget {
 class _QrViewState extends State<QrView> with TickerProviderStateMixin {
   late AnimationController _rotationController;
   late Animation<double> _rotationAnimation;
+  late final QrCubit _qrCubit;
 
-  bool _isSharing = false;
   bool _isSaving = false;
-  bool _isYes = false;
-  final TextEditingController _notesController = TextEditingController();
-
-  // User data - in real app, this would come from user profile/cache
-  final Map<String, String> userData = {
-    'name': 'Ahmed Hassan',
-    'email': 'ahmed.hassan@nets.com',
-    'phone': '+20 123 456 7890',
-    'company': 'Nets Technologies',
-    'position': 'Senior Developer',
-    'profileUrl': 'https://nets.com/profile/ahmed-hassan',
-  };
+  String? _scannedQrRawData;
+  Map<String, String>? _scannedContactDetails;
 
   @override
   void initState() {
     super.initState();
 
-    _rotationController = AnimationController(
-      duration: const Duration(seconds: 10),
-      vsync: this,
-    )..repeat();
+    _qrCubit = QrCubit();
+    _rotationController = AnimationController(duration: const Duration(seconds: 10), vsync: this)..repeat();
 
-    _rotationAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _rotationController, curve: Curves.linear),
-    );
+    _rotationAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _rotationController, curve: Curves.linear));
   }
 
   @override
   void dispose() {
+    _qrCubit.close();
     _rotationController.dispose();
-    _notesController.dispose();
     super.dispose();
   }
 
@@ -64,730 +47,564 @@ class _QrViewState extends State<QrView> with TickerProviderStateMixin {
     return '''
 BEGIN:VCARD
 VERSION:3.0
-FN:${userData['name']}
-EMAIL:${userData['email']}
-TEL:${userData['phone']}
-ORG:${userData['company']}
-TITLE:${userData['position']}
-URL:${userData['profileUrl']}
+FN:${userCacheValue?.data?.user?.profile?.firstName} ${userCacheValue?.data?.user?.profile?.lastName}
+EMAIL:${userCacheValue?.data?.user?.profile?.email}
+TEL:${userCacheValue?.data?.user?.phone}
+ORG:${userCacheValue?.data?.user?.profile?.titleWork}
+TITLE:${userCacheValue?.data?.user?.profile?.titleWork}
+URL:${userCacheValue?.data?.user?.profile?.website}
 END:VCARD
 '''.trim();
   }
 
-  void _shareQrCode() async {
-    setState(() => _isSharing = true);
+  Future<void> _openQrScanner() async {
+    if (_isSaving) return;
+
+    final hasPermission = await _ensureCameraPermission();
+    if (!hasPermission) {
+      return;
+    }
 
     try {
-      // Simulate sharing delay
-      await Future.delayed(const Duration(seconds: 1));
+      final qrCodeData = await Navigator.of(context).push<String>(MaterialPageRoute(builder: (_) => const QrCameraScanner()));
+      if (!mounted) {
+        return;
+      }
 
-      // In real app, implement actual sharing functionality
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Row(
-              children: [
-                Icon(Icons.check_circle, color: Colors.white),
-                SizedBox(width: 8),
-                Text('QR code shared successfully!'),
-              ],
-            ),
-            backgroundColor: Colors.green,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        );
+      if (qrCodeData == null) {
+        return;
       }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to share QR code: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
+      if (qrCodeData.isEmpty) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Unable to read QR code. Please try again.'), backgroundColor: Colors.orange));
+        return;
       }
-    } finally {
+      final contactDetails = _extractContactDetails(qrCodeData);
+      setState(() {
+        _scannedQrRawData = qrCodeData;
+        _scannedContactDetails = contactDetails;
+      });
+
+      await _showSaveConfirmationDialog();
+    } catch (error) {
       if (mounted) {
-        setState(() => _isSharing = false);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to scan QR code: $error'), backgroundColor: Colors.red));
       }
     }
   }
 
-  void _saveQrCode() async {
-    setState(() => _isSaving = true);
+  Future<bool> _ensureCameraPermission() async {
+    var status = await Permission.camera.status;
 
-    try {
-      // Simulate saving delay
-      await Future.delayed(const Duration(seconds: 1));
+    if (status.isGranted) {
+      return true;
+    }
 
-      // In real app, implement actual save to gallery functionality
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Row(
-              children: [
-                Icon(Icons.check_circle, color: Colors.white),
-                SizedBox(width: 8),
-                Text('QR code saved to gallery!'),
-              ],
-            ),
-            backgroundColor: Colors.green,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to save QR code: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isSaving = false);
-      }
+    status = await Permission.camera.request();
+
+    if (status.isGranted) {
+      return true;
+    }
+
+    _handleCameraPermissionDenied(status);
+    return false;
+  }
+
+  void _handleCameraPermissionDenied(PermissionStatus status) {
+    if (!mounted) {
+      return;
+    }
+
+    if (status.isPermanentlyDenied) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Camera Permission Required'),
+            content: const Text('Camera permission has been permanently denied. Please enable it in settings.'),
+            actions: [
+              TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  openAppSettings();
+                },
+                child: const Text('Open Settings'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Camera permission is required to scan QR codes'), backgroundColor: Colors.red));
     }
   }
 
-  void _copyQrData() {
-    Clipboard.setData(ClipboardData(text: _generateQrData()));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Row(
+  String _valueOrNA(String? value) {
+    final trimmed = value?.trim() ?? '';
+    return trimmed.isEmpty ? 'N/A' : trimmed;
+  }
+
+  void _clearScannedData() {
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _scannedQrRawData = null;
+      _scannedContactDetails = null;
+    });
+  }
+
+  Future<void> _showServerError(String message) async {
+    if (!mounted) {
+      return;
+    }
+
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        final theme = Theme.of(dialogContext);
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          backgroundColor: darkModeValue ? AppColors.darkModeColor : Colors.white,
+          titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+          contentPadding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(color: Colors.red.withOpacity(0.12), borderRadius: BorderRadius.circular(12)),
+                child: const Icon(Icons.error_outline, color: Colors.red),
+              ),
+              const SizedBox(width: 12),
+              Expanded(child: Text("Couldn't Save Contact", style: theme.textTheme.titleMedium?.copyWith(fontSize: 16, fontWeight: FontWeight.w600))),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'The server responded with the following message:',
+                style: theme.textTheme.bodySmall?.copyWith(fontSize: 13, color: darkModeValue ? Colors.grey[300] : Colors.grey[700]),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(color: darkModeValue ? Colors.black54 : Colors.grey[100], borderRadius: BorderRadius.circular(12)),
+                child: Text(message, style: theme.textTheme.bodyMedium?.copyWith(fontSize: 13.5)),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'You can close this message and try again later.',
+                style: theme.textTheme.bodySmall?.copyWith(fontSize: 12.5, color: darkModeValue ? Colors.grey[400] : Colors.grey[600]),
+              ),
+            ],
+          ),
+          actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          actions: [TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: const Text('Close'))],
+        );
+      },
+    );
+  }
+
+  Widget _buildInfoText(BuildContext context, String label, String value) {
+    final textTheme = Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Text.rich(
+        TextSpan(
           children: [
-            Icon(Icons.copy, color: Colors.white, size: 20),
-            SizedBox(width: 8),
-            Text('Contact info copied to clipboard!'),
+            TextSpan(text: '$label: ', style: textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w600, fontSize: 13)),
+            TextSpan(text: value, style: textTheme.bodyMedium?.copyWith(fontSize: 13)),
           ],
         ),
-        backgroundColor: AppColors.primaryColor,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        duration: const Duration(seconds: 2),
       ),
     );
   }
 
-  void _openQrScanner() async {
-    // Request camera permission first
-    final ImagePicker picker = ImagePicker();
-    try {
-      final XFile? photo = await picker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: 80,
-      );
+  Widget _buildContactSummary(BuildContext context, Map<String, String> details) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: darkModeValue ? AppColors.darkModeColor.withOpacity(0.6) : AppColors.greyG200.withOpacity(0.4),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: darkModeValue ? Colors.grey[700]! : AppColors.greyG200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildInfoText(context, 'Name', _valueOrNA(details['name'])),
+          _buildInfoText(context, 'Email', _valueOrNA(details['email'])),
+          _buildInfoText(context, 'Phone', _valueOrNA(details['phone'])),
+          _buildInfoText(context, 'Title', _valueOrNA(details['titleWork'])),
+          _buildInfoText(context, 'Location', _valueOrNA(details['location'])),
+        ],
+      ),
+    );
+  }
 
-      if (photo != null) {
-        // Show success message
-        if (mounted) {
-          _showScanQRCode();
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   const SnackBar(
-          //     content: Text('Photo captured successfully!'),
-          //     duration: Duration(seconds: 2),
-          //   ),
-          // );
-        }
-      }
-    } catch (e) {
-      final status = await Permission.camera.request();
+  Future<void> _showSaveConfirmationDialog() async {
+    if (!mounted || _scannedContactDetails == null) {
+      return;
+    }
 
-      if (status.isDenied) {
-        // Show permission denied message
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Camera permission is required to scan QR codes'),
-              backgroundColor: Colors.red,
+    final shouldSave = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        final details = _scannedContactDetails!;
+        final theme = Theme.of(dialogContext);
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          backgroundColor: darkModeValue ? AppColors.darkModeColor : Colors.white,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+          titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+          contentPadding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+          actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.12), borderRadius: BorderRadius.circular(12)),
+                child: const Icon(Icons.contact_page, color: AppColors.primaryColor),
+              ),
+              const SizedBox(width: 12),
+              Expanded(child: Text('Save this contact?', style: theme.textTheme.titleMedium?.copyWith(fontSize: 16, fontWeight: FontWeight.w600))),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Review the details before saving to your contacts.',
+                style: theme.textTheme.bodySmall?.copyWith(fontSize: 13, color: darkModeValue ? Colors.grey[300] : Colors.grey[700]),
+              ),
+              const SizedBox(height: 16),
+              _buildContactSummary(dialogContext, details),
+            ],
+          ),
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10)),
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('Not Now'),
             ),
-          );
-        }
-      } else if (status.isPermanentlyDenied) {
-        // Show settings dialog
-        if (mounted) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Camera Permission Required'),
-                content: const Text(
-                  'Camera permission has been permanently denied. Please enable it in settings.',
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      openAppSettings();
-                    },
-                    child: const Text('Open Settings'),
-                  ),
-                ],
-              );
-            },
-          );
-        }
-      }
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryColor,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              ),
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: const Row(mainAxisSize: MainAxisSize.min, children: [Icon(Icons.save_rounded, size: 18), SizedBox(width: 8), Text('Save')]),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldSave == true) {
+      _saveScannedContact();
+    } else {
+      _clearScannedData();
     }
   }
 
-  void _showScanQRCode() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: darkModeValue ? AppColors.darkModeColor : Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setModalState) {
-            return Container(
-              padding: const EdgeInsets.all(16),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            'scan_qr_code'.tr(),
-                            style: Theme.of(
-                              context,
-                            ).textTheme.displaySmall?.copyWith(
-                              color:
-                                  darkModeValue ? Colors.black : Colors.black,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () => Navigator.pop(context),
-                          icon: Icon(
-                            Icons.close,
-                            color: darkModeValue ? Colors.white : Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                    _buildDivider(indent: 5),
-                    const SizedBox(height: 20),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _isYes = !_isYes;
-                        });
-                        Navigator.pop(context);
-                        _showSaveContact();
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color:
-                              darkModeValue
-                                  ? _isYes
-                                      ? AppColors.primaryColor
-                                      : AppColors.transparent
-                                  : AppColors.primaryColor,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          'Yes: Share_all_info_including_phone_number'.tr(),
-                          style: Theme.of(
-                            context,
-                          ).textTheme.titleLarge?.copyWith(
-                            color:
-                                darkModeValue
-                                    ? Colors.white
-                                    : _isYes
-                                    ? AppColors.black
-                                    : AppColors.white,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _isYes = !_isYes;
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color:
-                              darkModeValue
-                                  ? !_isYes
-                                      ? AppColors.darkModeColor
-                                      : Colors.white
-                                  : Colors.white,
-                          border: Border.all(
-                            color:
-                                darkModeValue
-                                    ? Colors.white
-                                    : !_isYes
-                                    ? AppColors.greyG200
-                                    : AppColors.transparent,
-                          ),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          'No: Share_all_info_except_phone_number'.tr(),
-                          style: Theme.of(
-                            context,
-                          ).textTheme.titleLarge?.copyWith(
-                            color:
-                                darkModeValue
-                                    ? Colors.white
-                                    : !_isYes
-                                    ? Colors.black
-                                    : AppColors.transparent,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
+  Map<String, String> _extractContactDetails(String rawData) {
+    final normalized = rawData.trim();
+    final result = <String, String>{'name': '', 'email': '', 'phone': '', 'titleWork': '', 'location': '', 'notes': ''};
 
-                    const SizedBox(height: 20),
-                    CustomTextButton(
-                      onPress: () {
-                        Navigator.pop(context);
-                      },
-                      backgroundColor: AppColors.greyG200,
-                      borderRadius: 8,
-                      borderColor: AppColors.transparent,
-                      child: Text(
-                        'cancel'.tr(),
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: AppColors.black,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 40),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
+    if (normalized.toUpperCase().contains('BEGIN:VCARD')) {
+      final lines = normalized.split(RegExp(r'\r?\n'));
+      for (final line in lines) {
+        final separatorIndex = line.indexOf(':');
+        if (separatorIndex == -1) {
+          continue;
+        }
+        final key = line.substring(0, separatorIndex).toUpperCase();
+        final value = line.substring(separatorIndex + 1).trim();
+        result[key] = value;
+      }
+
+      result['name'] = result['FN'] ?? result['N'] ?? '';
+      result['email'] = result['EMAIL'] ?? '';
+      result['phone'] = result['TEL'] ?? '';
+      result['titleWork'] = result['TITLE'] ?? result['ORG'] ?? '';
+      result['location'] = result['ADR'] ?? result['LOCATION'] ?? '';
+    } else if (normalized.toUpperCase().startsWith('MECARD:')) {
+      final payload = normalized.substring(7);
+      final entries = payload.split(';');
+      final mecardData = <String, String>{};
+      for (final entry in entries) {
+        if (entry.isEmpty || !entry.contains(':')) {
+          continue;
+        }
+        final separatorIndex = entry.indexOf(':');
+        final key = entry.substring(0, separatorIndex).toUpperCase();
+        final value = entry.substring(separatorIndex + 1).trim();
+        mecardData[key] = value;
+      }
+
+      result['name'] = mecardData['N'] ?? '';
+      result['email'] = mecardData['EMAIL'] ?? '';
+      result['phone'] = mecardData['TEL'] ?? '';
+      result['titleWork'] = mecardData['ORG'] ?? '';
+      result['location'] = mecardData['ADR'] ?? '';
+    } else {
+      result['notes'] = normalized;
+    }
+
+    return result;
   }
 
-  Widget _buildDivider({double indent = 20}) {
-    return Divider(
-      height: 1,
-      color: darkModeValue ? Colors.grey[700] : Colors.grey[200],
-      indent: indent,
-      endIndent: 20,
-    );
-  }
+  void _saveScannedContact() {
+    final qrData = _scannedQrRawData;
+    if (qrData == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No QR code data to save'), backgroundColor: Colors.red));
+        _clearScannedData();
+      }
+      return;
+    }
 
- 
-  void _showSaveContact() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: darkModeValue ? AppColors.darkModeColor : Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setModalState) {
-            return Container(
-              padding: const EdgeInsets.all(16),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            'save_Contact'.tr(),
-                            style: Theme.of(
-                              context,
-                            ).textTheme.displaySmall?.copyWith(
-                              color:
-                                  darkModeValue ? Colors.black : Colors.black,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () => Navigator.pop(context),
-                          icon: Icon(
-                            Icons.close,
-                            color: darkModeValue ? Colors.white : Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                    _buildDivider(indent: 5),
-                    const SizedBox(height: 20),
-                    CustomTextFormField(
-                      nameField: 'notes'.tr(),
-                      controller: _notesController,
-                      hintText: 'add_notes_about_this_contact'.tr(),
-                      maxLines: 3,
-                    ),
+    final details = _scannedContactDetails ?? {};
 
-                 
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CustomTextButton(
-                            onPress: () {},
-                            backgroundColor: Colors.white,
-                            borderRadius: 10,
-                            borderColor: AppColors.greyG200,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(
-                                  Icons.mic,
-                                  color: AppColors.primaryColor,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'voice_note'.tr(),
-                                  style: Theme.of(context).textTheme.titleMedium
-                                      ?.copyWith(color: AppColors.primaryColor),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: CustomTextButton(
-                            onPress: () {},
-                            backgroundColor: Colors.white,
-                            borderRadius: 10,
-                            borderColor: AppColors.greyG200,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(
-                                  Icons.location_on,
-                                  color: AppColors.primaryColor,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'location'.tr(),
-                                  style: Theme.of(context).textTheme.titleMedium
-                                      ?.copyWith(color: AppColors.primaryColor),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    CustomTextButton(
-                      onPress: () {
-                        Navigator.pop(context);
-                      },
-                      backgroundColor: AppColors.primaryColor,
-                      borderRadius: 12,
-                      borderColor: AppColors.transparent,
-                      child: Text(
-                        'save_Contact'.tr(),
-                        style: Theme.of(
-                          context,
-                        ).textTheme.titleLarge?.copyWith(color: Colors.white),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    CustomTextButton(
-                      onPress: () {
-                        Navigator.pop(context);
-                      },
-                      backgroundColor: AppColors.greyG200,
-                      borderRadius: 12,
-                      borderColor: AppColors.transparent,
-                      child: Text(
-                        'cancel'.tr(),
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: AppColors.black,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
+    final sanitizedPhone = _valueOrNA(details['phone']);
+    final sanitizedEmail = _valueOrNA(details['email']);
+    final sanitizedName = _valueOrNA(details['name']);
+    final sanitizedTitle = _valueOrNA(details['titleWork']);
+    final sanitizedLocation = _valueOrNA(details['location']);
+    final sanitizedNotes = _valueOrNA(details['notes']);
+
+    _qrCubit.saveQrCode(
+      qrCodeData: qrData,
+      phone: sanitizedPhone,
+      email: sanitizedEmail,
+      name: sanitizedName,
+      titleWork: sanitizedTitle,
+      notes: sanitizedNotes,
+      location: sanitizedLocation,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor:
-          darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            // Main Content
-            SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 50, 20, 70),
-              child: Column(
-                children: [
-                  // QR Code Container
-                  Container(
-                    padding: const EdgeInsets.all(30),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          // AppColors.primaryColor.withOpacity(0.2),
-                          // AppColors.primaryColor.withOpacity(0.5),
-                          Color(0xff6D83B5),
-                          Color(0xffB5C6EE),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(25),
-                      border: Border.all(
-                        color: AppColors.primaryColor.withOpacity(0.3),
-                        width: 2,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primaryColor.withOpacity(0.2),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
+    return BlocProvider.value(
+      value: _qrCubit,
+      child: BlocListener<QrCubit, QrState>(
+        listener: (context, state) {
+          if (state is QrLoading) {
+            if (mounted) {
+              setState(() {
+                _isSaving = true;
+              });
+            }
+          } else if (state is QrSuccess) {
+            if (mounted) {
+              setState(() {
+                _isSaving = false;
+              });
+              _clearScannedData();
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Contact saved successfully'), backgroundColor: Colors.green));
+            }
+          } else if (state is QrError) {
+            if (mounted) {
+              setState(() {
+                _isSaving = false;
+              });
+              _clearScannedData();
+              _showServerError(state.error);
+            }
+          } else if (state is QrInitial) {
+            if (mounted) {
+              setState(() {
+                _isSaving = false;
+              });
+            }
+          }
+        },
+        child: Scaffold(
+          backgroundColor: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
+          body: SafeArea(
+            child: Stack(
+              children: [
+                // Main Content
+                SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(20, 50, 20, 70),
+                  child: Column(
+                    children: [
+                      // QR Code Container
+                      Container(
+                        padding: const EdgeInsets.all(30),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              // AppColors.primaryColor.withOpacity(0.2),
+                              // AppColors.primaryColor.withOpacity(0.5),
+                              Color(0xff6D83B5),
+                              Color(0xffB5C6EE),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(25),
+                          border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 2),
+                          boxShadow: [BoxShadow(color: AppColors.primaryColor.withOpacity(0.2), blurRadius: 20, offset: const Offset(0, 10))],
                         ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        // QR Code with animated border
-                        Stack(
-                          alignment: Alignment.center,
+                        child: Column(
                           children: [
-                            // Animated rotating border
-                            AnimatedBuilder(
-                              animation: _rotationAnimation,
-                              builder: (context, child) {
-                                return Transform.rotate(
-                                  angle: _rotationAnimation.value * 2 * 3.14159,
-                                  child: Container(
-                                    width: 280,
-                                    height: 280,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(
-                                        color: AppColors.primaryColor
-                                            .withOpacity(0.3),
-                                        width: 2,
+                            // QR Code with animated border
+                            Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                // Animated rotating border
+                                AnimatedBuilder(
+                                  animation: _rotationAnimation,
+                                  builder: (context, child) {
+                                    return Transform.rotate(
+                                      angle: _rotationAnimation.value * 2 * 3.14159,
+                                      child: Container(
+                                        width: 280,
+                                        height: 280,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(20),
+                                          border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 2),
+                                        ),
                                       ),
-                                    ),
+                                    );
+                                  },
+                                ),
+                                // QR Code
+                                Container(
+                                  // height: 280,
+                                  // width: 280,
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(15),
+                                    boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 5))],
                                   ),
-                                );
-                              },
+                                  child: QrImageView(
+                                    data: _generateQrData(),
+                                    // size: 190.0,
+                                    backgroundColor: Colors.white,
+                                    foregroundColor: AppColors.black,
+                                    errorStateBuilder: (cxt, err) {
+                                      return const Center(child: Text('Error generating QR code', textAlign: TextAlign.center));
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
-                            // QR Code
+
+                            const SizedBox(height: 25),
+
+                            // Enhanced User info card
                             Container(
-                              // height: 280,
-                              // width: 280,
+                              width: double.infinity,
                               padding: const EdgeInsets.all(20),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: darkModeValue ? AppColors.darkModeColor : Colors.grey[50],
                                 borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 5),
-                                  ),
-                                ],
+                                border: Border.all(color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!),
                               ),
-                              child: QrImageView(
-                                data: _generateQrData(),
-                                // size: 190.0,
-                                backgroundColor: Colors.white,
-                                foregroundColor: AppColors.black,
-                                errorStateBuilder: (cxt, err) {
-                                  return const Center(
-                                    child: Text(
-                                      'Error generating QR code',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  );
-                                },
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 30,
+                                        backgroundColor: AppColors.primaryColor,
+                                        child: Text(
+                                          userCacheValue?.data?.user?.profile?.firstName?.substring(0, 1) ?? '',
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.titleMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '${userCacheValue?.data?.user?.profile?.firstName} ${userCacheValue?.data?.user?.profile?.lastName}',
+                                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                                fontWeight: FontWeight.w400,
+                                                color: darkModeValue ? AppColors.white : AppColors.black,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 6),
+                                            Text(
+                                              userCacheValue?.data?.user?.profile?.titleWork ?? '',
+                                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                color: AppColors.primaryColor,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 6),
+                                            Text(
+                                              userCacheValue?.data?.user?.profile?.titleWork ?? '',
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.titleSmall?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600]),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 15),
+                                  Divider(color: darkModeValue ? Colors.grey[700] : Colors.grey[300], height: 1),
+                                  const SizedBox(height: 15),
+                                  // Contact details
+                                  _buildContactRow(AppIcons.email, userCacheValue?.data?.user?.profile?.email ?? ''),
+                                  const SizedBox(height: 8),
+                                  _buildContactRow(AppIcons.call, userCacheValue?.data?.user?.phone ?? ''),
+                                ],
                               ),
                             ),
                           ],
                         ),
+                      ),
 
-                        const SizedBox(height: 25),
-
-                        // Enhanced User info card
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color:
-                                darkModeValue
-                                    ? AppColors.darkModeColor
-                                    : Colors.grey[50],
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                              color:
-                                  darkModeValue
-                                      ? Colors.grey[700]!
-                                      : Colors.grey[200]!,
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 30,
-                                    backgroundColor: AppColors.primaryColor,
-                                    child: Text(
-                                      userData['name']!
-                                          .split(' ')
-                                          .map((e) => e[0])
-                                          .join(),
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.titleMedium?.copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          userData['name']!,
-                                          style: Theme.of(
-                                            context,
-                                          ).textTheme.titleLarge?.copyWith(
-                                            fontWeight: FontWeight.w400,
-                                            color:
-                                                darkModeValue
-                                                    ? AppColors.white
-                                                    : AppColors.black,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 6),
-                                        Text(
-                                          userData['position']!,
-                                          style: Theme.of(
-                                            context,
-                                          ).textTheme.bodyMedium?.copyWith(
-                                            color: AppColors.primaryColor,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 6),
-                                        Text(
-                                          userData['company']!,
-                                          style: Theme.of(
-                                            context,
-                                          ).textTheme.titleSmall?.copyWith(
-                                            color:
-                                                darkModeValue
-                                                    ? Colors.grey[400]
-                                                    : Colors.grey[600],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 15),
-                              Divider(
-                                color:
-                                    darkModeValue
-                                        ? Colors.grey[700]
-                                        : Colors.grey[300],
-                                height: 1,
-                              ),
-                              const SizedBox(height: 15),
-                              // Contact details
-                              _buildContactRow(
-                                AppIcons.email,
-                                userData['email']!,
-                              ),
-                              const SizedBox(height: 8),
-                              _buildContactRow(
-                                AppIcons.call,
-                                userData['phone']!,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      const SizedBox(height: 30),
+                    ],
                   ),
-
-                  const SizedBox(height: 30),
-                ],
-              ),
-            ),
-
-            // Top Header with Camera Icon
-            Positioned(
-              top: 0,
-              // left: 0,
-              right: 0,
-              child: IconButton(
-                onPressed: _openQrScanner,
-                icon: const Icon(
-                  Icons.qr_code_scanner,
-                  color: AppColors.primaryColor,
-                  size: 24,
                 ),
-                // padding: const EdgeInsets.symmetric(horizontal: 12),
-                constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-                tooltip: 'Scan QR Code',
-              ),
+
+                // Top Header with Camera Icon
+                Positioned(
+                  top: 0,
+                  // left: 0,
+                  right: 0,
+                  child: IconButton(
+                    onPressed: _isSaving ? null : _openQrScanner,
+                    icon:
+                        _isSaving
+                            ? const SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryColor)),
+                            )
+                            : const Icon(Icons.qr_code_scanner, color: AppColors.primaryColor, size: 24),
+                    // padding: const EdgeInsets.symmetric(horizontal: 12),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+                    tooltip: 'Scan QR Code',
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -796,19 +613,10 @@ END:VCARD
   Widget _buildContactRow(String icon, String text) {
     return Row(
       children: [
-        SvgPicture.asset(
-          icon,
-
-          color: darkModeValue ? Colors.grey[400] : Colors.grey[600],
-        ),
+        SvgPicture.asset(icon, color: darkModeValue ? Colors.grey[400] : Colors.grey[600]),
         const SizedBox(width: 8),
         Expanded(
-          child: Text(
-            text,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: darkModeValue ? Colors.grey[300] : Colors.grey[700],
-            ),
-          ),
+          child: Text(text, style: Theme.of(context).textTheme.titleSmall?.copyWith(color: darkModeValue ? Colors.grey[300] : Colors.grey[700])),
         ),
       ],
     );

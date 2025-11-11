@@ -42,4 +42,7 @@ class EndPoints {
   static const notifications = 'notifications';
   static const readNotification = 'mark-as-read';
   static const unreadCountNotification = 'unread-count';
+
+  // qr code
+  static const saveQrCode = 'contacts/save-from-qr';
 }
