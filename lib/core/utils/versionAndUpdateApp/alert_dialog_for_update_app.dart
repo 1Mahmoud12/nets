@@ -17,7 +17,7 @@ void checkVersion(BuildContext context) async {
     final AppCheckerResult result = value;
     log('Current Version ${value.currentVersion} ==== New Version ${result.newVersion}', level: 10);
     Constants.versionApp = value.currentVersion;
-    if (!result.canUpdate) {
+    if (result.canUpdate) {
       context.navigateToPage(
         NewUpdate(
           appUrl:
