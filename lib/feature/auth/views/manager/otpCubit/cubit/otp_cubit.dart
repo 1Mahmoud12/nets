@@ -42,13 +42,13 @@ class OTPCubit extends Cubit<OTPState> {
           await userCache?.put(userCacheKey, jsonEncode(r.toJson()));
           await DeviceUUid().initializeDeviceInfo(isAuth: true);
           await context.read<UserDataCubit>().getUserData();
-          if (ConstantsModels.userDataModel?.data?.phone == null ||
-              ConstantsModels.userDataModel?.data?.phone == '' ||
-              ConstantsModels.userDataModel?.data?.profile?.firstName == null ||
-              ConstantsModels.userDataModel?.data?.profile?.lastName == null) {
-            context.navigateToPage(const EditProfileView());
+            if (ConstantsModels.userDataModel?.data?.phone == null ||
+                ConstantsModels.userDataModel?.data?.phone == '' ||
+                ConstantsModels.userDataModel?.data?.profile?.firstName == null ||
+                ConstantsModels.userDataModel?.data?.profile?.lastName == null) {
+            context.navigateToPageWithReplacement(const EditProfileView(isFromLogin: true));
           } else {
-            context.navigateToPage(const NavigationView());
+            context.navigateToPageWithReplacement(const NavigationView());
           }
 
           // // // Save login credentials to cache

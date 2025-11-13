@@ -6,6 +6,8 @@ import 'package:nets/core/utils/constants_models.dart';
 import 'package:nets/core/network/end_points.dart';
 import 'package:nets/core/network/local/cache.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:nets/core/utils/navigate.dart';
+import 'package:nets/feature/navigation/view/presentation/navigation_view.dart';
 import 'package:nets/feature/profile/data/models/user_data_model.dart';
 import 'package:nets/feature/profile/data/models/user_data_param.dart' as param;
 import 'dart:io';
@@ -21,8 +23,8 @@ import 'widgets/save_changes_button.dart';
 import 'widgets/profile_data_model.dart';
 
 class EditProfileView extends StatefulWidget {
-  const EditProfileView({super.key});
-
+  const EditProfileView({super.key, this.isFromLogin = false});
+final bool isFromLogin;
   @override
   State<EditProfileView> createState() => _EditProfileViewState();
 }
@@ -284,7 +286,11 @@ class _EditProfileViewState extends State<EditProfileView> {
       // Reload user data after successful update
       context.read<UserDataCubit>().getUserData();
       // Navigate back
+      if(widget.isFromLogin){
+        context.navigateToPageWithReplacement(const NavigationView());
+      }else{
       Navigator.pop(context);
+      }
       // Reset flags
       _isImageUpdateComplete = false;
       _isDataUpdateComplete = false;
