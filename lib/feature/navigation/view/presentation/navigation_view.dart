@@ -304,47 +304,9 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
                                   ),
                                 ],
                               ),
+
                               // const Spacer(),
                               // Status indicator
-
-                              // Notifications button with animation
-                              GestureDetector(
-                                onTap: _showNotifications,
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      width: 35,
-                                      height: 35,
-                                      // padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: darkModeValue ? AppColors.greyG200 : AppColors.greyG200),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Center(
-                                        child: SvgPicture.asset(AppIcons.notificationBill, color: darkModeValue ? AppColors.white : AppColors.black),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 0,
-                                      top: 4,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          borderRadius: BorderRadius.circular(8),
-                                          // border: Border.all(
-                                          //   color:
-                                          //       darkModeValue
-                                          //           ? AppColors.appBarDarkModeColor
-                                          //           : AppColors.white,
-                                          //   width: 1.5,
-                                          // ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
                             ],
                           ),
                         ),
