@@ -16,8 +16,8 @@ class PhoneData {
     String type = 'mobile',
     this.isPrimary = false,
     String? countryCode,
-  })  : typeController = typeController ?? TextEditingController(text: type),
-        countryCode = countryCode ?? '+966'; // Default to Saudi Arabia
+  }) : typeController = typeController ?? TextEditingController(text: type),
+       countryCode = countryCode ?? '+966'; // Default to Saudi Arabia
 
   String get type => typeController.text;
   set type(String value) {
@@ -81,7 +81,11 @@ class _ContactInformationState extends State<ContactInformation> {
                     enabled: true,
                     onCountryCodeChanged: (countryCode) {
                       phone.countryCode = countryCode;
-                      widget.onPhoneChanged?.call(i, phone.type, phone.isPrimary);
+                      widget.onPhoneChanged?.call(
+                        i,
+                        phone.type,
+                        phone.isPrimary,
+                      );
                     },
                   ),
                   const SizedBox(height: 12),
@@ -90,14 +94,21 @@ class _ContactInformationState extends State<ContactInformation> {
                       // Phone Type Text Field
                       Expanded(
                         child: CustomTextFormField(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                          ),
                           controller: phone.typeController,
                           hintText: 'Type (e.g., mobile, office)',
                           nameField: null,
                           textInputType: TextInputType.text,
                           borderRadius: 8,
+                          validator: (value) => null,
                           onChange: (value) {
-                            widget.onPhoneChanged?.call(i, value, phone.isPrimary);
+                            widget.onPhoneChanged?.call(
+                              i,
+                              value,
+                              phone.isPrimary,
+                            );
                           },
                         ),
                       ),
@@ -116,25 +127,37 @@ class _ContactInformationState extends State<ContactInformation> {
                                 phone.isPrimary = true;
                               } else {
                                 // Prevent unchecking if it's the only primary phone
-                                final primaryCount = widget.phones.where((p) => p.isPrimary).length;
+                                final primaryCount =
+                                    widget.phones
+                                        .where((p) => p.isPrimary)
+                                        .length;
                                 if (primaryCount <= 1) {
                                   // Keep it checked - at least one must be primary
                                   return;
                                 }
                                 phone.isPrimary = false;
                               }
-                              widget.onPhoneChanged?.call(i, phone.type, phone.isPrimary);
+                              widget.onPhoneChanged?.call(
+                                i,
+                                phone.type,
+                                phone.isPrimary,
+                              );
                               setState(() {});
                             },
                             activeColor: AppColors.primaryColor,
                           ),
                           Text(
                             'Primary',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  color: widget.isDarkMode ? AppColors.white : AppColors.black,
-                                ),
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodySmall?.copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color:
+                                  widget.isDarkMode
+                                      ? AppColors.white
+                                      : AppColors.black,
+                            ),
                           ),
                         ],
                       ),
@@ -165,6 +188,7 @@ class _ContactInformationState extends State<ContactInformation> {
             nameField: 'Zip Code',
             textInputType: TextInputType.number,
             borderRadius: 8,
+            validator: (value) => null,
           ),
         ],
       ),

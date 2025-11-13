@@ -10,6 +10,8 @@ import 'package:nets/core/utils/device_id.dart';
 import 'package:nets/core/utils/navigate.dart';
 import 'package:nets/feature/auth/data/dataSource/reset_password_data_source.dart';
 import 'package:nets/feature/navigation/view/presentation/navigation_view.dart';
+import 'package:nets/feature/profile/views/manager/cubit/user_data_cubit.dart';
+import 'package:nets/feature/profile/views/presentation/edit_profile_view.dart';
 
 part 'otp_state.dart';
 
@@ -39,16 +41,24 @@ class OTPCubit extends Cubit<OTPState> {
           userCacheValue = r;
           await userCache?.put(userCacheKey, jsonEncode(r.toJson()));
           await DeviceUUid().initializeDeviceInfo(isAuth: true);
+          await context.read<UserDataCubit>().getUserData();
+          if (ConstantsModels.userDataModel?.data?.phone == null ||
+              ConstantsModels.userDataModel?.data?.phone == '' ||
+              ConstantsModels.userDataModel?.data?.profile?.firstName == null ||
+              ConstantsModels.userDataModel?.data?.profile?.lastName == null) {
+            context.navigateToPage(const EditProfileView());
+          } else {
+            context.navigateToPage(const NavigationView());
+          }
 
-          // // Save login credentials to cache
-          // await loginCache?.put(loginEmailKey, emailController.text);
-          // await loginCache?.put(loginPasswordKey, passwordController.text);
-          // if (verifyRegistrationEmail) {
-          customShowToast(context, r.message ?? '');
-          context.navigateToPage(const NavigationView());
-          // } else {
-          //   context.navigateToPage(ResetPasswordView(homeView: false, tempToken: r.data?.authKey));
-          // }
+          // // // Save login credentials to cache
+          // // await loginCache?.put(loginEmailKey, emailController.text);
+          // // await loginCache?.put(loginPasswordKey, passwordController.text);
+          // // if (verifyRegistrationEmail) {
+          //   customShowToast(context, r.message ?? '');
+          // // } else {
+          // //   context.navigateToPage(ResetPasswordView(homeView: false, tempToken: r.data?.authKey));
+          // // }
 
           emit(OTPSuccess());
         },

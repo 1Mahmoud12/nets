@@ -54,20 +54,28 @@ class UserDataParam {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['first_name'] = firstName;
-    data['last_name'] = lastName;
-    data['email'] = email;  
-    data['website'] = website;
-    data['zip_code'] = zipCode;
-    data['street_name'] = streetName;
-    data['building_number'] = buildingNumber;
-    data['street_number'] = streetNumber;
-    data['additional_information'] = additionalInformation;
-    data['title_work'] = titleWork;
-    if (phones != null) {
+
+    void addIfNotNull(String key, dynamic value) {
+      if (value == null) return;
+      if (value is String && value.isEmpty) return;
+      data[key] = value;
+    }
+
+    addIfNotNull('first_name', firstName);
+    addIfNotNull('last_name', lastName);
+    addIfNotNull('email', email);
+    addIfNotNull('website', website);
+    addIfNotNull('zip_code', zipCode);
+    addIfNotNull('street_name', streetName);
+    addIfNotNull('building_number', buildingNumber);
+    addIfNotNull('street_number', streetNumber);
+    addIfNotNull('additional_information', additionalInformation);
+    addIfNotNull('title_work', titleWork);
+
+    if (phones != null && phones!.isNotEmpty) {
       data['phones'] = phones!.map((v) => v.toJson()).toList();
     }
-    if (socialLinks != null) {
+    if (socialLinks != null && socialLinks!.isNotEmpty) {
       data['social_links'] = socialLinks!.map((v) => v.toJson()).toList();
     }
     return data;

@@ -177,8 +177,26 @@ class _EditProfileViewState extends State<EditProfileView> {
     }
   }
 
+  String? _nullableTrim(String? value) {
+    final trimmed = value?.trim();
+    if (trimmed == null || trimmed.isEmpty) {
+      return null;
+    }
+    return trimmed;
+  }
+
   param.UserDataParam _buildUserDataParam() {
     final original = originalUserData ?? ConstantsModels.userDataModel?.data;
+
+    final firstName = _nullableTrim(profileData.firstNameCtrl.text) ?? '';
+    final lastName = _nullableTrim(profileData.lastNameCtrl.text) ?? '';
+    final email = _nullableTrim(profileData.emailCtrl.text);
+    final website = _nullableTrim(profileData.websiteCtrl.text);
+    final zipCode = _nullableTrim(profileData.zipCtrl.text);
+    final streetName = _nullableTrim(profileData.streetOfficeCtrl.text);
+    final buildingNumber = _nullableTrim(profileData.buildingOfficeCtrl.text);
+    final streetNumber = _nullableTrim(profileData.officeNumberOfficeCtrl.text);
+    final additionalInformation = _nullableTrim(profileData.otherDetailsCtrl.text);
 
     // Build phones list using UserDataParam.Phones
     final phones =
@@ -219,22 +237,25 @@ class _EditProfileViewState extends State<EditProfileView> {
 
     // Build UserDataParam
     return param.UserDataParam(
-      firstName: profileData.firstNameCtrl.text.trim(),
-      lastName: profileData.lastNameCtrl.text.trim(),
-      email: profileData.emailCtrl.text.trim(),
-      website: profileData.websiteCtrl.text.trim(),
-      zipCode: profileData.zipCtrl.text.trim(),
-      streetName: profileData.streetOfficeCtrl.text.trim(),
-      buildingNumber: profileData.buildingOfficeCtrl.text.trim(),
-      streetNumber: profileData.officeNumberOfficeCtrl.text.trim(),
-      additionalInformation: profileData.otherDetailsCtrl.text.trim(),
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      website: website,
+      zipCode: zipCode,
+      streetName: streetName,
+      buildingNumber: buildingNumber,
+      streetNumber: streetNumber,
+      additionalInformation: additionalInformation,
       titleWork: original?.profile?.titleWork,
-      phones: phones,
-      socialLinks: socialLinks,
+      phones: phones.isEmpty ? null : phones,
+      socialLinks: socialLinks.isEmpty ? null : socialLinks,
     );
   }
 
   Future<void> _saveProfile() async {
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      return;
+    }
     final updateCubit = context.read<UpdateUserDataCubit>();
     // Reset flags
     _isImageUpdateComplete = false;

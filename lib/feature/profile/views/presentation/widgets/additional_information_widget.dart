@@ -29,9 +29,9 @@ class AdditionalInformationWidget extends StatelessWidget {
           Text(
             'additional_information'.tr(),
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: isDarkMode ? AppColors.white : AppColors.black,
-                ),
+              fontWeight: FontWeight.w700,
+              color: isDarkMode ? AppColors.white : AppColors.black,
+            ),
           ),
           const SizedBox(height: 24),
           CustomTextFormField(
@@ -41,10 +41,10 @@ class AdditionalInformationWidget extends StatelessWidget {
             nameField: 'other_details'.tr(),
             maxLines: 6,
             borderRadius: 8,
+            validator: (value) => null,
           ),
         ],
       ),
     );
   }
 }
-

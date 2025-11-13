@@ -19,7 +19,6 @@ import 'package:nets/core/network/local/hive_data_base.dart';
 import 'package:nets/core/utils/bloc_observe.dart';
 import 'package:nets/core/utils/constants.dart';
 import 'package:nets/core/utils/constants_models.dart';
-import 'package:nets/feature/Contacts/views/presentation/contacts_view.dart';
 import 'package:nets/feature/auth/data/models/login_model.dart';
 import 'package:nets/feature/navigation/view/presentation/navigation_view.dart';
 import 'package:nets/feature/splash/view/presentation/splash_screen_view.dart';

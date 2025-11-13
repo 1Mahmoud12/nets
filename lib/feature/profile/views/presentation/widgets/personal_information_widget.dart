@@ -88,31 +88,33 @@ class _PersonalInformationState extends State<PersonalInformation> {
                         ),
                       ],
                     ),
-                    child: onImageSelected.path.isNotEmpty
-                        ? CacheImage(
-                            fileImage: onImageSelected,
-                            circle: true,
-                            width: 88,
-                            height: 88,
-                            fit: BoxFit.cover,
-                          )
-                        : widget.imageUrl != null && widget.imageUrl!.isNotEmpty
+                    child:
+                        onImageSelected.path.isNotEmpty
                             ? CacheImage(
-                                urlImage: widget.imageUrl,
-                                circle: true,
-                                width: 88,
-                                height: 88,
-                                fit: BoxFit.cover,
-                                profileImage: true,
-                              )
+                              fileImage: onImageSelected,
+                              circle: true,
+                              width: 88,
+                              height: 88,
+                              fit: BoxFit.cover,
+                            )
+                            : widget.imageUrl != null &&
+                                widget.imageUrl!.isNotEmpty
+                            ? CacheImage(
+                              urlImage: widget.imageUrl,
+                              circle: true,
+                              width: 88,
+                              height: 88,
+                              fit: BoxFit.cover,
+                              profileImage: true,
+                            )
                             : const CircleAvatar(
-                                backgroundColor: AppColors.primaryColor,
-                                child: Icon(
-                                  Icons.person,
-                                  color: Colors.white,
-                                  size: 45,
-                                ),
+                              backgroundColor: AppColors.primaryColor,
+                              child: Icon(
+                                Icons.person,
+                                color: Colors.white,
+                                size: 45,
                               ),
+                            ),
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -145,6 +147,12 @@ class _PersonalInformationState extends State<PersonalInformation> {
                   hintText: 'First Name',
                   nameField: 'First Name',
                   borderRadius: 10,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'First name is required';
+                    }
+                    return null;
+                  },
                 ),
               ),
               const SizedBox(width: 12),
@@ -155,6 +163,12 @@ class _PersonalInformationState extends State<PersonalInformation> {
                   hintText: 'Last Name',
                   nameField: 'Last Name',
                   borderRadius: 10,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Last name is required';
+                    }
+                    return null;
+                  },
                 ),
               ),
             ],
@@ -167,6 +181,17 @@ class _PersonalInformationState extends State<PersonalInformation> {
             nameField: 'Email',
             textInputType: TextInputType.emailAddress,
             borderRadius: 8,
+            validator: (value) {
+              final trimmed = value?.trim() ?? '';
+              if (trimmed.isEmpty) {
+                return null;
+              }
+              final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+              if (!emailRegex.hasMatch(trimmed)) {
+                return 'Please enter a valid email';
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 12),
           CustomTextFormField(
@@ -176,6 +201,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
             nameField: 'Website',
             textInputType: TextInputType.url,
             borderRadius: 8,
+            validator: (value) => null,
           ),
         ],
       ),
