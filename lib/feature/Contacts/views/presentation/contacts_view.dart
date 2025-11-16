@@ -687,6 +687,7 @@ class _ContactsViewState extends State<ContactsView> {
               return Container(
                 padding: const EdgeInsets.all(40),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.search_off, size: 64, color: darkModeValue ? Colors.grey[600] : Colors.grey[400]),
                     const SizedBox(height: 16),
@@ -695,9 +696,12 @@ class _ContactsViewState extends State<ContactsView> {
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600]),
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      'Try adjusting your search terms',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: darkModeValue ? Colors.grey[500] : Colors.grey[500]),
+                    Center(
+                      child: Text(
+                        'Try adjusting your search terms',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: darkModeValue ? Colors.grey[500] : Colors.grey[500]),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ],
                 ),

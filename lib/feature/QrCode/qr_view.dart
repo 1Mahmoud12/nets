@@ -6,6 +6,8 @@ import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/utils/app_icons.dart';
 import 'package:nets/feature/QrCode/manager/cubit/qr_cubit.dart';
 import 'package:nets/feature/QrCode/widgets/qr_camera_scanner.dart';
+import 'package:nets/feature/profile/views/manager/cubit/user_data_cubit.dart';
+import 'package:nets/feature/profile/views/manager/update/cubit/update_user_data_cubit.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -508,70 +510,83 @@ END:VCARD
                             const SizedBox(height: 25),
 
                             // Enhanced User info card
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                color: darkModeValue ? AppColors.darkModeColor : Colors.grey[50],
-                                borderRadius: BorderRadius.circular(15),
-                                border: Border.all(color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!),
-                              ),
-                              child: Column(
-                                children: [
-                                  Row(
+                            BlocBuilder<UserDataCubit, UserDataState>(
+                              builder: (context, state) {
+                                return Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                    color: darkModeValue ? AppColors.darkModeColor : Colors.grey[50],
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!),
+                                  ),
+                                  child: Column(
                                     children: [
-                                      CircleAvatar(
-                                        radius: 30,
-                                        backgroundColor: AppColors.primaryColor,
-                                        child: Text(
-                                          userCacheValue?.data?.user?.profile?.firstName?.substring(0, 1) ?? '',
-                                          style: Theme.of(
-                                            context,
-                                          ).textTheme.titleMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              '${userCacheValue?.data?.user?.profile?.firstName} ${userCacheValue?.data?.user?.profile?.lastName}',
-                                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                                fontWeight: FontWeight.w400,
-                                                color: darkModeValue ? AppColors.white : AppColors.black,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 6),
-                                            Text(
-                                              userCacheValue?.data?.user?.profile?.titleWork ?? '',
-                                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                                color: AppColors.primaryColor,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 6),
-                                            Text(
-                                              userCacheValue?.data?.user?.profile?.titleWork ?? '',
+                                      Row(
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 30,
+                                            backgroundColor: AppColors.primaryColor,
+                                            child: Text(
+                                              userCacheValue?.data?.user?.profile?.firstName?.substring(0, 1) ?? '',
                                               style: Theme.of(
                                                 context,
-                                              ).textTheme.titleSmall?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600]),
+                                              ).textTheme.titleMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  // userCacheValue?.data?.user?.profile?.firstName ?? 'unknown'.tr(),
+                                                  '${userCacheValue?.data?.user?.profile?.firstName} ${userCacheValue?.data?.user?.profile?.lastName}',
+                                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                                    fontWeight: FontWeight.w400,
+                                                    color: darkModeValue ? AppColors.white : AppColors.black,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 6),
+                                                Text(
+                                                  userCacheValue?.data?.user?.profile?.titleWork ?? '',
+                                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                    color: AppColors.primaryColor,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                                if (userCacheValue?.data?.user?.profile?.titleWork != null &&
+                                                    userCacheValue?.data?.user?.profile?.titleWork?.isNotEmpty == true)
+                                                  const SizedBox(height: 6),
+                                                if (userCacheValue?.data?.user?.profile?.titleWork != null &&
+                                                    userCacheValue?.data?.user?.profile?.titleWork?.isNotEmpty == true)
+                                                  Text(
+                                                    userCacheValue?.data?.user?.profile?.titleWork ?? '',
+                                                    style: Theme.of(
+                                                      context,
+                                                    ).textTheme.titleSmall?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600]),
+                                                  ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       ),
+                                      const SizedBox(height: 15),
+                                      Divider(color: darkModeValue ? Colors.grey[700] : Colors.grey[300], height: 1),
+                                      if (userCacheValue?.data?.user?.profile?.email != null &&
+                                          userCacheValue?.data?.user?.profile?.email?.isNotEmpty == true)
+                                        const SizedBox(height: 15),
+                                      // Contact details
+                                      if (userCacheValue?.data?.user?.profile?.email != null &&
+                                          userCacheValue?.data?.user?.profile?.email?.isNotEmpty == true)
+                                        _buildContactRow(AppIcons.email, userCacheValue?.data?.user?.profile?.email ?? ''),
+                                      const SizedBox(height: 8),
+                                      _buildContactRow(AppIcons.call, userCacheValue?.data?.user?.phone ?? ''),
                                     ],
                                   ),
-                                  const SizedBox(height: 15),
-                                  Divider(color: darkModeValue ? Colors.grey[700] : Colors.grey[300], height: 1),
-                                  const SizedBox(height: 15),
-                                  // Contact details
-                                  _buildContactRow(AppIcons.email, userCacheValue?.data?.user?.profile?.email ?? ''),
-                                  const SizedBox(height: 8),
-                                  _buildContactRow(AppIcons.call, userCacheValue?.data?.user?.phone ?? ''),
-                                ],
-                              ),
+                                );
+                              },
                             ),
                           ],
                         ),

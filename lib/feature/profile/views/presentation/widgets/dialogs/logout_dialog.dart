@@ -28,27 +28,24 @@ class LogoutDialog extends StatelessWidget {
       backgroundColor: isDarkMode ? Colors.black : Colors.white,
       title: Text(
         title,
-        style: Theme.of(context)
-            .textTheme
-            .titleLarge
-            ?.copyWith(color: darkModeValue ? Colors.white : Colors.black),
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          color: darkModeValue ? Colors.white : Colors.black,
+        ),
       ),
       content: Text(
         message,
-        style: Theme.of(context)
-            .textTheme
-            .labelMedium
-            ?.copyWith(color: darkModeValue ? Colors.grey[100] : Colors.grey[300]),
+        style: Theme.of(
+          context,
+        ).textTheme.labelMedium?.copyWith(color: Colors.black),
       ),
       actions: [
         TextButton(
           onPressed: onCancel,
           child: Text(
             cancelText,
-            style: Theme.of(context)
-                .textTheme
-                .labelMedium
-                ?.copyWith(color: darkModeValue ? Colors.grey[100] : Colors.grey[300]),
+            style: Theme.of(
+              context,
+            ).textTheme.labelMedium?.copyWith(color: Colors.black),
           ),
         ),
         ElevatedButton(
@@ -60,4 +57,3 @@ class LogoutDialog extends StatelessWidget {
     );
   }
 }
-
