@@ -444,152 +444,156 @@ END:VCARD
                   child: Column(
                     children: [
                       // QR Code Container
-                      Container(
-                        padding: const EdgeInsets.all(30),
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              // AppColors.primaryColor.withOpacity(0.2),
-                              // AppColors.primaryColor.withOpacity(0.5),
-                              Color(0xff6D83B5),
-                              Color(0xffB5C6EE),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(25),
-                          border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 2),
-                          boxShadow: [BoxShadow(color: AppColors.primaryColor.withOpacity(0.2), blurRadius: 20, offset: const Offset(0, 10))],
-                        ),
-                        child: Column(
-                          children: [
-                            // QR Code with animated border
-                            Stack(
-                              alignment: Alignment.center,
+                      BlocBuilder<UserDataCubit, UserDataState>(
+                        builder: (context, state) {
+                          return Container(
+                            padding: const EdgeInsets.all(30),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  // AppColors.primaryColor.withOpacity(0.2),
+                                  // AppColors.primaryColor.withOpacity(0.5),
+                                  Color(0xff6D83B5),
+                                  Color(0xffB5C6EE),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(25),
+                              border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 2),
+                              boxShadow: [BoxShadow(color: AppColors.primaryColor.withOpacity(0.2), blurRadius: 20, offset: const Offset(0, 10))],
+                            ),
+                            child: Column(
                               children: [
-                                // Animated rotating border
-                                AnimatedBuilder(
-                                  animation: _rotationAnimation,
-                                  builder: (context, child) {
-                                    return Transform.rotate(
-                                      angle: _rotationAnimation.value * 2 * 3.14159,
-                                      child: Container(
-                                        width: 280,
-                                        height: 280,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(20),
-                                          border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 2),
-                                        ),
+                                // QR Code with animated border
+                                Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    // Animated rotating border
+                                    AnimatedBuilder(
+                                      animation: _rotationAnimation,
+                                      builder: (context, child) {
+                                        return Transform.rotate(
+                                          angle: _rotationAnimation.value * 2 * 3.14159,
+                                          child: Container(
+                                            width: 280,
+                                            height: 280,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(20),
+                                              border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 2),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    // QR Code
+                                    Container(
+                                      // height: 280,
+                                      // width: 280,
+                                      padding: const EdgeInsets.all(20),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(15),
+                                        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 5))],
+                                      ),
+                                      child: QrImageView(
+                                        data: _generateQrData(),
+                                        // size: 190.0,
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: AppColors.black,
+                                        errorStateBuilder: (cxt, err) {
+                                          return const Center(child: Text('Error generating QR code', textAlign: TextAlign.center));
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                const SizedBox(height: 25),
+
+                                // Enhanced User info card
+                                BlocBuilder<UserDataCubit, UserDataState>(
+                                  builder: (context, state) {
+                                    return Container(
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.all(20),
+                                      decoration: BoxDecoration(
+                                        color: darkModeValue ? AppColors.darkModeColor : Colors.grey[50],
+                                        borderRadius: BorderRadius.circular(15),
+                                        border: Border.all(color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              CircleAvatar(
+                                                radius: 30,
+                                                backgroundColor: AppColors.primaryColor,
+                                                child: Text(
+                                                  userCacheValue?.data?.user?.profile?.firstName?.substring(0, 1) ?? '',
+                                                  style: Theme.of(
+                                                    context,
+                                                  ).textTheme.titleMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      // userCacheValue?.data?.user?.profile?.firstName ?? 'unknown'.tr(),
+                                                      '${userCacheValue?.data?.user?.profile?.firstName} ${userCacheValue?.data?.user?.profile?.lastName}',
+                                                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                                        fontWeight: FontWeight.w400,
+                                                        color: darkModeValue ? AppColors.white : AppColors.black,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 6),
+                                                    Text(
+                                                      userCacheValue?.data?.user?.profile?.titleWork ?? '',
+                                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                        color: AppColors.primaryColor,
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.w400,
+                                                      ),
+                                                    ),
+                                                    if (userCacheValue?.data?.user?.profile?.titleWork != null &&
+                                                        userCacheValue?.data?.user?.profile?.titleWork?.isNotEmpty == true)
+                                                      const SizedBox(height: 6),
+                                                    if (userCacheValue?.data?.user?.profile?.titleWork != null &&
+                                                        userCacheValue?.data?.user?.profile?.titleWork?.isNotEmpty == true)
+                                                      Text(
+                                                        userCacheValue?.data?.user?.profile?.titleWork ?? '',
+                                                        style: Theme.of(
+                                                          context,
+                                                        ).textTheme.titleSmall?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600]),
+                                                      ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 15),
+                                          Divider(color: darkModeValue ? Colors.grey[700] : Colors.grey[300], height: 1),
+                                          if (userCacheValue?.data?.user?.profile?.email != null &&
+                                              userCacheValue?.data?.user?.profile?.email?.isNotEmpty == true)
+                                            const SizedBox(height: 15),
+                                          // Contact details
+                                          if (userCacheValue?.data?.user?.profile?.email != null &&
+                                              userCacheValue?.data?.user?.profile?.email?.isNotEmpty == true)
+                                            _buildContactRow(AppIcons.email, userCacheValue?.data?.user?.profile?.email ?? ''),
+                                          const SizedBox(height: 8),
+                                          _buildContactRow(AppIcons.call, userCacheValue?.data?.user?.phone ?? ''),
+                                        ],
                                       ),
                                     );
                                   },
                                 ),
-                                // QR Code
-                                Container(
-                                  // height: 280,
-                                  // width: 280,
-                                  padding: const EdgeInsets.all(20),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15),
-                                    boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 5))],
-                                  ),
-                                  child: QrImageView(
-                                    data: _generateQrData(),
-                                    // size: 190.0,
-                                    backgroundColor: Colors.white,
-                                    foregroundColor: AppColors.black,
-                                    errorStateBuilder: (cxt, err) {
-                                      return const Center(child: Text('Error generating QR code', textAlign: TextAlign.center));
-                                    },
-                                  ),
-                                ),
                               ],
                             ),
-
-                            const SizedBox(height: 25),
-
-                            // Enhanced User info card
-                            BlocBuilder<UserDataCubit, UserDataState>(
-                              builder: (context, state) {
-                                return Container(
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.all(20),
-                                  decoration: BoxDecoration(
-                                    color: darkModeValue ? AppColors.darkModeColor : Colors.grey[50],
-                                    borderRadius: BorderRadius.circular(15),
-                                    border: Border.all(color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 30,
-                                            backgroundColor: AppColors.primaryColor,
-                                            child: Text(
-                                              userCacheValue?.data?.user?.profile?.firstName?.substring(0, 1) ?? '',
-                                              style: Theme.of(
-                                                context,
-                                              ).textTheme.titleMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  // userCacheValue?.data?.user?.profile?.firstName ?? 'unknown'.tr(),
-                                                  '${userCacheValue?.data?.user?.profile?.firstName} ${userCacheValue?.data?.user?.profile?.lastName}',
-                                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                                    fontWeight: FontWeight.w400,
-                                                    color: darkModeValue ? AppColors.white : AppColors.black,
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 6),
-                                                Text(
-                                                  userCacheValue?.data?.user?.profile?.titleWork ?? '',
-                                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                                    color: AppColors.primaryColor,
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                                if (userCacheValue?.data?.user?.profile?.titleWork != null &&
-                                                    userCacheValue?.data?.user?.profile?.titleWork?.isNotEmpty == true)
-                                                  const SizedBox(height: 6),
-                                                if (userCacheValue?.data?.user?.profile?.titleWork != null &&
-                                                    userCacheValue?.data?.user?.profile?.titleWork?.isNotEmpty == true)
-                                                  Text(
-                                                    userCacheValue?.data?.user?.profile?.titleWork ?? '',
-                                                    style: Theme.of(
-                                                      context,
-                                                    ).textTheme.titleSmall?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600]),
-                                                  ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 15),
-                                      Divider(color: darkModeValue ? Colors.grey[700] : Colors.grey[300], height: 1),
-                                      if (userCacheValue?.data?.user?.profile?.email != null &&
-                                          userCacheValue?.data?.user?.profile?.email?.isNotEmpty == true)
-                                        const SizedBox(height: 15),
-                                      // Contact details
-                                      if (userCacheValue?.data?.user?.profile?.email != null &&
-                                          userCacheValue?.data?.user?.profile?.email?.isNotEmpty == true)
-                                        _buildContactRow(AppIcons.email, userCacheValue?.data?.user?.profile?.email ?? ''),
-                                      const SizedBox(height: 8),
-                                      _buildContactRow(AppIcons.call, userCacheValue?.data?.user?.phone ?? ''),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
 
                       const SizedBox(height: 30),
