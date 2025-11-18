@@ -42,7 +42,7 @@ class FiltersMyJourneySheet extends StatelessWidget {
     return Container(
       height: MediaQuery.of(context).size.height * 0.8,
       decoration: BoxDecoration(
-        color: darkModeValue ? AppColors.darkModeColor : Colors.white,
+        color: darkModeValue ? AppColors.darkContainer : Colors.white,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
@@ -60,11 +60,11 @@ class FiltersMyJourneySheet extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .displaySmall
-                            ?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black),
+                            ?.copyWith(color: darkModeValue ? AppColors.darkTextPrimary : AppColors.black),
                       ),
                       IconButton(
                         onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.close),
+                        icon: Icon(Icons.close, color: darkModeValue ? AppColors.darkTextPrimary : AppColors.black),
                       ),
                     ],
                   ),
@@ -96,7 +96,7 @@ class FiltersMyJourneySheet extends StatelessWidget {
                       CustomTextButton(
                         borderColor: AppColors.transparent,
                         borderRadius: 8,
-                        colorText: AppColors.black,
+                        colorText: darkModeValue ? AppColors.darkTextPrimary : AppColors.black,
                         backgroundColor: AppColors.primaryColor.withOpacity(.3),
                         onPress: () {
                           onReset();

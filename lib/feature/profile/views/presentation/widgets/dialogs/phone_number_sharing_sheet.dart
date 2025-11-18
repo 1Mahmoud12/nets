@@ -125,18 +125,18 @@ class _PhoneNumberSharingSheetState extends State<PhoneNumberSharingSheet> {
                           widget.title,
                           style: Theme.of(
                             context,
-                          ).textTheme.displaySmall?.copyWith(color: widget.darkModeValue ? Colors.black : Colors.black, fontWeight: FontWeight.w400),
+                          ).textTheme.displaySmall?.copyWith(color: widget.darkModeValue ? AppColors.darkTextPrimary : Colors.black, fontWeight: FontWeight.w400),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       IconButton(
                         onPressed: () => Navigator.pop(context),
-                        icon: Icon(Icons.close, color: widget.isDarkMode ? Colors.white : Colors.black),
+                        icon: Icon(Icons.close, color: widget.darkModeValue ? AppColors.darkTextPrimary : Colors.black),
                       ),
                     ],
                   ),
-                  Divider(height: 1, color: widget.darkModeValue ? Colors.grey[700] : Colors.grey[200], indent: 5, endIndent: 5),
+                  Divider(height: 1, color: widget.darkModeValue ? AppColors.darkBorder : Colors.grey[200], indent: 5, endIndent: 5),
                   const SizedBox(height: 20),
                   NotificationToggleTile(
                     title: widget.shareMobileLabel,

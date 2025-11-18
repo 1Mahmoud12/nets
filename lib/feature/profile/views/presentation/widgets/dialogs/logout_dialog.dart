@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nets/core/themes/colors.dart';
 
 class LogoutDialog extends StatelessWidget {
   const LogoutDialog({
@@ -25,18 +26,19 @@ class LogoutDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: isDarkMode ? Colors.black : Colors.white,
+      backgroundColor: darkModeValue ? AppColors.darkContainer : Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       title: Text(
         title,
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          color: darkModeValue ? Colors.white : Colors.black,
+          color: darkModeValue ? AppColors.darkTextPrimary : Colors.black,
         ),
       ),
       content: Text(
         message,
         style: Theme.of(
           context,
-        ).textTheme.labelMedium?.copyWith(color: Colors.black),
+        ).textTheme.labelMedium?.copyWith(color: darkModeValue ? AppColors.darkTextSecondary : Colors.black),
       ),
       actions: [
         TextButton(
@@ -45,7 +47,7 @@ class LogoutDialog extends StatelessWidget {
             cancelText,
             style: Theme.of(
               context,
-            ).textTheme.labelMedium?.copyWith(color: Colors.black),
+            ).textTheme.labelMedium?.copyWith(color: darkModeValue ? AppColors.darkTextSecondary : Colors.black),
           ),
         ),
         ElevatedButton(

@@ -38,14 +38,14 @@ class HelpItemTile extends StatelessWidget {
         style: Theme.of(context)
             .textTheme
             .titleLarge
-            ?.copyWith(color: isDarkMode ? Colors.black : Colors.black, fontWeight: FontWeight.w400),
+            ?.copyWith(color: isDarkMode ? AppColors.darkTextPrimary : Colors.black, fontWeight: FontWeight.w400),
       ),
       subtitle: Text(
         subtitle,
         style: Theme.of(context)
             .textTheme
             .labelMedium
-            ?.copyWith(color: isDarkMode ? Colors.grey[400] : Colors.grey[600]),
+            ?.copyWith(color: isDarkMode ? AppColors.darkTextSecondary : Colors.grey[600]),
       ),
       trailing: RotatedBox(quarterTurns: isArabic ? 3 : 1, child: SvgPicture.asset(AppIcons.arrowDown)),
       onTap: onTap,

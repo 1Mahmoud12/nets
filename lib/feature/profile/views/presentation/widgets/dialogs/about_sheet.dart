@@ -43,19 +43,19 @@ class AboutSheet extends StatelessWidget {
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: darkModeValue ? Colors.black : Colors.black,
+                        color: darkModeValue ? AppColors.darkTextPrimary : Colors.black,
                         fontWeight: FontWeight.w600,
                       ),
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: Icon(Icons.close, color: darkModeValue ? Colors.black : Colors.black),
+                  icon: Icon(Icons.close, color: darkModeValue ? AppColors.darkTextPrimary : Colors.black),
                 ),
               ],
             ),
             Divider(
               height: 1,
-              color: darkModeValue ? Colors.grey[700] : Colors.grey[200],
+              color: darkModeValue ? AppColors.darkBorder : Colors.grey[200],
               indent: 5,
               endIndent: 5,
             ),
@@ -72,13 +72,13 @@ class AboutSheet extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .titleLarge
-                  ?.copyWith(color: darkModeValue ? Colors.black : Colors.black, fontWeight: FontWeight.w600),
+                  ?.copyWith(color: darkModeValue ? AppColors.darkTextPrimary : Colors.black, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 8),
             Text(
               versionText,
               style:
-                  Theme.of(context).textTheme.labelMedium?.copyWith(color: darkModeValue ? Colors.grey[600] : Colors.grey[600]),
+                  Theme.of(context).textTheme.labelMedium?.copyWith(color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[600]),
             ),
             const SizedBox(height: 20),
             Text(
@@ -87,7 +87,7 @@ class AboutSheet extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .labelMedium
-                  ?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600], height: 1.5),
+                  ?.copyWith(color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[600], height: 1.5),
             ),
             const SizedBox(height: 24),
             Row(

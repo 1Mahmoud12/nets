@@ -30,7 +30,7 @@ class ProfileStatItem extends StatelessWidget {
           style: Theme.of(context)
               .textTheme
               .labelMedium
-              ?.copyWith(color: isDarkMode ? AppColors.white : Colors.grey[600]),
+              ?.copyWith(color: isDarkMode ? AppColors.darkTextSecondary : Colors.grey[600]),
         ),
       ],
     );

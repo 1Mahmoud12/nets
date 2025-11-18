@@ -46,16 +46,23 @@ class ProfileSettingsItem extends StatelessWidget {
         style: Theme.of(context)
             .textTheme
             .titleLarge
-            ?.copyWith(fontWeight: FontWeight.w400, color: isDarkMode ? AppColors.white : AppColors.black),
+            ?.copyWith(fontWeight: FontWeight.w400, color: isDarkMode ? AppColors.darkTextPrimary : AppColors.black),
       ),
       subtitle: Text(
         subtitle,
         style: Theme.of(context)
             .textTheme
             .labelMedium
-            ?.copyWith(color: isDarkMode ? AppColors.greyG100 : AppColors.greyG300),
+            ?.copyWith(color: isDarkMode ? AppColors.darkTextSecondary : AppColors.greyG300),
       ),
-      trailing: trailing ?? RotatedBox(quarterTurns: isArabic ? 3 : 1, child: SvgPicture.asset(AppIcons.arrowDown)),
+      trailing: trailing ??
+          RotatedBox(
+            quarterTurns: isArabic ? 3 : 1,
+            child: SvgPicture.asset(
+              AppIcons.arrowDown,
+              colorFilter: ColorFilter.mode(isDarkMode ? AppColors.darkTextSecondary : AppColors.black, BlendMode.srcIn),
+            ),
+          ),
       onTap: onTap,
     );
   }

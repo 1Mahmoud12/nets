@@ -111,7 +111,7 @@ class _ProfileViewState extends State<ProfileView> {
       backgroundColor: Colors.transparent,
       builder:
           (context) => FiltersMyJourneySheet(
-            isDarkMode: isDarkMode,
+            isDarkMode: darkModeValue,
             darkModeValue: darkModeValue,
             title: 'filters'.tr(),
             positionLabel: 'position'.tr(),
@@ -139,7 +139,7 @@ class _ProfileViewState extends State<ProfileView> {
         }
       },
       child: Scaffold(
-        backgroundColor: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.scaffoldBackGround,
+        backgroundColor: darkModeValue ? AppColors.darkBackground : AppColors.scaffoldBackGround,
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -211,9 +211,9 @@ class _ProfileViewState extends State<ProfileView> {
                             child: Text(
                               'edit_profile'.tr(),
                               style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                color: darkModeValue ? Colors.grey[400] : Colors.grey[600],
+                                color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[600],
                                 decoration: TextDecoration.underline,
-                                decorationColor: Colors.grey[400],
+                                decorationColor: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[400],
                               ),
                             ),
                           ),
@@ -240,9 +240,9 @@ class _ProfileViewState extends State<ProfileView> {
                         margin: const EdgeInsets.symmetric(horizontal: 16),
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: darkModeValue ? AppColors.darkModeColor : Colors.white,
+                          color: darkModeValue ? AppColors.darkContainer : Colors.white,
                           borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!),
+                          border: Border.all(color: darkModeValue ? AppColors.darkBorder : Colors.grey[200]!),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -263,9 +263,9 @@ class _ProfileViewState extends State<ProfileView> {
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
-                    color: darkModeValue ? AppColors.darkModeColor : Colors.white,
+                    color: darkModeValue ? AppColors.darkContainer : Colors.white,
                     borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!),
+                    border: Border.all(color: darkModeValue ? AppColors.darkBorder : Colors.grey[200]!),
                   ),
                   child: Column(
                     children: [
@@ -415,7 +415,7 @@ class _ProfileViewState extends State<ProfileView> {
       context: context,
       builder: (BuildContext context) {
         return LogoutDialog(
-          isDarkMode: isDarkMode,
+          isDarkMode: darkModeValue,
           darkModeValue: darkModeValue,
           title: 'logout_button'.tr(),
           message: 'logout_confirmation_title'.tr(),
@@ -438,7 +438,7 @@ class _ProfileViewState extends State<ProfileView> {
       context: context,
       builder: (BuildContext context) {
         return DeleteAccountDialog(
-          isDarkMode: isDarkMode,
+          isDarkMode: darkModeValue,
           title: 'delete_account'.tr(),
           message: 'delete_account_warning'.tr(),
           warningDescription: 'account_deletion_info_30_days'.tr(),
@@ -458,13 +458,13 @@ class _ProfileViewState extends State<ProfileView> {
   void _showNotificationSettings() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: isDarkMode ? AppColors.darkModeColor : Colors.white,
+      backgroundColor: darkModeValue ? AppColors.darkContainer : Colors.white,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (BuildContext context) {
         return BlocProvider(
           create: (_) => NotificationSettingCubit(),
           child: NotificationSettingsSheet(
-            isDarkMode: isDarkMode,
+            isDarkMode: darkModeValue,
             darkModeValue: darkModeValue,
             pushNotifications: pushNotifications,
             emailNotifications: emailNotifications,
@@ -495,13 +495,13 @@ class _ProfileViewState extends State<ProfileView> {
   void _showPhoneNumberSharingSettings() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: isDarkMode ? AppColors.darkModeColor : Colors.white,
+      backgroundColor: darkModeValue ? AppColors.darkContainer : Colors.white,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (BuildContext context) {
         return BlocProvider(
           create: (_) => PhoneNumberSharingCubit(),
           child: PhoneNumberSharingSheet(
-            isDarkMode: isDarkMode,
+            isDarkMode: darkModeValue,
             darkModeValue: darkModeValue,
             shareMobile: sharePhoneNumberValue,
             removeShareNotification: notifyMeValue,
@@ -532,11 +532,11 @@ class _ProfileViewState extends State<ProfileView> {
   void _showPrivacySettings() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: isDarkMode ? AppColors.darkModeColor : Colors.white,
+      backgroundColor: darkModeValue ? AppColors.darkContainer : Colors.white,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (BuildContext context) {
         return PrivacySettingsSheet(
-          isDarkMode: isDarkMode,
+          isDarkMode: darkModeValue,
           darkModeValue: darkModeValue,
           isArabic: arabicLanguage,
           title: 'privacy_security'.tr(),
@@ -584,11 +584,11 @@ class _ProfileViewState extends State<ProfileView> {
 
     showModalBottomSheet(
       context: context,
-      backgroundColor: isDarkMode ? AppColors.darkModeColor : Colors.white,
+      backgroundColor: darkModeValue ? AppColors.darkContainer : Colors.white,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (BuildContext context) {
         return LanguageSettingsSheet(
-          isDarkMode: isDarkMode,
+          isDarkMode: darkModeValue,
           darkModeValue: darkModeValue,
           languages: languages,
           selectedLanguage: selectedLanguage,
@@ -616,11 +616,11 @@ class _ProfileViewState extends State<ProfileView> {
   void _showHelpSupport() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: isDarkMode ? AppColors.darkModeColor : Colors.white,
+      backgroundColor: darkModeValue ? AppColors.darkContainer : Colors.white,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (BuildContext context) {
         return HelpSupportSheet(
-          isDarkMode: isDarkMode,
+          isDarkMode: darkModeValue,
           darkModeValue: darkModeValue,
           isArabic: arabicLanguage,
           title: 'help_support'.tr(),
@@ -666,11 +666,11 @@ class _ProfileViewState extends State<ProfileView> {
   void _showAbout() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: isDarkMode ? AppColors.darkModeColor : Colors.white,
+      backgroundColor: darkModeValue ? AppColors.darkContainer : Colors.white,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (BuildContext context) {
         return AboutSheet(
-          isDarkMode: isDarkMode,
+          isDarkMode: darkModeValue,
           darkModeValue: darkModeValue,
           title: 'about'.tr(),
           appName: 'NETS',

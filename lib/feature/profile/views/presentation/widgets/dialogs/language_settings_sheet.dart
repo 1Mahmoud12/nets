@@ -33,19 +33,19 @@ class LanguageSettingsSheet extends StatelessWidget {
               Text(
                 title,
                 style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                      color: darkModeValue ? Colors.black : Colors.black,
+                      color: darkModeValue ? AppColors.darkTextPrimary : Colors.black,
                       fontWeight: FontWeight.w400,
                     ),
               ),
               IconButton(
                 onPressed: () => Navigator.pop(context),
-                icon: Icon(Icons.close, color: darkModeValue ? AppColors.black : AppColors.black),
+                icon: Icon(Icons.close, color: darkModeValue ? AppColors.darkTextPrimary : AppColors.black),
               ),
             ],
           ),
           Divider(
             height: 1,
-            color: darkModeValue ? Colors.grey[700] : Colors.grey[200],
+            color: darkModeValue ? AppColors.darkBorder : Colors.grey[200],
             indent: 5,
             endIndent: 5,
           ),
@@ -62,7 +62,7 @@ class LanguageSettingsSheet extends StatelessWidget {
                   title: Text(
                     language,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: darkModeValue ? Colors.black : Colors.black,
+                          color: darkModeValue ? AppColors.darkTextPrimary : Colors.black,
                           fontWeight: FontWeight.w400,
                         ),
                   ),

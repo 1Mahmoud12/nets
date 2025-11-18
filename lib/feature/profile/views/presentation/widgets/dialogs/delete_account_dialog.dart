@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nets/core/themes/colors.dart';
 
 class DeleteAccountDialog extends StatelessWidget {
   const DeleteAccountDialog({
@@ -25,13 +26,14 @@ class DeleteAccountDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: isDarkMode ? Colors.black : Colors.white,
+      backgroundColor: isDarkMode ? AppColors.darkContainer : Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       title: Text(
         title,
         style: Theme.of(context)
             .textTheme
             .titleLarge
-            ?.copyWith(color: isDarkMode ? Colors.white : Colors.black),
+            ?.copyWith(color: isDarkMode ? AppColors.darkTextPrimary : Colors.black),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -42,25 +44,29 @@ class DeleteAccountDialog extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .labelMedium
-                ?.copyWith(color: isDarkMode ? Colors.grey[300] : Colors.grey[700]),
+                ?.copyWith(color: isDarkMode ? AppColors.darkTextSecondary : Colors.grey[700]),
           ),
           const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.orange[50],
+              color: isDarkMode ? Colors.orange.withOpacity(0.15) : Colors.orange[50],
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.orange[200]!),
+              border: Border.all(color: isDarkMode ? Colors.orange.withOpacity(0.5) : Colors.orange[200]!),
             ),
             child: Row(
               children: [
-                Icon(Icons.warning, color: Colors.orange[600], size: 20),
+                Icon(
+                  Icons.warning,
+                  color: isDarkMode ? Colors.orange[400] : Colors.orange[600],
+                  size: 20,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     warningDescription,
                     style: TextStyle(
-                      color: Colors.orange[800],
+                      color: isDarkMode ? Colors.orange[300] : Colors.orange[800],
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                     ),
@@ -76,7 +82,7 @@ class DeleteAccountDialog extends StatelessWidget {
           onPressed: onCancel,
           child: Text(
             cancelText,
-            style: TextStyle(color: isDarkMode ? Colors.grey[400] : Colors.grey[600]),
+            style: TextStyle(color: isDarkMode ? AppColors.darkTextSecondary : Colors.grey[600]),
           ),
         ),
         ElevatedButton(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nets/core/themes/colors.dart';
 import '../help_item_tile.dart';
 
 class HelpSupportSheet extends StatelessWidget {
@@ -32,19 +33,19 @@ class HelpSupportSheet extends StatelessWidget {
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: darkModeValue ? Colors.black : Colors.black,
+                        color: darkModeValue ? AppColors.darkTextPrimary : Colors.black,
                         fontWeight: FontWeight.w600,
                       ),
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: Icon(Icons.close, color: darkModeValue ? Colors.black : Colors.black),
+                  icon: Icon(Icons.close, color: darkModeValue ? AppColors.darkTextPrimary : Colors.black),
                 ),
               ],
             ),
             Divider(
               height: 1,
-              color: darkModeValue ? Colors.grey[700] : Colors.grey[200],
+              color: darkModeValue ? AppColors.darkBorder : Colors.grey[200],
               indent: 5,
               endIndent: 5,
             ),
