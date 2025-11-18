@@ -94,7 +94,7 @@ class _ContactsViewState extends State<ContactsView> {
 
   // ignore: unused_element
   void _addNewContact() {
-    customShowToast(context, 'Add new contact functionality would open here');
+    customShowToast(context, 'add_new_contact_functionality'.tr());
   }
 
   void showFiltersContact(BuildContext context) {
@@ -121,7 +121,7 @@ class _ContactsViewState extends State<ContactsView> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Filters', style: Theme.of(context).textTheme.displaySmall?.copyWith(color: primaryTextColor)),
+                          Text('filters'.tr(), style: Theme.of(context).textTheme.displaySmall?.copyWith(color: primaryTextColor)),
                           IconButton(
                             onPressed: () {
                               Navigator.pop(context);
@@ -133,9 +133,9 @@ class _ContactsViewState extends State<ContactsView> {
                       const SizedBox(height: 8),
                       CustomDropDownMenu(
                         borderRadius: 8,
-                        nameField: 'Journey',
+                        nameField: 'journey'.tr(),
 
-                        selectedItem: DropDownModel(name: 'Select Journey', value: 1),
+                        selectedItem: DropDownModel(name: 'select_journey'.tr(), value: 1),
                         items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
                       ),
                       const SizedBox(height: 8),
@@ -153,24 +153,24 @@ class _ContactsViewState extends State<ContactsView> {
                           contentPadding: const EdgeInsets.only(left: 20),
                           borderRadius: 8,
                           controller: datePick,
-                          nameField: 'Date',
-                          hintText: 'Select Date',
+                          nameField: 'date'.tr(),
+                          hintText: 'select_date'.tr(),
                           suffixIcon: SvgPicture.asset(AppIcons.date, fit: BoxFit.scaleDown),
                         ),
                       ),
                       const SizedBox(height: 8),
                       CustomDropDownMenu(
                         borderRadius: 8,
-                        nameField: 'Position',
-                        selectedItem: DropDownModel(name: 'Select Position', value: 1),
+                        nameField: 'position'.tr(),
+                        selectedItem: DropDownModel(name: 'select_position'.tr(), value: 1),
                         items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
                       ),
                       const SizedBox(height: 8),
                       CustomDropDownMenu(
                         borderRadius: 8,
-                        nameField: 'Country',
+                        nameField: 'country'.tr(),
 
-                        selectedItem: DropDownModel(name: 'Select Country', value: 1),
+                        selectedItem: DropDownModel(name: 'select_country'.tr(), value: 1),
                         items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
                       ),
                       const SizedBox(height: 20),
@@ -183,7 +183,7 @@ class _ContactsViewState extends State<ContactsView> {
                             colorText: primaryTextColor,
                             backgroundColor: AppColors.primaryColor.withOpacity(.3),
                             onPress: () {},
-                            childText: 'Reset All',
+                            childText: 'reset_all'.tr(),
                           ),
                           CustomTextButton(
                             borderColor: AppColors.transparent,
@@ -191,7 +191,7 @@ class _ContactsViewState extends State<ContactsView> {
                             colorText: AppColors.white,
                             backgroundColor: AppColors.primaryColor,
                             onPress: () {},
-                            childText: 'Apply Filters',
+                            childText: 'apply_filters'.tr(),
                           ),
                         ],
                       ),
@@ -229,17 +229,14 @@ class _ContactsViewState extends State<ContactsView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Manual Sync',
+                          'manual_sync'.tr(),
                           style: Theme.of(context).textTheme.displaySmall?.copyWith(color: primaryTextColor, fontWeight: FontWeight.w400),
                         ),
                         IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close, color: primaryTextColor)),
                       ],
                     ),
 
-                    Text(
-                      'Select contacts to sync with your device',
-                      style: Theme.of(context).textTheme.displayLarge?.copyWith(color: primaryTextColor),
-                    ),
+                    Text('select_contacts_to_sync'.tr(), style: Theme.of(context).textTheme.displayLarge?.copyWith(color: primaryTextColor)),
                     const SizedBox(height: 10),
                     _buildDivider(indent: 5),
                     const SizedBox(height: 20),
@@ -340,7 +337,7 @@ class _ContactsViewState extends State<ContactsView> {
                             onPress: () {
                               Navigator.pop(context);
                             },
-                            childText: 'Cancel',
+                            childText: 'cancel'.tr(),
                           ),
                         ),
                         w10,
@@ -352,7 +349,7 @@ class _ContactsViewState extends State<ContactsView> {
                             colorText: AppColors.white,
                             backgroundColor: isChack ? AppColors.primaryColor : AppColors.primaryColor.withOpacity(.3),
                             onPress: () {},
-                            childText: 'Sync Now (${isChack ? 2 : 0})',
+                            childText: '${'sync_now'.tr()} (${isChack ? 2 : 0})',
                           ),
                         ),
                       ],
@@ -390,17 +387,14 @@ class _ContactsViewState extends State<ContactsView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Duplicate Contact Found',
+                          'duplicate_contact_found'.tr(),
                           style: Theme.of(context).textTheme.displaySmall?.copyWith(color: primaryTextColor, fontWeight: FontWeight.w400),
                         ),
                         IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close, color: primaryTextColor)),
                       ],
                     ),
 
-                    Text(
-                      'We found a contact with similar information. Would you like to merge them?',
-                      style: Theme.of(context).textTheme.displayLarge?.copyWith(color: primaryTextColor),
-                    ),
+                    Text('duplicate_contact_message'.tr(), style: Theme.of(context).textTheme.displayLarge?.copyWith(color: primaryTextColor)),
                     const SizedBox(height: 10),
                     _buildDivider(indent: 5),
                     const SizedBox(height: 20),
@@ -490,7 +484,7 @@ class _ContactsViewState extends State<ContactsView> {
                             onPress: () {
                               Navigator.pop(context);
                             },
-                            childText: 'Cancel',
+                            childText: 'cancel'.tr(),
                           ),
                         ),
                         w10,
@@ -502,7 +496,7 @@ class _ContactsViewState extends State<ContactsView> {
                             colorText: AppColors.white,
                             backgroundColor: isChack ? AppColors.primaryColor : AppColors.primaryColor.withOpacity(.3),
                             onPress: () {},
-                            childText: 'Sync Now (${isChack ? 2 : 0})',
+                            childText: '${'sync_now'.tr()} (${isChack ? 2 : 0})',
                           ),
                         ),
                       ],
@@ -539,7 +533,7 @@ class _ContactsViewState extends State<ContactsView> {
     if (isLoading && contacts.isEmpty) {
       child = const Center(child: CircularProgressIndicator());
     } else if (isError && contacts.isEmpty) {
-      child = _buildErrorState(context, errorMessage ?? 'Something went wrong');
+      child = _buildErrorState(context, errorMessage ?? 'something_went_wrong'.tr());
     } else {
       child = _buildContent(context, contacts, isLoading: isLoading, isError: isError, errorMessage: errorMessage);
     }
@@ -639,7 +633,7 @@ class _ContactsViewState extends State<ContactsView> {
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
                     child: Text(
-                      'Filtered',
+                      'filtered'.tr(),
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppColors.primaryColor, fontWeight: FontWeight.w500),
                     ),
                   ),
@@ -671,13 +665,13 @@ class _ContactsViewState extends State<ContactsView> {
                     Icon(Icons.search_off, size: 64, color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[400]),
                     const SizedBox(height: 16),
                     Text(
-                      'No contacts found',
+                      'no_contacts_found'.tr(),
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[600]),
                     ),
                     const SizedBox(height: 8),
                     Center(
                       child: Text(
-                        'Try adjusting your search terms',
+                        'try_adjusting_search_terms'.tr(),
                         style: Theme.of(
                           context,
                         ).textTheme.bodyMedium?.copyWith(color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[500]),
@@ -806,8 +800,8 @@ void showContactDetails(Data contact, BuildContext context) {
                     ),
                     const SizedBox(height: 32),
 
-                    DetailsRowWidget(icon: Icons.phone, label: 'Phone', value: contact.phone ?? '—'),
-                    DetailsRowWidget(icon: Icons.email, label: 'Email', value: contact.email ?? '—'),
+                    DetailsRowWidget(icon: Icons.phone, label: 'phone_label'.tr(), value: contact.phone ?? '—'),
+                    DetailsRowWidget(icon: Icons.email, label: 'email'.tr(), value: contact.email ?? '—'),
                     const Spacer(),
                     Row(
                       children: [
@@ -815,7 +809,7 @@ void showContactDetails(Data contact, BuildContext context) {
                           child: ElevatedButton.icon(
                             onPressed: () {},
                             icon: const Icon(Icons.call),
-                            label: const Text('Call'),
+                            label: Text('call'.tr()),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green,
                               foregroundColor: Colors.white,
@@ -829,7 +823,7 @@ void showContactDetails(Data contact, BuildContext context) {
                           child: ElevatedButton.icon(
                             onPressed: () {},
                             icon: const Icon(Icons.message),
-                            label: const Text('Message'),
+                            label: Text('message'.tr()),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primaryColor,
                               foregroundColor: Colors.white,

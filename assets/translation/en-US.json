@@ -334,5 +334,21 @@
   "error_generating_qr_code": "Error generating QR code",
   "torch_not_available": "Torch not available on this device",
   "position_qr_code_inside_frame": "Position the QR code inside the frame",
-  "scanning_will_happen_automatically": "Scanning will happen automatically"
+  "scanning_will_happen_automatically": "Scanning will happen automatically",
+  "date": "Date",
+  "select_date": "Select Date",
+  "manual_sync": "Manual Sync",
+  "select_contacts_to_sync": "Select contacts to sync with your device",
+  "sync_now": "Sync Now",
+  "duplicate_contact_found": "Duplicate Contact Found",
+  "duplicate_contact_message": "We found a contact with similar information. Would you like to merge them?",
+  "something_went_wrong": "Something went wrong",
+  "no_contacts_found": "No contacts found",
+  "try_adjusting_search_terms": "Try adjusting your search terms",
+  "filtered": "Filtered",
+  "phone_label": "Phone",
+  "call": "Call",
+  "message": "Message",
+  "unknown": "Unknown",
+  "add_new_contact_functionality": "Add new contact functionality would open here"
 }

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -8,7 +9,7 @@ import '../../../data/models/contact_model.dart';
 import '../contacts_view.dart';
 
 Widget buildContactCard(Data contact, BuildContext context) {
-  final name = (contact.name ?? '').trim().isEmpty ? 'Unknown' : contact.name!.trim();
+  final name = (contact.name ?? '').trim().isEmpty ? 'unknown'.tr() : contact.name!.trim();
   final phone = (contact.phone ?? '').trim();
   final email = (contact.email ?? '').trim();
   final status = (contact.status ?? contact.notes ?? 'offline').toLowerCase();
@@ -154,7 +155,7 @@ Widget buildContactCard(Data contact, BuildContext context) {
                           BlendMode.srcIn,
                         ),
                       ),
-                      tooltip: 'Call',
+                      tooltip: 'call'.tr(),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -173,7 +174,7 @@ Widget buildContactCard(Data contact, BuildContext context) {
                         AppIcons.message,
                         color: AppColors.primaryColor,
                       ),
-                      tooltip: 'Message',
+                      tooltip: 'message'.tr(),
                     ),
                   ),
                 ],
