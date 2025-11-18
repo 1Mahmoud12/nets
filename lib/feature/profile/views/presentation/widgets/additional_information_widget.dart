@@ -19,9 +19,9 @@ class AdditionalInformationWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDarkMode ? AppColors.darkContainer : Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey[200]!),
+        border: Border.all(color: isDarkMode ? AppColors.darkBorder : Colors.grey[200]!),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,7 +30,7 @@ class AdditionalInformationWidget extends StatelessWidget {
             'additional_information'.tr(),
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w700,
-              color: isDarkMode ? AppColors.white : AppColors.black,
+              color: isDarkMode ? AppColors.darkTextPrimary : AppColors.black,
             ),
           ),
           const SizedBox(height: 24),

@@ -37,6 +37,7 @@ class _AddSocialMediaDialogState extends State<AddSocialMediaDialog> {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     
     return Dialog(
+      backgroundColor: isDarkMode ? AppColors.darkContainer : Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -52,7 +53,7 @@ class _AddSocialMediaDialogState extends State<AddSocialMediaDialog> {
                 'Add Social Media',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w700,
-                      color: isDarkMode ? AppColors.white : AppColors.black,
+                      color: isDarkMode ? AppColors.darkTextPrimary : AppColors.black,
                     ),
               ),
               const SizedBox(height: 24),
@@ -79,7 +80,7 @@ class _AddSocialMediaDialogState extends State<AddSocialMediaDialog> {
                     child: Text(
                       'cancel'.tr(),
                       style: TextStyle(
-                        color: isDarkMode ? AppColors.white : AppColors.black,
+                        color: isDarkMode ? AppColors.darkTextSecondary : AppColors.black,
                       ),
                     ),
                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nets/core/themes/colors.dart';
 
 class SectionContainer extends StatelessWidget {
   const SectionContainer({
@@ -16,9 +17,9 @@ class SectionContainer extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDarkMode ? AppColors.darkContainer : Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey[200]!),
+        border: Border.all(color: isDarkMode ? AppColors.darkBorder : Colors.grey[200]!),
       ),
       child: child,
     );

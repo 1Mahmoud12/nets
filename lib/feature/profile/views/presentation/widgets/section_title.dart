@@ -17,7 +17,7 @@ class SectionTitle extends StatelessWidget {
       title,
       style: Theme.of(context).textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.w700,
-            color: isDarkMode ? AppColors.white : AppColors.black,
+            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.black,
           ),
     );
   }

@@ -24,7 +24,7 @@ import 'widgets/profile_data_model.dart';
 
 class EditProfileView extends StatefulWidget {
   const EditProfileView({super.key, this.isFromLogin = false});
-final bool isFromLogin;
+  final bool isFromLogin;
   @override
   State<EditProfileView> createState() => _EditProfileViewState();
 }
@@ -286,10 +286,10 @@ class _EditProfileViewState extends State<EditProfileView> {
       // Reload user data after successful update
       context.read<UserDataCubit>().getUserData();
       // Navigate back
-      if(widget.isFromLogin){
+      if (widget.isFromLogin) {
         context.navigateToPageWithReplacement(const NavigationView());
-      }else{
-      Navigator.pop(context);
+      } else {
+        Navigator.pop(context);
       }
       // Reset flags
       _isImageUpdateComplete = false;
@@ -341,7 +341,7 @@ class _EditProfileViewState extends State<EditProfileView> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: customAppBar(context: context, title: 'edit_profile'.tr()),
-        backgroundColor: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
+        backgroundColor: darkModeValue ? AppColors.darkBackground : AppColors.white,
         body: BlocBuilder<UserDataCubit, UserDataState>(
           builder: (context, state) {
             if (state is UserDataLoading) {
@@ -425,9 +425,11 @@ class _EditProfileViewState extends State<EditProfileView> {
                       return Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
-                          border: Border(top: BorderSide(color: Colors.grey[200]!)),
-                          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -2))],
+                          color: darkModeValue ? AppColors.darkBackground : AppColors.white,
+                          border: Border(top: BorderSide(color: darkModeValue ? AppColors.darkBorder : Colors.grey[200]!)),
+                          boxShadow: [
+                            BoxShadow(color: Colors.black.withOpacity(darkModeValue ? 0.3 : 0.05), blurRadius: 10, offset: const Offset(0, -2)),
+                          ],
                         ),
                         child: SafeArea(top: false, child: SaveChangesButton(isLoading: isLoading, onPressed: _saveProfile)),
                       );

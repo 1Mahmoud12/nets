@@ -52,9 +52,9 @@ class _ContactInformationState extends State<ContactInformation> {
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: widget.isDarkMode ? AppColors.darkContainer : Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey[200]!),
+        border: Border.all(color: widget.isDarkMode ? AppColors.darkBorder : Colors.grey[200]!),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +63,7 @@ class _ContactInformationState extends State<ContactInformation> {
             'Contact Information',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w700,
-              color: widget.isDarkMode ? AppColors.white : AppColors.black,
+              color: widget.isDarkMode ? AppColors.darkTextPrimary : AppColors.black,
             ),
           ),
           const SizedBox(height: 24),
@@ -155,7 +155,7 @@ class _ContactInformationState extends State<ContactInformation> {
                               fontWeight: FontWeight.w400,
                               color:
                                   widget.isDarkMode
-                                      ? AppColors.white
+                                      ? AppColors.darkTextPrimary
                                       : AppColors.black,
                             ),
                           ),
@@ -175,7 +175,9 @@ class _ContactInformationState extends State<ContactInformation> {
                 const Icon(Icons.add, color: AppColors.primaryColor),
                 Text(
                   'Add Phone Number',
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(),
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: widget.isDarkMode ? AppColors.darkTextPrimary : AppColors.black,
+                  ),
                 ),
               ],
             ),

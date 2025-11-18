@@ -64,9 +64,9 @@ class _SocialMediaWidgetState extends State<SocialMediaWidget> {
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: widget.isDarkMode ? AppColors.darkContainer : Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey[200]!),
+        border: Border.all(color: widget.isDarkMode ? AppColors.darkBorder : Colors.grey[200]!),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +75,7 @@ class _SocialMediaWidgetState extends State<SocialMediaWidget> {
             'social_media'.tr(),
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w700,
-                  color: widget.isDarkMode ? AppColors.white : AppColors.black,
+                  color: widget.isDarkMode ? AppColors.darkTextPrimary : AppColors.black,
                 ),
           ),
           const SizedBox(height: 24),
