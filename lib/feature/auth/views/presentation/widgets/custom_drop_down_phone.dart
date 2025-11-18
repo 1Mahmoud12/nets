@@ -8,6 +8,7 @@ import 'package:nets/core/themes/styles.dart';
 import 'package:nets/core/utils/constant_gaping.dart';
 import 'package:nets/core/utils/constants.dart';
 import 'package:nets/core/utils/extensions.dart';
+import 'package:nets/core/network/local/cache.dart';
 
 import '../../../../../core/utils/app_icons.dart';
 
@@ -100,7 +101,7 @@ class _CustomDropDownPhoneState extends State<CustomDropDownPhone> {
             widget.nameField!.tr(),
             style: Theme.of(context).textTheme.displayMedium?.copyWith(
               fontWeight: FontWeight.w500,
-              color: AppColors.cP50,
+              color: darkModeValue ? AppColors.darkTextSecondary : AppColors.cP50,
             ),
           ),
         if (widget.nameField != null) h8,
@@ -151,7 +152,7 @@ class _CustomDropDownPhoneState extends State<CustomDropDownPhone> {
                     Text(
                       newSelected.name.tr(),
                       style: Styles.style12400.copyWith(
-                        color: AppColors.textColor,
+                        color: darkModeValue ? AppColors.darkTextPrimary : AppColors.textColor,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -164,10 +165,14 @@ class _CustomDropDownPhoneState extends State<CustomDropDownPhone> {
                         AppIcons.arrowDown,
                         height: 6,
                         width: 6,
+                        colorFilter: ColorFilter.mode(
+                          darkModeValue ? AppColors.darkTextSecondary : AppColors.black,
+                          BlendMode.srcIn,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 4),
-                    Container(width: 1, height: 45, color: AppColors.greyG200),
+                    Container(width: 1, height: 45, color: darkModeValue ? AppColors.darkBorder : AppColors.greyG200),
                   ],
                 ),
                 onChanged: (DropDownModelPhone? newValue) {
@@ -180,7 +185,7 @@ class _CustomDropDownPhoneState extends State<CustomDropDownPhone> {
                 borderRadius: BorderRadius.circular(15.r),
                 //  autofocus: false,
                 focusColor: AppColors.primaryColor,
-                dropdownColor: AppColors.white,
+                dropdownColor: darkModeValue ? AppColors.darkContainer : AppColors.white,
                 alignment:
                     context.locale.languageCode == 'ar'
                         ? Alignment.centerRight
@@ -220,7 +225,9 @@ class _CustomDropDownPhoneState extends State<CustomDropDownPhone> {
                               Expanded(
                                 child: Text(
                                   item.name,
-                                  style: Styles.style12400,
+                                  style: Styles.style12400.copyWith(
+                                    color: darkModeValue ? AppColors.darkTextPrimary : AppColors.textColor,
+                                  ),
                                   overflow: TextOverflow.ellipsis,
                                   textAlign:
                                       context.locale.languageCode == 'ar'

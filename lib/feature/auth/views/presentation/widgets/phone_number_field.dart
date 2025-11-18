@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../../../core/component/fields/custom_text_form_field.dart';
 import '../../../../../core/themes/colors.dart';
 import '../../../../../core/utils/app_icons.dart';
+import '../../../../../core/network/local/cache.dart';
 import '../../manager/loginCubit/cubit/login_cubit.dart';
 import 'custom_drop_down_phone.dart';
 
@@ -135,7 +136,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
       borderRadius: 12,
       nameField: 'phone_number'.tr(),
       hintText: 'enter_phone_number'.tr(),
-      hintStyle: TextStyle(color: AppColors.primaryColor.withOpacity(0.5)),
+      hintStyle: TextStyle(color: darkModeValue ? AppColors.darkTextSecondary : AppColors.primaryColor.withOpacity(0.5)),
       validator: (value) => _validatePhoneNumber(value, _countryCode),
       prefixIcon: SizedBox(
         width: 95,
