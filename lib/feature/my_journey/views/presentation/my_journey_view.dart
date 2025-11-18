@@ -84,8 +84,9 @@ class _MyJourneyViewState extends State<MyJourneyView> {
     required String helpText,
   }) {
     final theme = Theme.of(context);
+    final isDark = darkModeValue;
     final headerStyle = theme.textTheme.headlineSmall?.copyWith(fontSize: 18, color: Colors.white);
-    final bodyStyle = theme.textTheme.bodyMedium?.copyWith(fontSize: 14, color: AppColors.black);
+    final bodyStyle = theme.textTheme.bodyMedium?.copyWith(fontSize: 14, color: isDark ? AppColors.darkTextPrimary : AppColors.black);
     final weekDayStyle = theme.textTheme.labelSmall?.copyWith(fontSize: 12, color: AppColors.primaryColor);
 
     return showDatePicker(
@@ -97,7 +98,12 @@ class _MyJourneyViewState extends State<MyJourneyView> {
       builder: (context, child) {
         return Theme(
           data: theme.copyWith(
-            colorScheme: theme.colorScheme.copyWith(primary: AppColors.primaryColor, onPrimary: Colors.white, onSurface: AppColors.black),
+            colorScheme: theme.colorScheme.copyWith(
+              primary: AppColors.primaryColor,
+              onPrimary: Colors.white,
+              onSurface: isDark ? AppColors.darkTextPrimary : AppColors.black,
+              surface: isDark ? AppColors.darkContainer : Colors.white,
+            ),
             textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(foregroundColor: AppColors.primaryColor)),
             datePickerTheme: theme.datePickerTheme.copyWith(
               headerBackgroundColor: AppColors.primaryColor,
@@ -106,8 +112,12 @@ class _MyJourneyViewState extends State<MyJourneyView> {
               dayStyle: bodyStyle,
               weekdayStyle: weekDayStyle,
               yearStyle: bodyStyle,
+              backgroundColor: isDark ? AppColors.darkContainer : Colors.white,
             ),
-            textTheme: theme.textTheme.apply(bodyColor: AppColors.black, displayColor: AppColors.black),
+            textTheme: theme.textTheme.apply(
+              bodyColor: isDark ? AppColors.darkTextPrimary : AppColors.black,
+              displayColor: isDark ? AppColors.darkTextPrimary : AppColors.black,
+            ),
           ),
           child: child ?? const SizedBox.shrink(),
         );
@@ -149,96 +159,93 @@ class _MyJourneyViewState extends State<MyJourneyView> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder:
-          (context) => Container(
-            height: MediaQuery.of(context).size.height * 0.8,
-            decoration: BoxDecoration(
-              color: darkModeValue ? AppColors.darkModeColor : Colors.white,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            ),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Filters',
-                              style: Theme.of(context).textTheme.displaySmall?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(Icons.close),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 8),
-                        CustomDropDownMenu(
-                          borderRadius: 8,
-                          nameField: 'Position',
-                          selectedItem: DropDownModel(name: 'Select Position', value: 1),
-                          items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
-                        ),
-                        const SizedBox(height: 8),
-                        CustomDropDownMenu(
-                          borderRadius: 8,
-                          nameField: 'Country',
-
-                          selectedItem: DropDownModel(name: 'Select Country', value: 1),
-                          items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
-                        ),
-                        const SizedBox(height: 8),
-                        CustomDropDownMenu(
-                          borderRadius: 8,
-                          nameField: 'Journey',
-
-                          selectedItem: DropDownModel(name: 'Select Journey', value: 1),
-                          items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            CustomTextButton(
-                              borderColor: AppColors.transparent,
-                              borderRadius: 8,
-                              colorText: AppColors.black,
-                              backgroundColor: AppColors.primaryColor.withOpacity(.3),
-                              onPress: () {},
-                              childText: 'Reset All',
-                            ),
-                            CustomTextButton(
-                              borderColor: AppColors.transparent,
-
-                              borderRadius: 8,
-                              colorText: AppColors.white,
-                              backgroundColor: AppColors.primaryColor,
-                              onPress: () {},
-                              childText: 'Apply Filters',
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+      builder: (context) {
+        final isDark = darkModeValue;
+        final primaryTextColor = isDark ? AppColors.darkTextPrimary : AppColors.black;
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.8,
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.darkContainer : Colors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Filters', style: Theme.of(context).textTheme.displaySmall?.copyWith(color: primaryTextColor)),
+                          IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: Icon(Icons.close, color: primaryTextColor),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      CustomDropDownMenu(
+                        borderRadius: 8,
+                        nameField: 'Position',
+                        selectedItem: DropDownModel(name: 'Select Position', value: 1),
+                        items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
+                      ),
+                      const SizedBox(height: 8),
+                      CustomDropDownMenu(
+                        borderRadius: 8,
+                        nameField: 'Country',
+                        selectedItem: DropDownModel(name: 'Select Country', value: 1),
+                        items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
+                      ),
+                      const SizedBox(height: 8),
+                      CustomDropDownMenu(
+                        borderRadius: 8,
+                        nameField: 'Journey',
+                        selectedItem: DropDownModel(name: 'Select Journey', value: 1),
+                        items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomTextButton(
+                            borderColor: AppColors.transparent,
+                            borderRadius: 8,
+                            colorText: primaryTextColor,
+                            backgroundColor: AppColors.primaryColor.withOpacity(.3),
+                            onPress: () {},
+                            childText: 'Reset All',
+                          ),
+                          CustomTextButton(
+                            borderColor: AppColors.transparent,
+                            borderRadius: 8,
+                            colorText: AppColors.white,
+                            backgroundColor: AppColors.primaryColor,
+                            onPress: () {},
+                            childText: 'Apply Filters',
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final isDark = darkModeValue;
     return Scaffold(
-      // backgroundColor: AppColors.scaffoldBackGround,
+      backgroundColor: isDark ? AppColors.darkBackground : AppColors.scaffoldBackGround,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: SingleChildScrollView(
@@ -248,21 +255,42 @@ class _MyJourneyViewState extends State<MyJourneyView> {
                 children: [
                   Expanded(
                     child: CustomTextFormField(
-                      fillColor: AppColors.white,
+                      fillColor: isDark ? AppColors.darkContainer : AppColors.white,
                       borderRadius: 8,
                       controller: search,
                       hintText: 'search',
                       contentPadding: const EdgeInsets.only(left: 10),
                       focusNode: _searchFocusNode,
                       onChange: _onSearchChanged,
+                      enabledBorder: isDark ? AppColors.darkBorder : AppColors.greyBorderColor,
+                      hintStyle: TextStyle(
+                        color: isDark ? AppColors.darkTextSecondary : AppColors.greyG900,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                       suffixIcon:
                           search.text.isNotEmpty
-                              ? IconButton(onPressed: _onSearchCleared, icon: const Icon(Icons.close, size: 18, color: Colors.grey))
+                              ? IconButton(
+                                onPressed: _onSearchCleared,
+                                icon: Icon(Icons.close, size: 18, color: isDark ? AppColors.darkTextSecondary : Colors.grey),
+                              )
                               : null,
                     ),
                   ),
                   const SizedBox(width: 8),
-                  GestureDetector(onTap: _openDateFilter, child: SvgPicture.asset(AppIcons.filtterIcon)),
+                  GestureDetector(
+                    onTap: _openDateFilter,
+                    child: Container(
+                      height: 48,
+                      width: 48,
+                      decoration: BoxDecoration(
+                        color: isDark ? AppColors.darkContainer : AppColors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: isDark ? AppColors.darkBorder : AppColors.greyBorderColor),
+                      ),
+                      child: Icon(Icons.filter_list, color: isDark ? AppColors.darkTextPrimary : AppColors.black, size: 20),
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -271,7 +299,11 @@ class _MyJourneyViewState extends State<MyJourneyView> {
                   width: double.infinity,
                   margin: const EdgeInsets.only(bottom: 12),
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.08), borderRadius: BorderRadius.circular(8)),
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.primaryColor.withOpacity(0.15) : AppColors.primaryColor.withOpacity(0.08),
+                    borderRadius: BorderRadius.circular(8),
+                    border: isDark ? Border.all(color: AppColors.darkBorder) : null,
+                  ),
                   child: Row(
                     children: [
                       const Icon(Icons.event, color: AppColors.primaryColor, size: 18),
@@ -290,7 +322,7 @@ class _MyJourneyViewState extends State<MyJourneyView> {
                           });
                           _fetchJourneys();
                         },
-                        child: const Text('Clear'),
+                        child: Text('Clear', style: TextStyle(color: isDark ? AppColors.darkTextSecondary : AppColors.primaryColor)),
                       ),
                     ],
                   ),
@@ -311,6 +343,7 @@ class _MyJourneyViewState extends State<MyJourneyView> {
                   }
 
                   if ((journeys.isEmpty && !isLoading) || hasError) {
+                    final isDark = darkModeValue;
                     return Center(
                       child: Column(
                         children: [
@@ -319,7 +352,7 @@ class _MyJourneyViewState extends State<MyJourneyView> {
                           const SizedBox(height: 16),
                           Text(
                             hasError ? 'Failed to load journeys' : 'No Journey Yet',
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.black87),
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: isDark ? AppColors.darkTextPrimary : Colors.black87),
                           ),
                         ],
                       ),
@@ -350,13 +383,18 @@ class MyJourneyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = darkModeValue;
     final dateText = _formatDate(myJourney.journeyDate);
     final List<String> participants = (myJourney.persons ?? []).map((person) => person.name ?? '').where((name) => name.isNotEmpty).toList();
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.grey.shade300)),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.darkContainer : Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: isDark ? AppColors.darkBorder : Colors.grey.shade300),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -364,11 +402,17 @@ class MyJourneyCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(dateText, style: Theme.of(context).textTheme.displayMedium?.copyWith(color: Colors.grey)),
+                Text(dateText, style: Theme.of(context).textTheme.displayMedium?.copyWith(color: isDark ? AppColors.darkTextSecondary : Colors.grey)),
                 const SizedBox(height: 6),
-                Text(myJourney.address ?? '', style: Theme.of(context).textTheme.displayMedium?.copyWith()),
+                Text(
+                  myJourney.address ?? '',
+                  style: Theme.of(context).textTheme.displayMedium?.copyWith(color: isDark ? AppColors.darkTextPrimary : null),
+                ),
                 const SizedBox(height: 4),
-                Text(myJourney.description ?? myJourney.address ?? '', style: Theme.of(context).textTheme.labelMedium),
+                Text(
+                  myJourney.description ?? myJourney.address ?? '',
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(color: isDark ? AppColors.darkTextSecondary : null),
+                ),
                 const SizedBox(height: 8),
                 if (participants.isNotEmpty)
                   Wrap(
@@ -388,15 +432,21 @@ class MyJourneyCard extends StatelessWidget {
                 else
                   Row(
                     children: [
-                      SvgPicture.asset(AppIcons.person),
+                      SvgPicture.asset(
+                        AppIcons.person,
+                        colorFilter: ColorFilter.mode(isDark ? AppColors.darkTextSecondary : Colors.grey, BlendMode.srcIn),
+                      ),
                       const SizedBox(width: 4),
-                      Text('No participants', style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Colors.grey)),
+                      Text(
+                        'No participants',
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(color: isDark ? AppColors.darkTextSecondary : Colors.grey),
+                      ),
                     ],
                   ),
               ],
             ),
           ),
-          SvgPicture.asset(AppIcons.maps),
+          SvgPicture.asset(AppIcons.maps, colorFilter: ColorFilter.mode(isDark ? AppColors.darkTextSecondary : AppColors.black, BlendMode.srcIn)),
         ],
       ),
     );
