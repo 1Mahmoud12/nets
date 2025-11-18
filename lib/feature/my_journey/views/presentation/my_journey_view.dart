@@ -9,6 +9,8 @@ import 'package:nets/core/utils/app_icons.dart';
 import 'package:nets/core/utils/constants_models.dart';
 import 'package:nets/core/utils/custom_show_toast.dart';
 import 'package:nets/feature/my_journey/data/models/journy_model.dart';
+import 'package:nets/feature/navigation/view/manager/homeBloc/cubit.dart';
+import 'package:nets/feature/navigation/view/manager/homeBloc/state.dart';
 import '../../../../core/component/buttons/custom_text_button.dart';
 import '../../../../core/component/custom_drop_down_menu.dart';
 import '../../../../core/network/local/cache.dart';
@@ -245,135 +247,139 @@ class _MyJourneyViewState extends State<MyJourneyView> {
   @override
   Widget build(BuildContext context) {
     final isDark = darkModeValue;
-    return Scaffold(
-      backgroundColor: isDark ? AppColors.darkBackground : AppColors.scaffoldBackGround,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Row(
+    return BlocBuilder<MainCubit, MainState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: isDark ? AppColors.darkBackground : AppColors.scaffoldBackGround,
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: SingleChildScrollView(
+              child: Column(
                 children: [
-                  Expanded(
-                    child: CustomTextFormField(
-                      fillColor: isDark ? AppColors.darkContainer : AppColors.white,
-                      borderRadius: 8,
-                      controller: search,
-                      hintText: 'search'.tr(),
-                      contentPadding: const EdgeInsets.only(left: 10),
-                      focusNode: _searchFocusNode,
-                      onChange: _onSearchChanged,
-                      enabledBorder: isDark ? AppColors.darkBorder : AppColors.greyBorderColor,
-                      hintStyle: TextStyle(
-                        color: isDark ? AppColors.darkTextSecondary : AppColors.greyG900,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      suffixIcon:
-                          search.text.isNotEmpty
-                              ? IconButton(
-                                onPressed: _onSearchCleared,
-                                icon: Icon(Icons.close, size: 18, color: isDark ? AppColors.darkTextSecondary : Colors.grey),
-                              )
-                              : null,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  GestureDetector(
-                    onTap: _openDateFilter,
-                    child: Container(
-                      height: 48,
-                      width: 48,
-                      decoration: BoxDecoration(
-                        color: isDark ? AppColors.darkContainer : AppColors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: isDark ? AppColors.darkBorder : AppColors.greyBorderColor),
-                      ),
-                      child: Icon(Icons.filter_list, color: isDark ? AppColors.darkTextPrimary : AppColors.black, size: 20),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              if (_startDate != null || _endDate != null)
-                Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: isDark ? AppColors.primaryColor.withOpacity(0.15) : AppColors.primaryColor.withOpacity(0.08),
-                    borderRadius: BorderRadius.circular(8),
-                    border: isDark ? Border.all(color: AppColors.darkBorder) : null,
-                  ),
-                  child: Row(
+                  Row(
                     children: [
-                      const Icon(Icons.event, color: AppColors.primaryColor, size: 18),
-                      const SizedBox(width: 8),
                       Expanded(
-                        child: Text(
-                          _dateRangeLabel(),
-                          style: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.primaryColor, fontWeight: FontWeight.w600),
+                        child: CustomTextFormField(
+                          fillColor: isDark ? AppColors.darkContainer : AppColors.white,
+                          borderRadius: 8,
+                          controller: search,
+                          hintText: 'search'.tr(),
+                          contentPadding: const EdgeInsets.only(left: 10),
+                          focusNode: _searchFocusNode,
+                          onChange: _onSearchChanged,
+                          enabledBorder: isDark ? AppColors.darkBorder : AppColors.greyBorderColor,
+                          hintStyle: TextStyle(
+                            color: isDark ? AppColors.darkTextSecondary : AppColors.greyG900,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          suffixIcon:
+                              search.text.isNotEmpty
+                                  ? IconButton(
+                                    onPressed: _onSearchCleared,
+                                    icon: Icon(Icons.close, size: 18, color: isDark ? AppColors.darkTextSecondary : Colors.grey),
+                                  )
+                                  : null,
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          setState(() {
-                            _startDate = null;
-                            _endDate = null;
-                          });
-                          _fetchJourneys();
-                        },
-                        child: Text('clear'.tr(), style: TextStyle(color: isDark ? AppColors.darkTextSecondary : AppColors.primaryColor)),
+                      const SizedBox(width: 8),
+                      GestureDetector(
+                        onTap: _openDateFilter,
+                        child: Container(
+                          height: 48,
+                          width: 48,
+                          decoration: BoxDecoration(
+                            color: isDark ? AppColors.darkContainer : AppColors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: isDark ? AppColors.darkBorder : AppColors.greyBorderColor),
+                          ),
+                          child: Icon(Icons.filter_list, color: isDark ? AppColors.darkTextPrimary : AppColors.black, size: 20),
+                        ),
                       ),
                     ],
                   ),
-                ),
-              BlocConsumer<MyJourneyCubit, MyJourneyState>(
-                listener: (context, state) {
-                  if (state is MyJourneyError) {
-                    customShowToast(context, state.message, showToastStatus: ShowToastStatus.error);
-                  }
-                },
-                builder: (context, state) {
-                  final bool isLoading = state is MyJourneyLoading;
-                  final bool hasError = state is MyJourneyError;
-                  final journeys = state is MyJourneySuccess ? state.journeys.data ?? [] : ConstantsModels.journeyModel?.data ?? [];
-
-                  if (isLoading && journeys.isEmpty) {
-                    return const Padding(padding: EdgeInsets.symmetric(vertical: 40), child: CircularProgressIndicator());
-                  }
-
-                  if ((journeys.isEmpty && !isLoading) || hasError) {
-                    final isDark = darkModeValue;
-                    return Center(
-                      child: Column(
+                  const SizedBox(height: 16),
+                  if (_startDate != null || _endDate != null)
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: isDark ? AppColors.primaryColor.withOpacity(0.15) : AppColors.primaryColor.withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(8),
+                        border: isDark ? Border.all(color: AppColors.darkBorder) : null,
+                      ),
+                      child: Row(
                         children: [
-                          const SizedBox(height: 50),
-                          SvgPicture.asset(AppIcons.emptyJourney),
-                          const SizedBox(height: 16),
-                          Text(
-                            hasError ? 'failed_to_load_journeys'.tr() : 'no_journey_yet'.tr(),
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: isDark ? AppColors.darkTextPrimary : Colors.black87),
+                          const Icon(Icons.event, color: AppColors.primaryColor, size: 18),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              _dateRangeLabel(),
+                              style: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.primaryColor, fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                _startDate = null;
+                                _endDate = null;
+                              });
+                              _fetchJourneys();
+                            },
+                            child: Text('clear'.tr(), style: TextStyle(color: isDark ? AppColors.darkTextSecondary : AppColors.primaryColor)),
                           ),
                         ],
                       ),
-                    );
-                  }
+                    ),
+                  BlocConsumer<MyJourneyCubit, MyJourneyState>(
+                    listener: (context, state) {
+                      if (state is MyJourneyError) {
+                        customShowToast(context, state.message, showToastStatus: ShowToastStatus.error);
+                      }
+                    },
+                    builder: (context, state) {
+                      final bool isLoading = state is MyJourneyLoading;
+                      final bool hasError = state is MyJourneyError;
+                      final journeys = state is MyJourneySuccess ? state.journeys.data ?? [] : ConstantsModels.journeyModel?.data ?? [];
 
-                  return Column(
-                    children: [
-                      if (isLoading) const LinearProgressIndicator(minHeight: 2),
-                      ...journeys.map((journey) => MyJourneyCard(journey)).toList(),
-                    ],
-                  );
-                },
+                      if (isLoading && journeys.isEmpty) {
+                        return const Padding(padding: EdgeInsets.symmetric(vertical: 40), child: CircularProgressIndicator());
+                      }
+
+                      if ((journeys.isEmpty && !isLoading) || hasError) {
+                        final isDark = darkModeValue;
+                        return Center(
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 50),
+                              SvgPicture.asset(AppIcons.emptyJourney),
+                              const SizedBox(height: 16),
+                              Text(
+                                hasError ? 'failed_to_load_journeys'.tr() : 'no_journey_yet'.tr(),
+                                style: Theme.of(context).textTheme.titleMedium?.copyWith(color: isDark ? AppColors.darkTextPrimary : Colors.black87),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+
+                      return Column(
+                        children: [
+                          if (isLoading) const LinearProgressIndicator(minHeight: 2),
+                          ...journeys.map((journey) => MyJourneyCard(journey)).toList(),
+                        ],
+                      );
+                    },
+                  ),
+
+                  const SizedBox(height: 80),
+                ],
               ),
-
-              const SizedBox(height: 80),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

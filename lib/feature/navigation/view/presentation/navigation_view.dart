@@ -12,6 +12,8 @@ import 'package:nets/core/utils/constants_models.dart';
 import 'package:nets/feature/Contacts/views/presentation/contacts_view.dart';
 import 'package:nets/feature/QrCode/qr_view.dart';
 import 'package:nets/feature/navigation/data/homeDataSource/home_data_source.dart';
+import 'package:nets/feature/navigation/view/manager/homeBloc/cubit.dart';
+import 'package:nets/feature/navigation/view/manager/homeBloc/state.dart';
 import 'package:nets/feature/navigation/view/presentation/widgets/custom_bottom_nav.dart';
 import 'package:nets/feature/profile/views/manager/cubit/user_data_cubit.dart';
 import 'package:nets/feature/profile/views/presentation/profile_view.dart';
@@ -239,128 +241,132 @@ class _NavigationViewState extends State<NavigationView> with TickerProviderStat
           exit(0);
         }
       },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(70),
-          child: Container(
-            decoration: BoxDecoration(
-              border: const Border(bottom: BorderSide(color: AppColors.greyG100)),
-              color: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 2))],
-            ),
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                child: BlocBuilder<UserDataCubit, UserDataState>(
-                  builder: (context, state) {
-                    final firstName = userCacheValue?.data?.user?.profile?.firstName ?? '';
-                    final initials = firstName.length >= 2 ? firstName.substring(0, 2).toUpperCase() : 'UK';
-                    return Row(
-                      children: [
-                        // Profile avatar with menu
-                        GestureDetector(
-                          // onTap: _showProfileMenu,
-                          child: Container(
-                            decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.primaryColor, width: 2)),
-                            child: CircleAvatar(
-                              radius: 20,
-                              backgroundColor: AppColors.primaryColor,
-                              child: Text(
-                                initials,
-                                style: Theme.of(context).textTheme.displayMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+      child: BlocBuilder<MainCubit, MainState>(
+        builder: (context, state) {
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(70),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: const Border(bottom: BorderSide(color: AppColors.greyG100)),
+                  color: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
+                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 2))],
+                ),
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                    child: BlocBuilder<UserDataCubit, UserDataState>(
+                      builder: (context, state) {
+                        final firstName = userCacheValue?.data?.user?.profile?.firstName ?? '';
+                        final initials = firstName.length >= 2 ? firstName.substring(0, 2).toUpperCase() : 'UK';
+                        return Row(
+                          children: [
+                            // Profile avatar with menu
+                            GestureDetector(
+                              // onTap: _showProfileMenu,
+                              child: Container(
+                                decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.primaryColor, width: 2)),
+                                child: CircleAvatar(
+                                  radius: 20,
+                                  backgroundColor: AppColors.primaryColor,
+                                  child: Text(
+                                    initials,
+                                    style: Theme.of(context).textTheme.displayMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
 
-                        const SizedBox(width: 8),
+                            const SizedBox(width: 8),
 
-                        // Greeting and user name
-                        Flexible(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
+                            // Greeting and user name
+                            Flexible(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    _getGreeting(),
-                                    style: Theme.of(context).textTheme.displayMedium,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        _getGreeting(),
+                                        style: Theme.of(context).textTheme.displayMedium,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        userCacheValue?.data?.user?.profile?.firstName ?? 'unknown'.tr(),
+                                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                          fontWeight: FontWeight.w400,
+                                          color: darkModeValue ? AppColors.white : AppColors.black,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
                                   ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    userCacheValue?.data?.user?.profile?.firstName ?? 'unknown'.tr(),
-                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                      fontWeight: FontWeight.w400,
-                                      color: darkModeValue ? AppColors.white : AppColors.black,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+
+                                  // const Spacer(),
+                                  // Status indicator
                                 ],
                               ),
-
-                              // const Spacer(),
-                              // Status indicator
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-                  },
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
 
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                (darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white),
-                (darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white).withOpacity(0.95),
+            body: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    (darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white),
+                    (darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white).withOpacity(0.95),
+                  ],
+                ),
+              ),
+              child: IndexedStack(index: index, children: List.generate(4, (index) => _buildScreen(index))),
+            ),
+
+            bottomSheet: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SafeArea(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      // color:
+                      //     darkModeValue
+                      //         ? AppColors.appBarDarkModeColor
+                      //         : AppColors.white,
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     color: Colors.black.withOpacity(0.1),
+                      //     blurRadius: 10,
+                      //     offset: const Offset(0, -2),
+                      //   ),
+                      // ],
+                    ),
+                    child: CustomBottomNavigationBar(
+                      currentIndex: index,
+                      onTap: (value) => _onItemTapped(value, context),
+                      selectedIcons: selectedIcons,
+                      unselectedIcons: unselectedIcons,
+                      names: names,
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
-          child: IndexedStack(index: index, children: List.generate(4, (index) => _buildScreen(index))),
-        ),
-
-        bottomSheet: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SafeArea(
-              child: Container(
-                decoration: const BoxDecoration(
-                  // color:
-                  //     darkModeValue
-                  //         ? AppColors.appBarDarkModeColor
-                  //         : AppColors.white,
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //     color: Colors.black.withOpacity(0.1),
-                  //     blurRadius: 10,
-                  //     offset: const Offset(0, -2),
-                  //   ),
-                  // ],
-                ),
-                child: CustomBottomNavigationBar(
-                  currentIndex: index,
-                  onTap: (value) => _onItemTapped(value, context),
-                  selectedIcons: selectedIcons,
-                  unselectedIcons: unselectedIcons,
-                  names: names,
-                ),
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

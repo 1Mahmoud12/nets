@@ -18,6 +18,7 @@ PreferredSizeWidget customAppBar({
   PreferredSizeWidget? bottom,
 }) {
   return AppBar(
+    backgroundColor: darkModeValue ? AppColors.darkAppBar : AppColors.white,
     leading:
         stopLeading
             ? const SizedBox.shrink()

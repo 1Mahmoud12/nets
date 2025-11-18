@@ -18,6 +18,7 @@ import 'package:nets/feature/auth/views/presentation/login_view.dart';
 import '../../../../core/component/buttons/custom_text_button.dart';
 import '../../../../core/component/custom_drop_down_menu.dart';
 import '../../../../core/utils/constants.dart';
+import '../../../../feature/navigation/view/manager/homeBloc/cubit.dart';
 import '../manager/cubit/user_data_cubit.dart';
 import '../manager/getUesrStatistics/cubit/get_user_statistics_cubit.dart';
 import '../manager/notificationSettign/cubit/notification_setting_cubit.dart';
@@ -605,13 +606,9 @@ class _ProfileViewState extends State<ProfileView> {
           title: 'select_language'.tr(),
           onLanguageSelected: (language) {
             if (language == 'Arabic'.tr() || language == 'arabic'.tr()) {
-              context.setLocale(const Locale('ar', 'SA'));
-              userCache?.put(languageAppKey, true);
-              arabicLanguage = true;
+              context.read<MainCubit>().changeLanguage(const Locale('ar', 'SA'), context);
             } else {
-              context.setLocale(const Locale('en', 'US'));
-              userCache?.put(languageAppKey, false);
-              arabicLanguage = false;
+              context.read<MainCubit>().changeLanguage(const Locale('en', 'US'), context);
             }
             setState(() {
               selectedLanguage = language;
