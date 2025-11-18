@@ -354,5 +354,15 @@
   "call": "اتصال",
   "message": "رسالة",
   "unknown": "غير معروف",
-  "add_new_contact_functionality": "ستفتح وظيفة إضافة جهة اتصال جديدة هنا"
+  "add_new_contact_functionality": "ستفتح وظيفة إضافة جهة اتصال جديدة هنا",
+  "select_start_date": "اختر تاريخ البداية",
+  "select_end_date": "اختر تاريخ النهاية",
+  "clear": "مسح",
+  "failed_to_load_journeys": "فشل تحميل الرحلات",
+  "no_journey_yet": "لا توجد رحلة بعد",
+  "no_participants": "لا يوجد مشاركون",
+  "search": "بحث",
+  "from": "من",
+  "onwards": "فصاعداً",
+  "until": "حتى"
 }

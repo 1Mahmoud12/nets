@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -70,9 +71,9 @@ class _MyJourneyViewState extends State<MyJourneyView> {
     if (startText != null && endText != null) {
       return '$startText  →  $endText';
     } else if (startText != null) {
-      return 'From $startText onwards';
+      return '${'from'.tr()} $startText ${'onwards'.tr()}';
     } else if (endText != null) {
-      return 'Until $endText';
+      return '${'until'.tr()} $endText';
     }
     return '';
   }
@@ -132,7 +133,7 @@ class _MyJourneyViewState extends State<MyJourneyView> {
       initialDate: initialStart,
       firstDate: DateTime(now.year - 5),
       lastDate: now,
-      helpText: 'Select start date',
+      helpText: 'select_start_date'.tr(),
     );
 
     if (pickedStart == null) return;
@@ -141,7 +142,7 @@ class _MyJourneyViewState extends State<MyJourneyView> {
       initialDate: (_endDate != null && !_endDate!.isBefore(pickedStart)) ? _endDate! : pickedStart,
       firstDate: pickedStart,
       lastDate: DateTime(now.year + 5),
-      helpText: 'Select end date',
+      helpText: 'select_end_date'.tr(),
     );
 
     if (pickedEnd == null) return;
@@ -178,7 +179,7 @@ class _MyJourneyViewState extends State<MyJourneyView> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Filters', style: Theme.of(context).textTheme.displaySmall?.copyWith(color: primaryTextColor)),
+                          Text('filters'.tr(), style: Theme.of(context).textTheme.displaySmall?.copyWith(color: primaryTextColor)),
                           IconButton(
                             onPressed: () {
                               Navigator.pop(context);
@@ -190,22 +191,22 @@ class _MyJourneyViewState extends State<MyJourneyView> {
                       const SizedBox(height: 8),
                       CustomDropDownMenu(
                         borderRadius: 8,
-                        nameField: 'Position',
-                        selectedItem: DropDownModel(name: 'Select Position', value: 1),
+                        nameField: 'position'.tr(),
+                        selectedItem: DropDownModel(name: 'select_position'.tr(), value: 1),
                         items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
                       ),
                       const SizedBox(height: 8),
                       CustomDropDownMenu(
                         borderRadius: 8,
-                        nameField: 'Country',
-                        selectedItem: DropDownModel(name: 'Select Country', value: 1),
+                        nameField: 'country'.tr(),
+                        selectedItem: DropDownModel(name: 'select_country'.tr(), value: 1),
                         items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
                       ),
                       const SizedBox(height: 8),
                       CustomDropDownMenu(
                         borderRadius: 8,
-                        nameField: 'Journey',
-                        selectedItem: DropDownModel(name: 'Select Journey', value: 1),
+                        nameField: 'journey'.tr(),
+                        selectedItem: DropDownModel(name: 'select_journey'.tr(), value: 1),
                         items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
                       ),
                       const SizedBox(height: 20),
@@ -218,7 +219,7 @@ class _MyJourneyViewState extends State<MyJourneyView> {
                             colorText: primaryTextColor,
                             backgroundColor: AppColors.primaryColor.withOpacity(.3),
                             onPress: () {},
-                            childText: 'Reset All',
+                            childText: 'reset_all'.tr(),
                           ),
                           CustomTextButton(
                             borderColor: AppColors.transparent,
@@ -226,7 +227,7 @@ class _MyJourneyViewState extends State<MyJourneyView> {
                             colorText: AppColors.white,
                             backgroundColor: AppColors.primaryColor,
                             onPress: () {},
-                            childText: 'Apply Filters',
+                            childText: 'apply_filters'.tr(),
                           ),
                         ],
                       ),
@@ -258,7 +259,7 @@ class _MyJourneyViewState extends State<MyJourneyView> {
                       fillColor: isDark ? AppColors.darkContainer : AppColors.white,
                       borderRadius: 8,
                       controller: search,
-                      hintText: 'search',
+                      hintText: 'search'.tr(),
                       contentPadding: const EdgeInsets.only(left: 10),
                       focusNode: _searchFocusNode,
                       onChange: _onSearchChanged,
@@ -322,7 +323,7 @@ class _MyJourneyViewState extends State<MyJourneyView> {
                           });
                           _fetchJourneys();
                         },
-                        child: Text('Clear', style: TextStyle(color: isDark ? AppColors.darkTextSecondary : AppColors.primaryColor)),
+                        child: Text('clear'.tr(), style: TextStyle(color: isDark ? AppColors.darkTextSecondary : AppColors.primaryColor)),
                       ),
                     ],
                   ),
@@ -351,7 +352,7 @@ class _MyJourneyViewState extends State<MyJourneyView> {
                           SvgPicture.asset(AppIcons.emptyJourney),
                           const SizedBox(height: 16),
                           Text(
-                            hasError ? 'Failed to load journeys' : 'No Journey Yet',
+                            hasError ? 'failed_to_load_journeys'.tr() : 'no_journey_yet'.tr(),
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(color: isDark ? AppColors.darkTextPrimary : Colors.black87),
                           ),
                         ],
@@ -438,7 +439,7 @@ class MyJourneyCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        'No participants',
+                        'no_participants'.tr(),
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(color: isDark ? AppColors.darkTextSecondary : Colors.grey),
                       ),
                     ],
