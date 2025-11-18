@@ -48,7 +48,7 @@ class OTPVerificationViewState extends State<OTPVerificationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: darkModeValue ? AppColors.black : AppColors.scaffoldBackGround,
+      backgroundColor: darkModeValue ? AppColors.darkBackground : AppColors.scaffoldBackGround,
       // appBar: customAppBar(context: context, title: 'Email Confirmation'.tr()),
       body: BlocProvider.value(
         value: cubit,
@@ -85,7 +85,7 @@ class OTPVerificationViewState extends State<OTPVerificationView> {
                                   Text(
                                     'A_verification_code_has_been_sent_to'.tr(),
                                     style: Theme.of(context).textTheme.displayMedium!.copyWith(
-                                      color: darkModeValue ? AppColors.darkModeText : AppColors.cP50,
+                                      color: darkModeValue ? AppColors.darkTextSecondary : AppColors.cP50,
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -95,7 +95,7 @@ class OTPVerificationViewState extends State<OTPVerificationView> {
                                   Text(
                                     widget.phone,
                                     style: Theme.of(context).textTheme.displayMedium!.copyWith(
-                                      color: darkModeValue ? AppColors.darkModeText : AppColors.cP50,
+                                      color: darkModeValue ? AppColors.darkTextSecondary : AppColors.cP50,
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -113,20 +113,27 @@ class OTPVerificationViewState extends State<OTPVerificationView> {
                                 appContext: context,
                                 keyboardType: TextInputType.number,
                                 animationType: AnimationType.fade,
+                                backgroundColor: Colors.transparent,
                                 pinTheme: PinTheme(
                                   shape: PinCodeFieldShape.box,
                                   borderRadius: BorderRadius.circular(10.r),
                                   fieldHeight: 58.h,
                                   fieldWidth: 50.w,
-                                  activeFillColor: AppColors.white,
-                                  inactiveColor: AppColors.white,
-                                  inactiveFillColor: darkModeValue ? AppColors.darkModeBackground : Colors.white,
-                                  activeColor: AppColors.greyG100,
-                                  selectedFillColor: AppColors.white.withAlpha(20),
+                                  activeFillColor: Colors.transparent,
+                                  inactiveColor: darkModeValue ? AppColors.darkBorder : AppColors.greyG200,
+                                  inactiveFillColor: Colors.transparent,
+                                  activeColor: darkModeValue ? AppColors.darkBorder : AppColors.greyG200,
+                                  selectedFillColor: Colors.transparent,
                                   selectedColor: AppColors.primaryColor,
+                                  borderWidth: 1,
+                                  fieldOuterPadding: EdgeInsets.zero,
+                                ),
+                                textStyle: TextStyle(
+                                  color: darkModeValue ? AppColors.darkTextPrimary : AppColors.black,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w600,
                                 ),
                                 animationDuration: const Duration(milliseconds: 300),
-                                enableActiveFill: true,
                                 controller: cubit.codeController,
                                 // hintCharacter: '-',
                                 onCompleted: (v) async {
@@ -189,7 +196,7 @@ class OTPVerificationViewState extends State<OTPVerificationView> {
                               ' ${'resend_code'.tr()} ',
                               style: Theme.of(
                                 context,
-                              ).textTheme.displayMedium!.copyWith(color: darkModeValue ? AppColors.darkModeText : AppColors.textColor),
+                              ).textTheme.displayMedium!.copyWith(color: darkModeValue ? AppColors.darkTextSecondary : AppColors.textColor),
                             ),
 
                             GestureDetector(
@@ -239,7 +246,7 @@ class OTPVerificationViewState extends State<OTPVerificationView> {
                                       state is OTPTimerRunning
                                           ? AppColors.greyG500
                                           : darkModeValue
-                                          ? AppColors.darkModeText
+                                          ? AppColors.darkTextPrimary
                                           : AppColors.primaryColor,
                                 ),
                               ),
