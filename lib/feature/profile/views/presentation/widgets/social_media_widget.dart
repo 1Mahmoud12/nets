@@ -145,7 +145,7 @@ class _SocialMediaWidgetState extends State<SocialMediaWidget> {
                     IconButton(
                       icon: const Icon(Icons.close, color: AppColors.primaryColor),
                       onPressed: () => _removeSocialMedia(index),
-                      tooltip: 'Remove',
+                      tooltip: 'remove'.tr(),
                     ),
                   ],
                 ),
@@ -161,7 +161,7 @@ class _SocialMediaWidgetState extends State<SocialMediaWidget> {
                 const Icon(Icons.add, color: AppColors.primaryColor),
                 const SizedBox(width: 8),
                 Text(
-                  'Add Social Media',
+                  'add_social_media'.tr(),
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
                         color: AppColors.primaryColor,
                       ),
@@ -231,7 +231,7 @@ class _SocialFieldState extends State<SocialField> {
           IconButton(
             icon: const Icon(Icons.close, color: AppColors.primaryColor, size: 20),
             onPressed: widget.onDelete,
-            tooltip: 'Clear',
+            tooltip: 'clear'.tr(),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
           ),

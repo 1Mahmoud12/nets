@@ -50,7 +50,7 @@ class _AddSocialMediaDialogState extends State<AddSocialMediaDialog> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Add Social Media',
+                'add_social_media'.tr(),
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w700,
                       color: isDarkMode ? AppColors.darkTextPrimary : AppColors.black,
@@ -59,15 +59,15 @@ class _AddSocialMediaDialogState extends State<AddSocialMediaDialog> {
               const SizedBox(height: 24),
               CustomTextFormField(
                 controller: _platformController,
-                hintText: 'Platform Name',
-                nameField: 'Platform Name',
+                hintText: 'platform_name'.tr(),
+                nameField: 'platform_name'.tr(),
                 borderRadius: 8,
               ),
               const SizedBox(height: 16),
               CustomTextFormField(
                 controller: _urlController,
-                hintText: 'URL',
-                nameField: 'URL',
+                hintText: 'url'.tr(),
+                nameField: 'url'.tr(),
                 borderRadius: 8,
                 textInputType: TextInputType.url,
               ),

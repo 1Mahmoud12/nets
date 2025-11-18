@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:nets/core/themes/colors.dart';
 
@@ -60,7 +61,7 @@ class _ContactInformationState extends State<ContactInformation> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Contact Information',
+            'contact_information'.tr(),
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w700,
               color: widget.isDarkMode ? AppColors.darkTextPrimary : AppColors.black,
@@ -77,7 +78,7 @@ class _ContactInformationState extends State<ContactInformation> {
                   PhoneFieldWithCountryCode(
                     controller: phone.controller,
                     initialCountryCode: phone.countryCode,
-                    nameField: i == 0 ? 'Phone Numbers' : null,
+                    nameField: i == 0 ? 'phone_numbers'.tr() : null,
                     enabled: true,
                     onCountryCodeChanged: (countryCode) {
                       phone.countryCode = countryCode;
@@ -98,7 +99,7 @@ class _ContactInformationState extends State<ContactInformation> {
                             horizontal: 10,
                           ),
                           controller: phone.typeController,
-                          hintText: 'Type (e.g., mobile, office)',
+                          hintText: 'type_eg_mobile_office'.tr(),
                           nameField: null,
                           textInputType: TextInputType.text,
                           borderRadius: 8,
@@ -147,7 +148,7 @@ class _ContactInformationState extends State<ContactInformation> {
                             activeColor: AppColors.primaryColor,
                           ),
                           Text(
-                            'Primary',
+                            'primary'.tr(),
                             style: Theme.of(
                               context,
                             ).textTheme.bodySmall?.copyWith(
@@ -174,7 +175,7 @@ class _ContactInformationState extends State<ContactInformation> {
               children: [
                 const Icon(Icons.add, color: AppColors.primaryColor),
                 Text(
-                  'Add Phone Number',
+                  'add_phone_number'.tr(),
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     color: widget.isDarkMode ? AppColors.darkTextPrimary : AppColors.black,
                   ),
@@ -186,8 +187,8 @@ class _ContactInformationState extends State<ContactInformation> {
           CustomTextFormField(
             contentPadding: const EdgeInsets.symmetric(horizontal: 10),
             controller: widget.zipCtrl,
-            hintText: 'Zip Code',
-            nameField: 'Zip Code',
+            hintText: 'zip_code'.tr(),
+            nameField: 'zip_code'.tr(),
             textInputType: TextInputType.number,
             borderRadius: 8,
             validator: (value) => null,

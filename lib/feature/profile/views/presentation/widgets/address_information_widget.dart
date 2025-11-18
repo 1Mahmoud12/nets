@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:nets/core/themes/colors.dart';
 
@@ -31,7 +32,7 @@ class AddressInformation extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Address Information',
+            'address_information'.tr(),
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w700,
               color: isDarkMode ? AppColors.darkTextPrimary : AppColors.black,
@@ -41,8 +42,8 @@ class AddressInformation extends StatelessWidget {
           CustomTextFormField(
             contentPadding: EdgeInsets.symmetric(horizontal: 10),
             controller: streetOfficeCtrl,
-            hintText: 'Street Name',
-            nameField: 'Street Name',
+            hintText: 'street_name'.tr(),
+            nameField: 'street_name'.tr(),
             borderRadius: 8,
             validator: (value) => null,
           ),
@@ -53,8 +54,8 @@ class AddressInformation extends StatelessWidget {
                 child: CustomTextFormField(
                   contentPadding: EdgeInsets.symmetric(horizontal: 10),
                   controller: buildingOfficeCtrl,
-                  hintText: 'Building Number',
-                  nameField: 'Building Number',
+                  hintText: 'building_number'.tr(),
+                  nameField: 'building_number'.tr(),
                   borderRadius: 8,
                   validator: (value) => null,
                 ),
@@ -64,8 +65,8 @@ class AddressInformation extends StatelessWidget {
                 child: CustomTextFormField(
                   contentPadding: EdgeInsets.symmetric(horizontal: 10),
                   controller: officeNumberOfficeCtrl,
-                  hintText: 'Office Number',
-                  nameField: 'Office Number',
+                  hintText: 'office_number'.tr(),
+                  nameField: 'office_number'.tr(),
                   borderRadius: 8,
                   validator: (value) => null,
                 ),

@@ -546,7 +546,7 @@ class _ProfileViewState extends State<ProfileView> {
               title: 'two_factor_authentication'.tr(),
               subtitle: 'two_factor_authentication_desc'.tr(),
               onTap: () {
-                customShowToast(context, '${'two_factor_authentication'.tr()} settings would open here');
+                customShowToast(context, '${'two_factor_authentication'.tr()} ${'settings_would_open_here'.tr()}');
               },
             ),
             PrivacyItemData(
@@ -554,7 +554,7 @@ class _ProfileViewState extends State<ProfileView> {
               title: 'profile_visibility'.tr(),
               subtitle: 'profile_visibility_desc'.tr(),
               onTap: () {
-                customShowToast(context, '${'profile_visibility'.tr()} settings would open here');
+                customShowToast(context, '${'profile_visibility'.tr()} ${'settings_would_open_here'.tr()}');
               },
             ),
             PrivacyItemData(
@@ -562,7 +562,7 @@ class _ProfileViewState extends State<ProfileView> {
               title: 'blocked_users'.tr(),
               subtitle: 'blocked_users_desc'.tr(),
               onTap: () {
-                customShowToast(context, '${'blocked_users'.tr()} settings would open here');
+                customShowToast(context, '${'blocked_users'.tr()} ${'settings_would_open_here'.tr()}');
               },
             ),
             PrivacyItemData(
@@ -570,7 +570,7 @@ class _ProfileViewState extends State<ProfileView> {
               title: 'data_encryption'.tr(),
               subtitle: 'data_encryption_desc'.tr(),
               onTap: () {
-                customShowToast(context, '${'data_encryption'.tr()} settings would open here');
+                customShowToast(context, '${'data_encryption'.tr()} ${'settings_would_open_here'.tr()}');
               },
             ),
           ],
@@ -580,7 +580,17 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   void _showLanguageSettings() {
-    final languages = ['English'.tr(), 'Arabic'.tr(), 'Spanish', 'French', 'German', 'Italian', 'Portuguese', 'Chinese', 'Japanese'];
+    final languages = [
+      'English'.tr(),
+      'Arabic'.tr(),
+      'spanish'.tr(),
+      'french'.tr(),
+      'german'.tr(),
+      'italian'.tr(),
+      'portuguese'.tr(),
+      'chinese'.tr(),
+      'japanese'.tr(),
+    ];
 
     showModalBottomSheet(
       context: context,
@@ -594,7 +604,7 @@ class _ProfileViewState extends State<ProfileView> {
           selectedLanguage: selectedLanguage,
           title: 'select_language'.tr(),
           onLanguageSelected: (language) {
-            if (language == 'Arabic') {
+            if (language == 'Arabic'.tr() || language == 'arabic'.tr()) {
               context.setLocale(const Locale('ar', 'SA'));
               userCache?.put(languageAppKey, true);
               arabicLanguage = true;
@@ -630,7 +640,7 @@ class _ProfileViewState extends State<ProfileView> {
               title: 'faq'.tr(),
               subtitle: 'faq_desc'.tr(),
               onTap: () {
-                customShowToast(context, '${'faq'.tr()} settings would open here');
+                customShowToast(context, '${'faq'.tr()} ${'settings_would_open_here'.tr()}');
               },
             ),
             HelpItemData(
@@ -638,7 +648,7 @@ class _ProfileViewState extends State<ProfileView> {
               title: 'live_chat'.tr(),
               subtitle: 'live_chat_desc'.tr(),
               onTap: () {
-                customShowToast(context, '${'live_chat'.tr()} settings would open here');
+                customShowToast(context, '${'live_chat'.tr()} ${'settings_would_open_here'.tr()}');
               },
             ),
             HelpItemData(
@@ -646,7 +656,7 @@ class _ProfileViewState extends State<ProfileView> {
               title: 'email_support'.tr(),
               subtitle: 'email_support_desc'.tr(),
               onTap: () {
-                customShowToast(context, '${'email_support'.tr()} settings would open here');
+                customShowToast(context, '${'email_support'.tr()} ${'settings_would_open_here'.tr()}');
               },
             ),
             HelpItemData(
@@ -654,7 +664,7 @@ class _ProfileViewState extends State<ProfileView> {
               title: 'call_support'.tr(),
               subtitle: '+1 (555) 123-4567',
               onTap: () {
-                customShowToast(context, '${'call_support'.tr()} settings would open here');
+                customShowToast(context, '${'call_support'.tr()} ${'settings_would_open_here'.tr()}');
               },
             ),
           ],

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nets/core/component/cache_image.dart';
@@ -50,7 +51,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Personal Information',
+            'personal_information'.tr(),
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w700,
               color: widget.isDarkMode ? AppColors.darkTextPrimary : AppColors.black,
@@ -144,12 +145,12 @@ class _PersonalInformationState extends State<PersonalInformation> {
                 child: CustomTextFormField(
                   contentPadding: EdgeInsets.symmetric(horizontal: 10),
                   controller: widget.firstNameCtrl,
-                  hintText: 'First Name',
-                  nameField: 'First Name',
+                  hintText: 'first_name'.tr(),
+                  nameField: 'first_name'.tr(),
                   borderRadius: 10,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'First name is required';
+                      return 'first_name_required'.tr();
                     }
                     return null;
                   },
@@ -160,12 +161,12 @@ class _PersonalInformationState extends State<PersonalInformation> {
                 child: CustomTextFormField(
                   enableLtr: true,
                   controller: widget.lastNameCtrl,
-                  hintText: 'Last Name',
-                  nameField: 'Last Name',
+                  hintText: 'last_name'.tr(),
+                  nameField: 'last_name'.tr(),
                   borderRadius: 10,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Last name is required';
+                      return 'last_name_required'.tr();
                     }
                     return null;
                   },
@@ -177,8 +178,8 @@ class _PersonalInformationState extends State<PersonalInformation> {
           CustomTextFormField(
             contentPadding: EdgeInsets.symmetric(horizontal: 10),
             controller: widget.emailCtrl,
-            hintText: 'Email',
-            nameField: 'Email',
+            hintText: 'email'.tr(),
+            nameField: 'email'.tr(),
             textInputType: TextInputType.emailAddress,
             borderRadius: 8,
             validator: (value) {
@@ -188,7 +189,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
               }
               final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
               if (!emailRegex.hasMatch(trimmed)) {
-                return 'Please enter a valid email';
+                return 'please_enter_valid_email'.tr();
               }
               return null;
             },
@@ -197,8 +198,8 @@ class _PersonalInformationState extends State<PersonalInformation> {
           CustomTextFormField(
             contentPadding: EdgeInsets.symmetric(horizontal: 10),
             controller: widget.websiteCtrl,
-            hintText: 'Website',
-            nameField: 'Website',
+            hintText: 'website'.tr(),
+            nameField: 'website'.tr(),
             textInputType: TextInputType.url,
             borderRadius: 8,
             validator: (value) => null,
