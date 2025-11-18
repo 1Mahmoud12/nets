@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -76,9 +77,7 @@ END:VCARD
         return;
       }
       if (qrCodeData.isEmpty) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Unable to read QR code. Please try again.'), backgroundColor: Colors.orange));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('unable_to_read_qr_code'.tr()), backgroundColor: Colors.orange));
         return;
       }
       final contactDetails = _extractContactDetails(qrCodeData);
@@ -90,7 +89,7 @@ END:VCARD
       await _showSaveConfirmationDialog();
     } catch (error) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to scan QR code: $error'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${'failed_to_scan_qr_code'.tr()}: $error'), backgroundColor: Colors.red));
       }
     }
   }
@@ -122,31 +121,29 @@ END:VCARD
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Camera Permission Required'),
-            content: const Text('Camera permission has been permanently denied. Please enable it in settings.'),
+            title: Text('camera_permission_required'.tr()),
+            content: Text('camera_permission_permanently_denied'.tr()),
             actions: [
-              TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
+              TextButton(onPressed: () => Navigator.of(context).pop(), child: Text('cancel'.tr())),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                   openAppSettings();
                 },
-                child: const Text('Open Settings'),
+                child: Text('open_settings'.tr()),
               ),
             ],
           );
         },
       );
     } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Camera permission is required to scan QR codes'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('camera_permission_required_message'.tr()), backgroundColor: Colors.red));
     }
   }
 
   String _valueOrNA(String? value) {
     final trimmed = value?.trim() ?? '';
-    return trimmed.isEmpty ? 'N/A' : trimmed;
+    return trimmed.isEmpty ? 'not_available'.tr() : trimmed;
   }
 
   void _clearScannedData() {
@@ -181,7 +178,9 @@ END:VCARD
                 child: const Icon(Icons.error_outline, color: Colors.red),
               ),
               const SizedBox(width: 12),
-              Expanded(child: Text("Couldn't Save Contact", style: theme.textTheme.titleMedium?.copyWith(fontSize: 16, fontWeight: FontWeight.w600))),
+              Expanded(
+                child: Text('couldnt_save_contact'.tr(), style: theme.textTheme.titleMedium?.copyWith(fontSize: 16, fontWeight: FontWeight.w600)),
+              ),
             ],
           ),
           content: Column(
@@ -189,7 +188,7 @@ END:VCARD
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'The server responded with the following message:',
+                'server_responded_message'.tr(),
                 style: theme.textTheme.bodySmall?.copyWith(fontSize: 13, color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[700]),
               ),
               const SizedBox(height: 10),
@@ -204,13 +203,13 @@ END:VCARD
               ),
               const SizedBox(height: 12),
               Text(
-                'You can close this message and try again later.',
+                'close_message_try_later'.tr(),
                 style: theme.textTheme.bodySmall?.copyWith(fontSize: 12.5, color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[600]),
               ),
             ],
           ),
           actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-          actions: [TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: const Text('Close'))],
+          actions: [TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: Text('close'.tr()))],
         );
       },
     );
@@ -243,11 +242,11 @@ END:VCARD
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildInfoText(context, 'Name', _valueOrNA(details['name'])),
-          _buildInfoText(context, 'Email', _valueOrNA(details['email'])),
-          _buildInfoText(context, 'Phone', _valueOrNA(details['phone'])),
-          _buildInfoText(context, 'Title', _valueOrNA(details['titleWork'])),
-          _buildInfoText(context, 'Location', _valueOrNA(details['location'])),
+          _buildInfoText(context, 'name'.tr(), _valueOrNA(details['name'])),
+          _buildInfoText(context, 'email'.tr(), _valueOrNA(details['email'])),
+          _buildInfoText(context, 'phone'.tr(), _valueOrNA(details['phone'])),
+          _buildInfoText(context, 'job_title'.tr(), _valueOrNA(details['titleWork'])),
+          _buildInfoText(context, 'location'.tr(), _valueOrNA(details['location'])),
         ],
       ),
     );
@@ -279,7 +278,9 @@ END:VCARD
                 child: const Icon(Icons.contact_page, color: AppColors.primaryColor),
               ),
               const SizedBox(width: 12),
-              Expanded(child: Text('Save this contact?', style: theme.textTheme.titleMedium?.copyWith(fontSize: 16, fontWeight: FontWeight.w600))),
+              Expanded(
+                child: Text('save_this_contact'.tr(), style: theme.textTheme.titleMedium?.copyWith(fontSize: 16, fontWeight: FontWeight.w600)),
+              ),
             ],
           ),
           content: Column(
@@ -287,7 +288,7 @@ END:VCARD
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Review the details before saving to your contacts.',
+                'review_details_before_saving'.tr(),
                 style: theme.textTheme.bodySmall?.copyWith(fontSize: 13, color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[700]),
               ),
               const SizedBox(height: 16),
@@ -298,7 +299,7 @@ END:VCARD
             TextButton(
               style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10)),
               onPressed: () => Navigator.of(dialogContext).pop(false),
-              child: const Text('Not Now'),
+              child: Text('not_now'.tr()),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -308,7 +309,10 @@ END:VCARD
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               ),
               onPressed: () => Navigator.of(dialogContext).pop(true),
-              child: const Row(mainAxisSize: MainAxisSize.min, children: [Icon(Icons.save_rounded, size: 18), SizedBox(width: 8), Text('Save')]),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [const Icon(Icons.save_rounded, size: 18), const SizedBox(width: 8), Text('save'.tr())],
+              ),
             ),
           ],
         );
@@ -373,7 +377,7 @@ END:VCARD
     final qrData = _scannedQrRawData;
     if (qrData == null) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No QR code data to save'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('no_qr_code_data_to_save'.tr()), backgroundColor: Colors.red));
         _clearScannedData();
       }
       return;
@@ -417,7 +421,7 @@ END:VCARD
                 _isSaving = false;
               });
               _clearScannedData();
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Contact saved successfully'), backgroundColor: Colors.green));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('contact_saved_successfully'.tr()), backgroundColor: Colors.green));
             }
           } else if (state is QrError) {
             if (mounted) {
@@ -504,7 +508,7 @@ END:VCARD
                                         backgroundColor: Colors.white,
                                         foregroundColor: AppColors.black,
                                         errorStateBuilder: (cxt, err) {
-                                          return const Center(child: Text('Error generating QR code', textAlign: TextAlign.center));
+                                          return Center(child: Text('error_generating_qr_code'.tr(), textAlign: TextAlign.center));
                                         },
                                       ),
                                     ),
@@ -620,7 +624,7 @@ END:VCARD
                             : const Icon(Icons.qr_code_scanner, color: AppColors.primaryColor, size: 24),
                     // padding: const EdgeInsets.symmetric(horizontal: 12),
                     constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-                    tooltip: 'Scan QR Code',
+                    tooltip: 'scan_qr_code'.tr(),
                   ),
                 ),
               ],

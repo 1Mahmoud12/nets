@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:nets/core/themes/colors.dart';
@@ -46,7 +47,7 @@ class _QrCameraScannerState extends State<QrCameraScanner> {
     final hasTorch = _controller.torchEnabled;
     if (!hasTorch) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Torch not available on this device')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('torch_not_available'.tr())));
       return;
     }
 
@@ -65,7 +66,7 @@ class _QrCameraScannerState extends State<QrCameraScanner> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text('Scan QR Code'),
+        title: Text('scan_qr_code'.tr()),
         actions: [IconButton(onPressed: _toggleTorch, icon: Icon(_torchEnabled ? Icons.flash_on : Icons.flash_off))],
       ),
       body: SafeArea(
@@ -83,12 +84,12 @@ class _QrCameraScannerState extends State<QrCameraScanner> {
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: AppColors.primaryColor.withOpacity(0.5)),
                 ),
-                child: const Column(
+                child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('Position the QR code inside the frame', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+                    Text('position_qr_code_inside_frame'.tr(), style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
                     SizedBox(height: 8),
-                    Text('Scanning will happen automatically', style: TextStyle(color: Colors.white70)),
+                    Text('scanning_will_happen_automatically'.tr(), style: TextStyle(color: Colors.white70)),
                   ],
                 ),
               ),
