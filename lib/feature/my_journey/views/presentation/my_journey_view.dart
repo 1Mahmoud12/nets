@@ -264,7 +264,10 @@ class _MyJourneyViewState extends State<MyJourneyView> {
                           borderRadius: 8,
                           controller: search,
                           hintText: 'search'.tr(),
-                          contentPadding: const EdgeInsets.only(left: 10),
+                          contentPadding: EdgeInsets.only(
+                            left: context.locale.languageCode == 'en' ? 10 : 0,
+                            right: context.locale.languageCode == 'ar' ? 10 : 0,
+                          ),
                           focusNode: _searchFocusNode,
                           onChange: _onSearchChanged,
                           enabledBorder: isDark ? AppColors.darkBorder : AppColors.greyBorderColor,

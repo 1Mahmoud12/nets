@@ -82,7 +82,6 @@ class _SearchWidgetState extends State<SearchWidget> {
       onTap: widget.onTap,
       child: IntrinsicHeight(
         child: CustomTextFormField(
-          enableLtr: true,
           fontSizeHintText: 12,
           enable: widget.onTap == null,
           outPadding: EdgeInsets.zero,
@@ -92,11 +91,10 @@ class _SearchWidgetState extends State<SearchWidget> {
           fillColor: AppColors.white,
           controller: _controller,
           focusNode: widget.focusNode,
-          hintText: widget.hintText ?? 'Search contacts, phone, or email',
-          labelStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w400,
-                color: AppColors.cP50.withAlpha((0.5 * 255).toInt()),
-              ),
+          hintText: widget.hintText ?? 'search'.tr(),
+          labelStyle: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400, color: AppColors.cP50.withAlpha((0.5 * 255).toInt())),
           onChange: (value) {
             widget.onChange?.call(value);
             if (widget.showClearButton && mounted) {
@@ -108,20 +106,15 @@ class _SearchWidgetState extends State<SearchWidget> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
-                padding: EdgeInsets.only(
-                  left: context.locale.languageCode == 'ar' ? 8 : 8,
-                  right: context.locale.languageCode == 'ar' ? 8 : 8,
-                ),
+                padding: EdgeInsets.only(left: context.locale.languageCode == 'ar' ? 8 : 8, right: context.locale.languageCode == 'ar' ? 8 : 8),
                 child: SvgPicture.asset(AppIcons.unselectedDiscoverDarkMode),
               ),
             ],
           ),
-          suffixIcon: widget.showClearButton && _controller.text.isNotEmpty
-              ? IconButton(
-                  onPressed: _clearSearch,
-                  icon: Icon(Icons.close, size: 18, color: AppColors.grey),
-                )
-              : null,
+          suffixIcon:
+              widget.showClearButton && _controller.text.isNotEmpty
+                  ? IconButton(onPressed: _clearSearch, icon: Icon(Icons.close, size: 18, color: AppColors.grey))
+                  : null,
         ),
       ),
     );
