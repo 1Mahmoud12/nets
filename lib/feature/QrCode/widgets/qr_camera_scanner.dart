@@ -10,10 +10,7 @@ class QrCameraScanner extends StatefulWidget {
 }
 
 class _QrCameraScannerState extends State<QrCameraScanner> {
-  final MobileScannerController _controller = MobileScannerController(
-    detectionSpeed: DetectionSpeed.noDuplicates,
-    facing: CameraFacing.back,
-  );
+  final MobileScannerController _controller = MobileScannerController(detectionSpeed: DetectionSpeed.noDuplicates);
   bool _isProcessing = false;
   bool _torchEnabled = false;
 
@@ -46,12 +43,10 @@ class _QrCameraScannerState extends State<QrCameraScanner> {
   }
 
   Future<void> _toggleTorch() async {
-    final hasTorch = await _controller.hasTorch;
+    final hasTorch = _controller.torchEnabled;
     if (!hasTorch) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Torch not available on this device')),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Torch not available on this device')));
       return;
     }
 
@@ -71,53 +66,29 @@ class _QrCameraScannerState extends State<QrCameraScanner> {
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         title: const Text('Scan QR Code'),
-        actions: [
-          IconButton(
-            onPressed: _toggleTorch,
-            icon: Icon(_torchEnabled ? Icons.flash_on : Icons.flash_off),
-          ),
-        ],
+        actions: [IconButton(onPressed: _toggleTorch, icon: Icon(_torchEnabled ? Icons.flash_on : Icons.flash_off))],
       ),
       body: SafeArea(
         child: Stack(
           children: [
-            Positioned.fill(
-              child: MobileScanner(
-                controller: _controller,
-                onDetect: _handleDetection,
-              ),
-            ),
+            Positioned.fill(child: MobileScanner(controller: _controller, onDetect: _handleDetection)),
             Positioned(
               left: 24,
               right: 24,
               bottom: 40,
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12,
-                  horizontal: 20,
-                ),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                 decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0.6),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                  ),
+                  border: Border.all(color: AppColors.primaryColor.withOpacity(0.5)),
                 ),
-                child: Column(
+                child: const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Text(
-                      'Position the QR code inside the frame',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                  children: [
+                    Text('Position the QR code inside the frame', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
                     SizedBox(height: 8),
-                    Text(
-                      'Scanning will happen automatically',
-                      style: TextStyle(color: Colors.white70),
-                    ),
+                    Text('Scanning will happen automatically', style: TextStyle(color: Colors.white70)),
                   ],
                 ),
               ),

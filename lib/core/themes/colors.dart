@@ -139,4 +139,13 @@ class AppColors {
   static Color cFeedingColor = const Color(0xFFCE5A9D);
   static Color cHumanitarianAidColor = const Color(0xFFB2CC28);
   static Color darkModeColor = const Color(0xFF9CA3A3);
+
+  // New Dark Mode Colors
+  static const darkBackground = Color(0xff0d0d14); // Main background
+  static const darkContainer = Color(0xff161927); // Container/widget background
+  static const darkTextPrimary = Color(0xffE5E5E5); // Primary text color
+  static const darkTextSecondary = Color(0xffB0B0B0); // Secondary text color
+  static const darkBorder = Color(0xff2A2A3A); // Border color
+  static const darkBorderLight = Color(0xff3A3A4A); // Light border color
+  static const darkAppBar = Color(0xff161927); // App bar background
 }

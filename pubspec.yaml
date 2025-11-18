@@ -16,7 +16,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.3.0+4
+version: 2.9.0+7
 
 environment:
   sdk: ^3.7.2
@@ -30,20 +30,20 @@ environment:
 dependencies:
   awesome_notifications: 0.10.1
   cached_network_image: ^3.4.1
-  connectivity_plus: ^6.1.5
+  connectivity_plus: ^7.0.0
   cupertino_icons: ^1.0.8
   dartz: ^0.10.1
-  device_info_plus: ^11.5.0
+  device_info_plus: ^12.2.0
   device_preview: ^1.3.1
   dio: ^5.8.0+1
   dotted_decoration: ^2.0.0
   easy_localization: ^3.0.8
   expandable: ^5.0.1
   file_picker: ^10.3.2
-  firebase_analytics: ^11.6.0
-  firebase_auth: ^5.7.0
-  firebase_core: ^3.15.2
-  firebase_messaging: ^15.2.10
+  firebase_analytics: ^12.0.4
+  firebase_auth: ^6.1.2
+  firebase_core: ^4.2.1
+  firebase_messaging: ^16.0.4
   fl_chart: ^1.0.0
   flutter:
     sdk: flutter
@@ -55,7 +55,7 @@ dependencies:
   flutter_spinkit: ^5.2.2
   flutter_svg: ^2.2.0
   flutter_volume_controller: ^1.3.3
-  fluttertoast: ^8.2.12
+  fluttertoast: ^9.0.0
   geocoding: ^4.0.0
   geolocator: ^14.0.2
   google_maps_flutter: ^2.12.3
@@ -75,13 +75,13 @@ dependencies:
   skeletonizer: ^2.1.0+1
   url_launcher: ^6.3.2
   uuid: ^4.5.1
-  share_plus: ^11.1.0
+  share_plus: ^12.0.1
   qr_flutter: ^4.1.0
   phosphor_flutter: ^2.0.0
 
   app_settings: ^6.1.1
   permission_handler: ^12.0.1
-  mobile_scanner: ^3.5.7
+  mobile_scanner: ^7.1.3
 
   #deep link
   adjust_sdk: ^5.4.2

@@ -35,10 +35,7 @@ class Themes {
         systemNavigationBarDividerColor: AppColors.scaffoldBackGround,
       ),
     ),
-    cardTheme: CardThemeData(
-      shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      color: AppColors.white,
-    ),
+    cardTheme: CardThemeData(shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(15)), color: AppColors.white),
     textTheme: ThemeData.light().textTheme.copyWith(
       bodyLarge: Styles.style24700.copyWith(color: AppColors.black400, fontFamily: family),
       bodyMedium: Styles.style22700.copyWith(color: AppColors.black400, fontFamily: family),
@@ -64,41 +61,75 @@ class Themes {
   );
 
   ThemeData dark() => ThemeData(
-    scaffoldBackgroundColor: AppColors.black,
+    brightness: Brightness.dark,
+    splashColor: Colors.transparent,
+    highlightColor: Colors.transparent,
+    scaffoldBackgroundColor: AppColors.darkBackground,
+    cardColor: AppColors.darkContainer,
     fontFamily: family,
-    dividerTheme: DividerThemeData(color: AppColors.transparent),
-    appBarTheme: AppBarTheme(
-      color: AppColors.appBarDarkModeColor,
+    primaryColor: AppColors.primaryColor,
+    dividerTheme: const DividerThemeData(color: AppColors.darkBorder),
+    appBarTheme: const AppBarTheme(
+      color: AppColors.darkAppBar,
       elevation: 0,
       surfaceTintColor: Colors.transparent,
-      systemOverlayStyle: const SystemUiOverlayStyle(
-        statusBarColor: AppColors.primaryColor,
-        statusBarIconBrightness: Brightness.dark,
+      iconTheme: IconThemeData(color: AppColors.darkTextPrimary),
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: AppColors.darkBackground,
+        statusBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.dark,
+        systemStatusBarContrastEnforced: true,
+        systemNavigationBarColor: AppColors.darkBackground,
+        systemNavigationBarDividerColor: AppColors.darkBackground,
+        systemNavigationBarIconBrightness: Brightness.light,
       ),
     ),
-    // cardTheme: CardTheme(shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(15)), color: AppColors.white),
-    textTheme: TextTheme(
-      bodyLarge: Styles.style24700.copyWith(color: const Color(0xff9CA3A3), fontFamily: family),
-      bodyMedium: Styles.style22700.copyWith(color: const Color(0xff9CA3A3), fontFamily: family),
-      bodySmall: Styles.style20700.copyWith(color: const Color(0xff9CA3A3), fontFamily: family),
-      titleLarge: Styles.style16700.copyWith(color: const Color(0xff9CA3A3), fontFamily: family),
-      titleMedium: Styles.style15400.copyWith(color: const Color(0xff9CA3A3), fontFamily: family),
-      titleSmall: Styles.style12400.copyWith(color: const Color(0xff9CA3A3), fontFamily: family),
-      labelLarge: Styles.style15700.copyWith(color: const Color(0xff9CA3A3), fontFamily: family),
-      labelMedium: Styles.style12400.copyWith(color: const Color(0xff9CA3A3), fontFamily: family),
-      labelSmall: Styles.style10400.copyWith(color: const Color(0xff9CA3A3), fontFamily: family),
-      displayLarge: Styles.style14400.copyWith(color: const Color(0xff9CA3A3), fontFamily: family),
-      displayMedium: Styles.style14400.copyWith(color: const Color(0xff9CA3A3), fontFamily: family),
-      displaySmall: Styles.style18500.copyWith(color: const Color(0xff9CA3A3), fontFamily: family),
-
-      headlineLarge: Styles.style11500.copyWith(color: const Color(0xff9CA3A3), fontFamily: family),
+    cardTheme: CardThemeData(
+      shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(15), side: const BorderSide(color: AppColors.darkBorder)),
+      color: AppColors.darkContainer,
+    ),
+    textTheme: ThemeData.dark().textTheme.copyWith(
+      bodyLarge: Styles.style24700.copyWith(color: AppColors.darkTextPrimary, fontFamily: family),
+      bodyMedium: Styles.style22700.copyWith(color: AppColors.darkTextPrimary, fontFamily: family),
+      bodySmall: Styles.style20700.copyWith(color: AppColors.darkTextSecondary, fontFamily: family),
+      titleLarge: Styles.style16700.copyWith(color: AppColors.darkTextPrimary, fontFamily: family),
+      titleMedium: Styles.style15400.copyWith(color: AppColors.darkTextPrimary, fontFamily: family),
+      titleSmall: Styles.style12400.copyWith(color: AppColors.darkTextSecondary, fontFamily: family),
+      labelLarge: Styles.style15700.copyWith(color: AppColors.darkTextPrimary, fontFamily: family),
+      labelMedium: Styles.style12400.copyWith(color: AppColors.darkTextSecondary, fontFamily: family),
+      labelSmall: Styles.style10400.copyWith(color: AppColors.darkTextSecondary, fontFamily: family),
+      displayLarge: Styles.style14400.copyWith(color: AppColors.darkTextPrimary, fontFamily: family),
+      displayMedium: Styles.style14400.copyWith(color: AppColors.darkTextPrimary, fontFamily: family),
+      displaySmall: Styles.style18500.copyWith(color: AppColors.darkTextPrimary, fontFamily: family),
+      headlineLarge: Styles.style11500.copyWith(color: AppColors.darkTextPrimary, fontFamily: family),
+    ),
+    dialogTheme: DialogThemeData(
+      backgroundColor: AppColors.darkContainer,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15), side: const BorderSide(color: AppColors.darkBorder)),
+    ),
+    bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: AppColors.darkContainer,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
     ),
     textSelectionTheme: TextSelectionThemeData(
-      cursorColor: AppColors.primaryColor, // Custom cursor color
-      selectionColor: AppColors.primaryColor.withAlpha((0.3 * 255).toInt()), // Custom selection color
-      selectionHandleColor: AppColors.primaryColor, // Custom selection handle color
+      cursorColor: AppColors.primaryColor,
+      selectionColor: AppColors.primaryColor.withAlpha((0.3 * 255).toInt()),
+      selectionHandleColor: AppColors.primaryColor,
     ),
-    // dialogTheme: DialogTheme(backgroundColor: AppColors.black),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: AppColors.darkContainer,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.darkBorder)),
+      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.darkBorder)),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.primaryColor, width: 2),
+      ),
+      hintStyle: const TextStyle(color: AppColors.darkTextSecondary),
+      labelStyle: const TextStyle(color: AppColors.darkTextSecondary),
+    ),
+    dividerColor: AppColors.darkBorder,
+    iconTheme: const IconThemeData(color: AppColors.darkTextPrimary),
+    primaryIconTheme: const IconThemeData(color: AppColors.darkTextPrimary),
   );
 }

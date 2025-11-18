@@ -7,7 +7,6 @@ import 'package:nets/core/utils/app_icons.dart';
 import 'package:nets/feature/QrCode/manager/cubit/qr_cubit.dart';
 import 'package:nets/feature/QrCode/widgets/qr_camera_scanner.dart';
 import 'package:nets/feature/profile/views/manager/cubit/user_data_cubit.dart';
-import 'package:nets/feature/profile/views/manager/update/cubit/update_user_data_cubit.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -171,7 +170,7 @@ END:VCARD
         final theme = Theme.of(dialogContext);
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-          backgroundColor: darkModeValue ? AppColors.darkModeColor : Colors.white,
+          backgroundColor: darkModeValue ? AppColors.darkContainer : Colors.white,
           titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
           contentPadding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
           title: Row(
@@ -191,19 +190,22 @@ END:VCARD
             children: [
               Text(
                 'The server responded with the following message:',
-                style: theme.textTheme.bodySmall?.copyWith(fontSize: 13, color: darkModeValue ? Colors.grey[300] : Colors.grey[700]),
+                style: theme.textTheme.bodySmall?.copyWith(fontSize: 13, color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[700]),
               ),
               const SizedBox(height: 10),
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(color: darkModeValue ? Colors.black54 : Colors.grey[100], borderRadius: BorderRadius.circular(12)),
+                decoration: BoxDecoration(
+                  color: darkModeValue ? AppColors.darkContainer.withOpacity(0.8) : Colors.grey[100],
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 child: Text(message, style: theme.textTheme.bodyMedium?.copyWith(fontSize: 13.5)),
               ),
               const SizedBox(height: 12),
               Text(
                 'You can close this message and try again later.',
-                style: theme.textTheme.bodySmall?.copyWith(fontSize: 12.5, color: darkModeValue ? Colors.grey[400] : Colors.grey[600]),
+                style: theme.textTheme.bodySmall?.copyWith(fontSize: 12.5, color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[600]),
               ),
             ],
           ),
@@ -234,9 +236,9 @@ END:VCARD
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: darkModeValue ? AppColors.darkModeColor.withOpacity(0.6) : AppColors.greyG200.withOpacity(0.4),
+        color: darkModeValue ? AppColors.darkContainer.withOpacity(0.6) : AppColors.greyG200.withOpacity(0.4),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: darkModeValue ? Colors.grey[700]! : AppColors.greyG200),
+        border: Border.all(color: darkModeValue ? AppColors.darkBorder : AppColors.greyG200),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,7 +266,7 @@ END:VCARD
         final theme = Theme.of(dialogContext);
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          backgroundColor: darkModeValue ? AppColors.darkModeColor : Colors.white,
+          backgroundColor: darkModeValue ? AppColors.darkContainer : Colors.white,
           insetPadding: const EdgeInsets.symmetric(horizontal: 24),
           titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
           contentPadding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
@@ -286,7 +288,7 @@ END:VCARD
             children: [
               Text(
                 'Review the details before saving to your contacts.',
-                style: theme.textTheme.bodySmall?.copyWith(fontSize: 13, color: darkModeValue ? Colors.grey[300] : Colors.grey[700]),
+                style: theme.textTheme.bodySmall?.copyWith(fontSize: 13, color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[700]),
               ),
               const SizedBox(height: 16),
               _buildContactSummary(dialogContext, details),
@@ -434,7 +436,7 @@ END:VCARD
           }
         },
         child: Scaffold(
-          backgroundColor: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
+          backgroundColor: darkModeValue ? AppColors.darkBackground : AppColors.white,
           body: SafeArea(
             child: Stack(
               children: [
@@ -518,9 +520,9 @@ END:VCARD
                                       width: double.infinity,
                                       padding: const EdgeInsets.all(20),
                                       decoration: BoxDecoration(
-                                        color: darkModeValue ? AppColors.darkModeColor : Colors.grey[50],
+                                        color: darkModeValue ? AppColors.darkContainer : Colors.grey[50],
                                         borderRadius: BorderRadius.circular(15),
-                                        border: Border.all(color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!),
+                                        border: Border.all(color: darkModeValue ? AppColors.darkBorder : Colors.grey[200]!),
                                       ),
                                       child: Column(
                                         children: [
@@ -546,7 +548,7 @@ END:VCARD
                                                       '${userCacheValue?.data?.user?.profile?.firstName} ${userCacheValue?.data?.user?.profile?.lastName}',
                                                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                                         fontWeight: FontWeight.w400,
-                                                        color: darkModeValue ? AppColors.white : AppColors.black,
+                                                        color: darkModeValue ? AppColors.darkTextPrimary : AppColors.black,
                                                       ),
                                                     ),
                                                     const SizedBox(height: 6),
@@ -565,9 +567,9 @@ END:VCARD
                                                         userCacheValue?.data?.user?.profile?.titleWork?.isNotEmpty == true)
                                                       Text(
                                                         userCacheValue?.data?.user?.profile?.titleWork ?? '',
-                                                        style: Theme.of(
-                                                          context,
-                                                        ).textTheme.titleSmall?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600]),
+                                                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                                          color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[600],
+                                                        ),
                                                       ),
                                                   ],
                                                 ),
@@ -575,7 +577,7 @@ END:VCARD
                                             ],
                                           ),
                                           const SizedBox(height: 15),
-                                          Divider(color: darkModeValue ? Colors.grey[700] : Colors.grey[300], height: 1),
+                                          Divider(color: darkModeValue ? AppColors.darkBorder : Colors.grey[300], height: 1),
                                           if (userCacheValue?.data?.user?.profile?.email != null &&
                                               userCacheValue?.data?.user?.profile?.email?.isNotEmpty == true)
                                             const SizedBox(height: 15),
@@ -632,10 +634,13 @@ END:VCARD
   Widget _buildContactRow(String icon, String text) {
     return Row(
       children: [
-        SvgPicture.asset(icon, color: darkModeValue ? Colors.grey[400] : Colors.grey[600]),
+        SvgPicture.asset(icon, color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[600]),
         const SizedBox(width: 8),
         Expanded(
-          child: Text(text, style: Theme.of(context).textTheme.titleSmall?.copyWith(color: darkModeValue ? Colors.grey[300] : Colors.grey[700])),
+          child: Text(
+            text,
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[700]),
+          ),
         ),
       ],
     );
