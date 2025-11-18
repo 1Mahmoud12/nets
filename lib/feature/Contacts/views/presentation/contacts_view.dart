@@ -102,108 +102,107 @@ class _ContactsViewState extends State<ContactsView> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder:
-          (context) => Container(
-            height: MediaQuery.of(context).size.height * 0.8,
-            decoration: BoxDecoration(
-              color: darkModeValue ? AppColors.darkModeColor : Colors.white,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            ),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Filters',
-                              style: Theme.of(context).textTheme.displaySmall?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(Icons.close),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        CustomDropDownMenu(
-                          borderRadius: 8,
-                          nameField: 'Journey',
-
-                          selectedItem: DropDownModel(name: 'Select Journey', value: 1),
-                          items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
-                        ),
-                        const SizedBox(height: 8),
-                        GestureDetector(
-                          onTap: () async {
-                            final DateTime date1 = await customShowDatePicker(context: context);
-                            final formatted = DateFormat('dd-MM-yyyy', 'en').format(date1);
-
-                            setState(() {
-                              datePick.text = formatted;
-                            });
-                          },
-                          child: CustomTextFormField(
-                            enable: false,
-                            contentPadding: const EdgeInsets.only(left: 20),
-                            borderRadius: 8,
-                            controller: datePick,
-                            nameField: 'Date',
-                            hintText: 'Select Date',
-                            suffixIcon: SvgPicture.asset(AppIcons.date, fit: BoxFit.scaleDown),
+      builder: (context) {
+        final isDark = darkModeValue;
+        final primaryTextColor = isDark ? AppColors.darkTextPrimary : AppColors.black;
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.8,
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.darkContainer : Colors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Filters', style: Theme.of(context).textTheme.displaySmall?.copyWith(color: primaryTextColor)),
+                          IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: Icon(Icons.close, color: primaryTextColor),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        CustomDropDownMenu(
-                          borderRadius: 8,
-                          nameField: 'Position',
-                          selectedItem: DropDownModel(name: 'Select Position', value: 1),
-                          items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
-                        ),
-                        const SizedBox(height: 8),
-                        CustomDropDownMenu(
-                          borderRadius: 8,
-                          nameField: 'Country',
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      CustomDropDownMenu(
+                        borderRadius: 8,
+                        nameField: 'Journey',
 
-                          selectedItem: DropDownModel(name: 'Select Country', value: 1),
-                          items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            CustomTextButton(
-                              borderColor: AppColors.transparent,
-                              borderRadius: 8,
-                              colorText: AppColors.black,
-                              backgroundColor: AppColors.primaryColor.withOpacity(.3),
-                              onPress: () {},
-                              childText: 'Reset All',
-                            ),
-                            CustomTextButton(
-                              borderColor: AppColors.transparent,
+                        selectedItem: DropDownModel(name: 'Select Journey', value: 1),
+                        items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
+                      ),
+                      const SizedBox(height: 8),
+                      GestureDetector(
+                        onTap: () async {
+                          final DateTime date1 = await customShowDatePicker(context: context);
+                          final formatted = DateFormat('dd-MM-yyyy', 'en').format(date1);
 
-                              borderRadius: 8,
-                              colorText: AppColors.white,
-                              backgroundColor: AppColors.primaryColor,
-                              onPress: () {},
-                              childText: 'Apply Filters',
-                            ),
-                          ],
+                          setState(() {
+                            datePick.text = formatted;
+                          });
+                        },
+                        child: CustomTextFormField(
+                          enable: false,
+                          contentPadding: const EdgeInsets.only(left: 20),
+                          borderRadius: 8,
+                          controller: datePick,
+                          nameField: 'Date',
+                          hintText: 'Select Date',
+                          suffixIcon: SvgPicture.asset(AppIcons.date, fit: BoxFit.scaleDown),
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 8),
+                      CustomDropDownMenu(
+                        borderRadius: 8,
+                        nameField: 'Position',
+                        selectedItem: DropDownModel(name: 'Select Position', value: 1),
+                        items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
+                      ),
+                      const SizedBox(height: 8),
+                      CustomDropDownMenu(
+                        borderRadius: 8,
+                        nameField: 'Country',
+
+                        selectedItem: DropDownModel(name: 'Select Country', value: 1),
+                        items: [DropDownModel(name: 'name', value: 1), DropDownModel(name: 'name1', value: 2)],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomTextButton(
+                            borderColor: AppColors.transparent,
+                            borderRadius: 8,
+                            colorText: primaryTextColor,
+                            backgroundColor: AppColors.primaryColor.withOpacity(.3),
+                            onPress: () {},
+                            childText: 'Reset All',
+                          ),
+                          CustomTextButton(
+                            borderColor: AppColors.transparent,
+                            borderRadius: 8,
+                            colorText: AppColors.white,
+                            backgroundColor: AppColors.primaryColor,
+                            onPress: () {},
+                            childText: 'Apply Filters',
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+        );
+      },
     );
   }
 
@@ -211,9 +210,12 @@ class _ContactsViewState extends State<ContactsView> {
   void _showManualSync() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: darkModeValue ? AppColors.darkModeColor : Colors.white,
+      backgroundColor: darkModeValue ? AppColors.darkContainer : Colors.white,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (BuildContext context) {
+        final isDark = darkModeValue;
+        final primaryTextColor = isDark ? AppColors.darkTextPrimary : Colors.black;
+        final secondaryTextColor = isDark ? AppColors.darkTextSecondary : Colors.black;
         return StatefulBuilder(
           builder: (context, setModalState) {
             return Container(
@@ -228,20 +230,15 @@ class _ContactsViewState extends State<ContactsView> {
                       children: [
                         Text(
                           'Manual Sync',
-                          style: Theme.of(
-                            context,
-                          ).textTheme.displaySmall?.copyWith(color: darkModeValue ? Colors.white : Colors.black, fontWeight: FontWeight.w400),
+                          style: Theme.of(context).textTheme.displaySmall?.copyWith(color: primaryTextColor, fontWeight: FontWeight.w400),
                         ),
-                        IconButton(
-                          onPressed: () => Navigator.pop(context),
-                          icon: Icon(Icons.close, color: darkModeValue ? Colors.white : Colors.black),
-                        ),
+                        IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close, color: primaryTextColor)),
                       ],
                     ),
 
                     Text(
                       'Select contacts to sync with your device',
-                      style: Theme.of(context).textTheme.displayLarge?.copyWith(color: darkModeValue ? AppColors.white : null),
+                      style: Theme.of(context).textTheme.displayLarge?.copyWith(color: primaryTextColor),
                     ),
                     const SizedBox(height: 10),
                     _buildDivider(indent: 5),
@@ -277,15 +274,11 @@ class _ContactsViewState extends State<ContactsView> {
                           children: [
                             Text(
                               'Ahmed Ali',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.titleLarge?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black, fontWeight: FontWeight.w400),
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: primaryTextColor, fontWeight: FontWeight.w400),
                             ),
                             Text(
                               'HR Manager',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.titleLarge?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black, fontWeight: FontWeight.w400),
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: secondaryTextColor, fontWeight: FontWeight.w400),
                             ),
                           ],
                         ),
@@ -324,15 +317,11 @@ class _ContactsViewState extends State<ContactsView> {
                           children: [
                             Text(
                               'Ahmed Ali',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.titleLarge?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black, fontWeight: FontWeight.w400),
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: primaryTextColor, fontWeight: FontWeight.w400),
                             ),
                             Text(
                               'HR Manager',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.titleLarge?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black, fontWeight: FontWeight.w400),
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: secondaryTextColor, fontWeight: FontWeight.w400),
                             ),
                           ],
                         ),
@@ -346,7 +335,7 @@ class _ContactsViewState extends State<ContactsView> {
                           child: CustomTextButton(
                             borderColor: AppColors.transparent,
                             borderRadius: 8,
-                            colorText: AppColors.black,
+                            colorText: primaryTextColor,
                             backgroundColor: AppColors.primaryColor.withOpacity(.1),
                             onPress: () {
                               Navigator.pop(context);
@@ -382,9 +371,12 @@ class _ContactsViewState extends State<ContactsView> {
   void _showDuplicateContact() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: darkModeValue ? AppColors.darkModeColor : Colors.white,
+      backgroundColor: darkModeValue ? AppColors.darkContainer : Colors.white,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (BuildContext context) {
+        final isDark = darkModeValue;
+        final primaryTextColor = isDark ? AppColors.darkTextPrimary : Colors.black;
+        final secondaryTextColor = isDark ? AppColors.darkTextSecondary : Colors.black;
         return StatefulBuilder(
           builder: (context, setModalState) {
             return Container(
@@ -399,20 +391,15 @@ class _ContactsViewState extends State<ContactsView> {
                       children: [
                         Text(
                           'Duplicate Contact Found',
-                          style: Theme.of(
-                            context,
-                          ).textTheme.displaySmall?.copyWith(color: darkModeValue ? Colors.white : Colors.black, fontWeight: FontWeight.w400),
+                          style: Theme.of(context).textTheme.displaySmall?.copyWith(color: primaryTextColor, fontWeight: FontWeight.w400),
                         ),
-                        IconButton(
-                          onPressed: () => Navigator.pop(context),
-                          icon: Icon(Icons.close, color: darkModeValue ? Colors.white : Colors.black),
-                        ),
+                        IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close, color: primaryTextColor)),
                       ],
                     ),
 
                     Text(
                       'We found a contact with similar information. Would you like to merge them?',
-                      style: Theme.of(context).textTheme.displayLarge?.copyWith(color: darkModeValue ? AppColors.white : null),
+                      style: Theme.of(context).textTheme.displayLarge?.copyWith(color: primaryTextColor),
                     ),
                     const SizedBox(height: 10),
                     _buildDivider(indent: 5),
@@ -437,15 +424,11 @@ class _ContactsViewState extends State<ContactsView> {
                           children: [
                             Text(
                               'Ahmed Ali',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.titleLarge?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black, fontWeight: FontWeight.w400),
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: primaryTextColor, fontWeight: FontWeight.w400),
                             ),
                             Text(
                               'HR Manager',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.titleLarge?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black, fontWeight: FontWeight.w400),
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: secondaryTextColor, fontWeight: FontWeight.w400),
                             ),
                           ],
                         ),
@@ -484,15 +467,11 @@ class _ContactsViewState extends State<ContactsView> {
                           children: [
                             Text(
                               'Ahmed Ali',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.titleLarge?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black, fontWeight: FontWeight.w400),
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: primaryTextColor, fontWeight: FontWeight.w400),
                             ),
                             Text(
                               'HR Manager',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.titleLarge?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black, fontWeight: FontWeight.w400),
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: secondaryTextColor, fontWeight: FontWeight.w400),
                             ),
                           ],
                         ),
@@ -506,7 +485,7 @@ class _ContactsViewState extends State<ContactsView> {
                           child: CustomTextButton(
                             borderColor: AppColors.transparent,
                             borderRadius: 8,
-                            colorText: AppColors.black,
+                            colorText: primaryTextColor,
                             backgroundColor: AppColors.primaryColor.withOpacity(.1),
                             onPress: () {
                               Navigator.pop(context);
@@ -539,7 +518,7 @@ class _ContactsViewState extends State<ContactsView> {
   }
 
   Widget _buildDivider({double indent = 60}) {
-    return Divider(height: 1, color: darkModeValue ? Colors.grey[700] : Colors.grey[200], indent: indent, endIndent: 20);
+    return Divider(height: 1, color: darkModeValue ? AppColors.darkBorder : Colors.grey[200], indent: indent, endIndent: 20);
   }
 
   @override
@@ -566,7 +545,7 @@ class _ContactsViewState extends State<ContactsView> {
     }
 
     return Scaffold(
-      backgroundColor: darkModeValue ? AppColors.appBarDarkModeColor : AppColors.white,
+      backgroundColor: darkModeValue ? AppColors.darkBackground : AppColors.white,
       body: SafeArea(child: Padding(padding: const EdgeInsets.all(16), child: child)),
     );
   }
@@ -652,7 +631,7 @@ class _ContactsViewState extends State<ContactsView> {
                   '$totalCount ${'contacts'.tr()}',
                   style: Theme.of(
                     context,
-                  ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400, color: darkModeValue ? AppColors.white : AppColors.black),
+                  ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400, color: darkModeValue ? AppColors.darkTextPrimary : AppColors.black),
                 ),
                 const SizedBox(width: 16),
                 if (_isSearchActive)
@@ -673,7 +652,7 @@ class _ContactsViewState extends State<ContactsView> {
                       '$onlineCount ${'online'.tr()}',
                       style: Theme.of(
                         context,
-                      ).textTheme.bodySmall?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600], fontSize: 12),
+                      ).textTheme.bodySmall?.copyWith(color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[600], fontSize: 12),
                     ),
                   ],
                 ),
@@ -689,17 +668,19 @@ class _ContactsViewState extends State<ContactsView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.search_off, size: 64, color: darkModeValue ? Colors.grey[600] : Colors.grey[400]),
+                    Icon(Icons.search_off, size: 64, color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[400]),
                     const SizedBox(height: 16),
                     Text(
                       'No contacts found',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600]),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[600]),
                     ),
                     const SizedBox(height: 8),
                     Center(
                       child: Text(
                         'Try adjusting your search terms',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: darkModeValue ? Colors.grey[500] : Colors.grey[500]),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.copyWith(color: darkModeValue ? AppColors.darkTextSecondary : Colors.grey[500]),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -727,7 +708,7 @@ class _ContactsViewState extends State<ContactsView> {
           Text(
             message,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: darkModeValue ? Colors.white : Colors.black87),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: darkModeValue ? AppColors.darkTextPrimary : Colors.black87),
           ),
           const SizedBox(height: 16),
           CustomTextButton(
@@ -753,23 +734,24 @@ class DetailsRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = darkModeValue;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
         children: [
-          Icon(icon, color: darkModeValue ? Colors.grey[400] : Colors.grey[600], size: 20),
+          Icon(icon, color: isDark ? AppColors.darkTextSecondary : Colors.grey[600], size: 20),
           const SizedBox(width: 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 label,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: darkModeValue ? Colors.grey[400] : Colors.grey[600], fontSize: 12),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: isDark ? AppColors.darkTextSecondary : Colors.grey[600], fontSize: 12),
               ),
               const SizedBox(height: 2),
               Text(
                 value,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: darkModeValue ? AppColors.white : AppColors.black, fontSize: 14),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: isDark ? AppColors.darkTextPrimary : AppColors.black, fontSize: 14),
               ),
             ],
           ),
@@ -784,86 +766,87 @@ void showContactDetails(Data contact, BuildContext context) {
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder:
-        (context) => Container(
-          height: MediaQuery.of(context).size.height * 0.6,
-          decoration: BoxDecoration(
-            color: darkModeValue ? AppColors.darkModeColor : Colors.white,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          child: Column(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundColor: AppColors.primaryColor,
-                        child: Text(
-                          (contact.name ?? 'N/A').split(' ').where((element) => element.isNotEmpty).map((e) => e[0]).take(2).join().toUpperCase(),
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
-                        ),
+    builder: (context) {
+      final isDark = darkModeValue;
+      final primaryTextColor = isDark ? AppColors.darkTextPrimary : AppColors.black;
+      return Container(
+        height: MediaQuery.of(context).size.height * 0.6,
+        decoration: BoxDecoration(
+          color: isDark ? AppColors.darkContainer : Colors.white,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundColor: AppColors.primaryColor,
+                      child: Text(
+                        (contact.name ?? 'N/A').split(' ').where((element) => element.isNotEmpty).map((e) => e[0]).take(2).join().toUpperCase(),
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
                       ),
-                      const SizedBox(height: 16),
-                      Text(
-                        contact.name ?? 'N/A',
-                        style: Theme.of(
-                          context,
-                        ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold, color: darkModeValue ? AppColors.white : AppColors.black),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      contact.name ?? 'N/A',
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold, color: primaryTextColor),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      (contact.status ?? contact.notes ?? 'offline').toUpperCase(),
+                      style: TextStyle(
+                        color: getStatusColor((contact.status ?? contact.notes ?? 'offline').toLowerCase()),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        (contact.status ?? contact.notes ?? 'offline').toUpperCase(),
-                        style: TextStyle(
-                          color: getStatusColor((contact.status ?? contact.notes ?? 'offline').toLowerCase()),
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(height: 32),
+                    ),
+                    const SizedBox(height: 32),
 
-                      DetailsRowWidget(icon: Icons.phone, label: 'Phone', value: contact.phone ?? '—'),
-                      DetailsRowWidget(icon: Icons.email, label: 'Email', value: contact.email ?? '—'),
-                      const Spacer(),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () {},
-                              icon: const Icon(Icons.call),
-                              label: const Text('Call'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                              ),
+                    DetailsRowWidget(icon: Icons.phone, label: 'Phone', value: contact.phone ?? '—'),
+                    DetailsRowWidget(icon: Icons.email, label: 'Email', value: contact.email ?? '—'),
+                    const Spacer(),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: const Icon(Icons.call),
+                            label: const Text('Call'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             ),
                           ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () {},
-                              icon: const Icon(Icons.message),
-                              label: const Text('Message'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.primaryColor,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                              ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: const Icon(Icons.message),
+                            label: const Text('Message'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primaryColor,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+      );
+    },
   );
 }

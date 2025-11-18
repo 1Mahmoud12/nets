@@ -12,17 +12,18 @@ Widget buildContactCard(Data contact, BuildContext context) {
   final phone = (contact.phone ?? '').trim();
   final email = (contact.email ?? '').trim();
   final status = (contact.status ?? contact.notes ?? 'offline').toLowerCase();
+  final isDark = darkModeValue;
   return Container(
     margin: const EdgeInsets.only(bottom: 12),
     decoration: BoxDecoration(
-      color: darkModeValue ? AppColors.darkModeColor : Colors.white,
+      color: isDark ? AppColors.darkContainer : Colors.white,
       borderRadius: BorderRadius.circular(16),
       border: Border.all(
-        color: darkModeValue ? Colors.grey[700]! : Colors.grey[200]!,
+        color: isDark ? AppColors.darkBorder : Colors.grey[200]!,
       ),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(darkModeValue ? 0.2 : 0.05),
+          color: Colors.black.withOpacity(isDark ? 0.3 : 0.05),
           blurRadius: 10,
           offset: const Offset(0, 2),
         ),
@@ -61,10 +62,7 @@ Widget buildContactCard(Data contact, BuildContext context) {
                       decoration: BoxDecoration(
                         color: getStatusColor(status),
                         shape: BoxShape.circle,
-                        border: Border.all(
-                          color: darkModeValue ? AppColors.white : Colors.white,
-                          width: 2,
-                        ),
+                        border: Border.all(color: isDark ? AppColors.darkBackground : Colors.white, width: 2),
                       ),
                     ),
                   ),
@@ -80,22 +78,17 @@ Widget buildContactCard(Data contact, BuildContext context) {
                     Text(
                       name,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w400,
-                        color:
-                            darkModeValue ? AppColors.white : AppColors.black,
-                        fontSize: 16,
-                      ),
+                            fontWeight: FontWeight.w400,
+                            color: isDark ? AppColors.darkTextPrimary : AppColors.black,
+                            fontSize: 16,
+                          ),
                     ),
                     const SizedBox(height: 6),
                     Row(
                       children: [
                         SvgPicture.asset(
                           AppIcons.call,
-
-                          color:
-                              darkModeValue
-                                  ? Colors.grey[800]
-                                  : Colors.grey[600],
+                          color: isDark ? AppColors.darkTextSecondary : Colors.grey[600],
                         ),
                         const SizedBox(width: 5),
                         Expanded(
@@ -104,12 +97,9 @@ Widget buildContactCard(Data contact, BuildContext context) {
                             style: Theme.of(
                               context,
                             ).textTheme.titleSmall?.copyWith(
-                              color:
-                                  darkModeValue
-                                      ? Colors.white
-                                      : Colors.grey[600],
-                              fontSize: 12,
-                            ),
+                                  color: isDark ? AppColors.darkTextSecondary : Colors.grey[600],
+                                  fontSize: 12,
+                                ),
                           ),
                         ),
                       ],
@@ -119,11 +109,7 @@ Widget buildContactCard(Data contact, BuildContext context) {
                       children: [
                         SvgPicture.asset(
                           AppIcons.email,
-
-                          color:
-                              darkModeValue
-                                  ? Colors.grey[800]
-                                  : Colors.grey[600],
+                          color: isDark ? AppColors.darkTextSecondary : Colors.grey[600],
                         ),
                         const SizedBox(width: 6),
                         Expanded(
@@ -132,12 +118,9 @@ Widget buildContactCard(Data contact, BuildContext context) {
                             style: Theme.of(
                               context,
                             ).textTheme.titleSmall?.copyWith(
-                              color:
-                                  darkModeValue
-                                      ? Colors.white
-                                      : Colors.grey[600],
-                              fontSize: 12,
-                            ),
+                                  color: isDark ? AppColors.darkTextSecondary : Colors.grey[600],
+                                  fontSize: 12,
+                                ),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -155,10 +138,7 @@ Widget buildContactCard(Data contact, BuildContext context) {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color:
-                          darkModeValue
-                              ? AppColors.green.withOpacity(.2)
-                              : Colors.green.withOpacity(0.1),
+                      color: isDark ? AppColors.green.withOpacity(.2) : Colors.green.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: IconButton(

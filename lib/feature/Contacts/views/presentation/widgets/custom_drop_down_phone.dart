@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:nets/core/network/local/cache.dart';
 import 'package:nets/core/themes/colors.dart';
 import 'package:nets/core/themes/styles.dart';
 import 'package:nets/core/utils/constant_gaping.dart';
@@ -92,6 +93,7 @@ class _CustomDropDownPhoneState extends State<CustomDropDownPhone> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = darkModeValue;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -110,14 +112,12 @@ class _CustomDropDownPhoneState extends State<CustomDropDownPhone> {
               //width: (MediaQuery.of(context).size.width * (widget.width ?? .9)).w,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(widget.borderRadius ?? 100),
-                color: widget.fillColor ?? AppColors.white,
+                color: widget.fillColor ?? (isDark ? AppColors.darkContainer : AppColors.white),
                 border: Border.all(
                   width: 2,
-                  color:
-                      widget.hasError
-                          ? Colors.red
-                          : (widget.borderColor ??
-                              AppColors.cBorderButtonColor),
+                  color: widget.hasError
+                      ? Colors.red
+                      : (widget.borderColor ?? (isDark ? AppColors.darkBorder : AppColors.cBorderButtonColor)),
                 ),
               ),
               child: DropdownButton<DropDownModelPhone>(
@@ -130,7 +130,7 @@ class _CustomDropDownPhoneState extends State<CustomDropDownPhone> {
                 hint: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(width: 1, height: 45, color: AppColors.greyG200),
+                    Container(width: 1, height: 45, color: isDark ? AppColors.darkBorderLight : AppColors.greyG200),
 
                     const FittedBox(
                       fit: BoxFit.scaleDown,
@@ -140,7 +140,7 @@ class _CustomDropDownPhoneState extends State<CustomDropDownPhone> {
                     Text(
                       newSelected.name.tr(),
                       style: Styles.style12400.copyWith(
-                        color: AppColors.textColor,
+                        color: isDark ? AppColors.darkTextPrimary : AppColors.textColor,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -174,7 +174,7 @@ class _CustomDropDownPhoneState extends State<CustomDropDownPhone> {
                 borderRadius: BorderRadius.circular(15.r),
                 //  autofocus: false,
                 focusColor: AppColors.primaryColor,
-                dropdownColor: AppColors.white,
+                dropdownColor: isDark ? AppColors.darkContainer : AppColors.white,
                 alignment:
                     context.locale.languageCode == 'ar'
                         ? Alignment.centerRight
@@ -214,7 +214,7 @@ class _CustomDropDownPhoneState extends State<CustomDropDownPhone> {
                               Expanded(
                                 child: Text(
                                   item.name,
-                                  style: Styles.style12400,
+                              style: Styles.style12400.copyWith(color: isDark ? AppColors.darkTextPrimary : AppColors.textColor),
                                   overflow: TextOverflow.ellipsis,
                                   textAlign:
                                       context.locale.languageCode == 'ar'
@@ -237,7 +237,7 @@ class _CustomDropDownPhoneState extends State<CustomDropDownPhone> {
               Positioned.fill(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.grey.withAlpha((0.3 * 255).toInt()),
+                    color: isDark ? AppColors.darkBorderLight.withOpacity(0.5) : Colors.grey.withAlpha((0.3 * 255).toInt()),
                     borderRadius: BorderRadius.circular(
                       widget.borderRadius ?? 8,
                     ),
